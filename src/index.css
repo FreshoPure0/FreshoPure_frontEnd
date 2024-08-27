@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Lato', sans-serif;;
+  color-scheme: light dark;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #fbf5ec;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+
+}
+a:hover {
+
+}
+
+html, body {
+  margin: 0;
+  padding: 2vh 2vh ;
+  box-sizing: border-box;
+}
+
+h1 {
+
+}
+
+button {
+
+}
+button:hover {
+
+}
+button:focus,
+button:focus-visible {
+
+}
