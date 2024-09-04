@@ -1,21 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import QuantityModal from "../components/QuantityModal";
 import Modal from 'react-modal'; // If you haven't installed this, run `npm install react-modal`
+import { useSelector, useDispatch } from "react-redux";
+import { getAllAddress } from "../store/actions/address";
 
 Modal.setAppElement('#root'); // Set the root element for accessibility
 
-function ItemContainer() {
+function ItemContainer(item) {
+    const dispatch = useDispatch();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [orderPlaced, setOrderPlaced] = useState(false);
+    const [weightKg, setWeightKg] = useState(item?.item.cartItems.quantity.kg)
+    const [weightG, setWeightG] = useState(item?.item.cartItems.quantity.gram)
+    const [weight, setWeight] = useState(item?.item.cartItems.quantity.litre || item?.item.cartItems.quantity.piece || item?.item.cartItems.quantity.packet)
+    const { selectedAddress } = useSelector((state) => state.address);
+    console.log(selectedAddress)
 
-    const [address, setAddress] = useState('254, Shri Nagar, Behind Sabhagruha, 3rd Lane');
-    const [city, setCity] = useState('Nagpur');
-    const [state, setState] = useState('Maharashtra');
-    const [pincode, setPincode] = useState('440009');
+    const [addressLine1, setAddressLine1] = useState();
+    const [addressLine2, setAddressLine2] = useState();
+    const [city, setCity] = useState();
+    const [state, setState] = useState();
+    const [pincode, setPincode] = useState();
 
-    const openModal = () => {
+    // console.log(item,"cont")
+
+    const openModal = async() => {
         setModalIsOpen(true);
+        setAddressLine1(selectedAddress?.addressLine1);
+        setAddressLine2(selectedAddress?.addressLine2);
+        setCity(selectedAddress?.city);
+        setState(selectedAddress?.state);
+        setPincode(selectedAddress?.pinCode);
     };
+
+    useEffect(()=>{
+        const fetchAddress = async () => {
+            await dispatch(getAllAddress());
+          };
+          fetchAddress();
+    },[])
 
     const closeModal = () => {
         setModalIsOpen(false);
@@ -26,6 +49,13 @@ function ItemContainer() {
         setOrderPlaced(true);
     };
 
+    function func(img) {
+        let image = img?.substr(12);
+        const retImage =
+          "https://letusfarm-image-storage.s3.ap-south-1.amazonaws.com" + image;
+    
+        return retImage;
+      }
     return (
         <>
             <div className="flex bg-white h-32 m-2 mx-4 rounded-lg shadow">
@@ -35,9 +65,9 @@ function ItemContainer() {
                             Item image
                         </p>
                         <img
-                            src="./assets/Milk.png"
-                            alt="hi"
-                            className="flex-3 ml-14 mt-6 h-16 w-fit justify-center items-center"
+                            src={func(item?.item.itemDetails.image.img)}
+                            alt="Item Image"
+                            className="flex-3 mx-20 mt-5 h-16 w-fit justify-center items-center"
                         />
                     </div>
                 </div>
@@ -45,7 +75,7 @@ function ItemContainer() {
                     <div className="flex flex-col">
                         <p className="flex-1 text-white bg-[#896439] text-center">Item name</p>
                         <p className=" flex-3 text-center justify-center my-9 font-bold">
-                            Low fat milk
+                            {item?.item.itemDetails.name}
                         </p>
                     </div>
                 </div>
@@ -53,21 +83,70 @@ function ItemContainer() {
                     <div className="flex flex-col">
                         <p className="flex-1 text-white bg-[#896439] text-center">Quantity</p>
                         <div className="flex items-center justify-center flex-col my-8">
-                            <QuantityModal />
-                            <p className="text-center text-xs font-light">in litres</p>
-                        </div>
-                    </div>
-                </div>
-                <div className=" flex-1 border ">
-                    <div className="flex flex-col">
-                        <p className="flex-1 text-white bg-[#896439] text-center">Price</p>
-                        <div className="flex-3 my-8">
-                            <p className="text-center justify-center font-bold ">
-                                ₹ 400/-
-                            </p>
-                            <p className="text-center justify-center text-xs font-light">
-                                ₹ 80/litre
-                            </p>
+                            {item?.item.cartItems.quantity.kg ? (
+                            <div className='flex'>
+                            <div className='flex flex-col text-center mx-1'>
+                            <input type='number' maxLength="3" className='w-24 bg-white border text-center border-gray-400 rounded outline-none px-2 focus:border-[#619524]' placeholder='Kg' value={weightKg}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (value >= 0 && value <= 200) {
+                                    setWeightKg(value);
+                                }
+                            }}/>
+                            <label htmlFor="" className='text-sm'>In Kg</label>
+                            </div>
+                            <div className='flex flex-col text-center mx-1'>
+                            <input type='number'
+                            maxLength="3" 
+                            className='w-24 bg-white border text-center border-gray-400 rounded outline-none px-2 focus:border-[#619524]' 
+                            placeholder='Grams' 
+                            value={item?.item.cartItems.quantity.gram}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (value >= 0 && value <= 999) {
+                                    setWeightG(value);
+                                }
+                            }}
+                            />
+                            <label htmlFor="" className='text-sm'>In G</label>
+                            </div>
+                            </div>
+                            ) : item?.item.cartItems.quantity.litre ? (
+                                <div className='flex flex-col text-center'>
+                                <input type='number' maxLength="3" className=' bg-white border border-gray-400 text-center rounded outline-none px-2 focus:border-[#619524]' placeholder='Litre' 
+                                value={weight}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value >= 0 && value <= 200) {
+                                        setWeight(value);
+                                    }
+                                }}/>
+                                <label htmlFor="" className='text-sm'>In Litres</label>
+                                </div>
+                            ) :item?.item.cartItems.quantity.piece ? (
+                                <div className='flex flex-col text-center'>
+                                <input type='number' maxLength="3" className=' bg-white border border-gray-400 text-center rounded outline-none px-2 focus:border-[#619524]' placeholder='Piece' value={weight}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value >= 0 && value <= 200) {
+                                        setWeight(value);
+                                    }
+                                }}/>
+                                <label htmlFor="" className='text-sm'>In Pieces</label>
+                                </div>
+                            ) :item?.item.cartItems.quantity.packet ? (
+                                <div className='flex flex-col text-center'>
+                                <input type='number' maxLength="3" className=' bg-white border border-gray-400 text-center rounded outline-none px-2 focus:border-[#619524]' placeholder='Packet' value={weight}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value >= 0 && value <= 200) {
+                                        setWeight(value);
+                                    }
+                                }}/>
+                                <label htmlFor="" className='text-sm'>In Packets</label>
+                                </div>
+                            ) : null}
+                            {/* <p className="text-center text-xs font-light">in {item?.item.cartItems.unit}</p> */}
                         </div>
                     </div>
                 </div>
@@ -77,7 +156,7 @@ function ItemContainer() {
                             Action
                         </p>
                         <button
-                            className=" flex-3 w-36 bg-[#619524] rounded-full text-white items-center justify-center mx-6 my-9"
+                            className=" flex-3 w-36 bg-[#619524] rounded-full text-white items-center justify-center mx-12 my-9"
                             onClick={openModal}
                         >
                             Proceed
@@ -108,7 +187,8 @@ function ItemContainer() {
                         <table className="w-full text-left border-collapse mb-4">
                             <thead>
                                 <tr>
-                                    <th className="border-b border-[#896439] p-2">Address</th>
+                                    <th className="border-b border-[#896439] p-2 ">Address Line 1</th>
+                                    <th className="border-b border-[#896439] p-2">Address Line 2</th>
                                     <th className="border-b border-[#896439] p-2">City</th>
                                     <th className="border-b border-[#896439] p-2">State</th>
                                     <th className="border-b border-[#896439] p-2">Pincode</th>
@@ -119,8 +199,16 @@ function ItemContainer() {
                                     <td className="border-b border-[#896439] p-2">
                                         <input
                                             type="text"
-                                            value={address}
-                                            onChange={(e) => setAddress(e.target.value)}
+                                            value={addressLine1}
+                                            onChange={(e) => setAddressLine1(e.target.value)}
+                                            className="w-full px-2 py-1 bg-[#fbf5ec]"
+                                        />
+                                    </td>
+                                    <td className="border-b border-[#896439] p-2">
+                                        <input
+                                            type="text"
+                                            value={addressLine2}
+                                            onChange={(e) => setAddressLine2(e.target.value)}
                                             className="w-full px-2 py-1 bg-[#fbf5ec]"
                                         />
                                     </td>

@@ -21,7 +21,7 @@ export const fetchCartItems = () => {
       const response = await fetch(`${baseUrl}/cart/getcartitems`, {
         method: "get",
         headers: {
-          token: await fetchToken(),
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNTI1ODIyMSwiZXhwIjoxNzI3ODUwMjIxfQ.-Fs3uZ7Pncevhw6jzPBHA6cx-9nr10wLEQBSyYri-h0",
         },
       });
 
@@ -57,7 +57,7 @@ export const addItemToCart = ({ itemId, quantity, vendorId, unit }) => {
         method: "post",
         body: JSON.stringify({ orderedItem }),
         headers: {
-          token: await fetchToken(),
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNTI1ODIyMSwiZXhwIjoxNzI3ODUwMjIxfQ.-Fs3uZ7Pncevhw6jzPBHA6cx-9nr10wLEQBSyYri-h0",
           "Content-Type": "application/json",
         },
       });
@@ -92,8 +92,7 @@ export const removeFromCart = (itemId) => {
       const response = await fetch(`${baseUrl}/cart/removeitemfromcart`, {
         method: "post",
         body: JSON.stringify({ itemId: itemId }),
-        headers: {
-          token: await fetchToken(),
+        headers: {token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNTI1ODIyMSwiZXhwIjoxNzI3ODUwMjIxfQ.-Fs3uZ7Pncevhw6jzPBHA6cx-9nr10wLEQBSyYri-h0",
           "Content-Type": "application/json",
         },
       });

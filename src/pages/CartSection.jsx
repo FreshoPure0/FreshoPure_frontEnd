@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiArrowLeft } from "react-icons/fi";
 import SearchBar from "../components/SearchBar";
 import ItemContainer from "../components/ItemContainer";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCartItems } from "../store/actions/cart";
+
 
 function CartSection() {
-  const [isEmpty, setIsEmpty] = useState(false);
 
-  const handleClick = (link) => {
-    console.log(`Image clicked: ${link}`);
-  };
+  const [isEmpty, setIsEmpty] = useState(false);
+  const { items } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  // console.log(items,"cart")
+
+  useEffect(() => {
+    const fetchCartItem = async () => {
+      await dispatch(fetchCartItems());
+    };
+    fetchCartItem();
+  }, []);
 
   return (
     <section className="flex flex-col ml-6 ">
@@ -33,13 +44,10 @@ function CartSection() {
             className="bg-white rounded-md shadow p-1 h-7 w-7 ml-4 mt-1 mb-2 flex flex-shrink-0"
             size={20}
           />
-            <ItemContainer/>
-            <ItemContainer/>
-            <ItemContainer/>
-            <ItemContainer/>
-            <ItemContainer/>
-            <ItemContainer/>
-            <ItemContainer/>
+          {items?.map((item,index) =>
+            <ItemContainer key={`${index}`} item={item}/>
+          )}
+            
         </div>
       )}
     </section>

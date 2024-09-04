@@ -20,14 +20,14 @@ export const getAllAddress = (addressId) => {
       const response = await fetch(`${baseUrl}/address/getalladdresses`, {
         method: "get",
         headers: {
-          token: await fetchToken(),
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNTI1ODIyMSwiZXhwIjoxNzI3ODUwMjIxfQ.-Fs3uZ7Pncevhw6jzPBHA6cx-9nr10wLEQBSyYri-h0",
         },
       });
 
       if (!response.ok) {
         throw new Error("Something went wrong while fetching addresses!!");
       }
-
+      console.log("hit")
       const resData = await response.json();
 
       dispatch({

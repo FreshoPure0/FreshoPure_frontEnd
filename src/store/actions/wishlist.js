@@ -20,7 +20,8 @@ export const fetchWishlistItems = () => {
       const response = await fetch(`${baseUrl}/wishlist/getwishlistitems`, {
         method: "get",
         headers: {
-          token: await fetchToken(),
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNTI1ODIyMSwiZXhwIjoxNzI3ODUwMjIxfQ.-Fs3uZ7Pncevhw6jzPBHA6cx-9nr10wLEQBSyYri-h0",
+          "Content-Type": "application/json",
         },
       });
 
@@ -53,7 +54,7 @@ export const addToWishlist = (itemId) => {
         method: "post",
         body: JSON.stringify({ wishlistItem }),
         headers: {
-          token: await fetchToken(),
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNTI1ODIyMSwiZXhwIjoxNzI3ODUwMjIxfQ.-Fs3uZ7Pncevhw6jzPBHA6cx-9nr10wLEQBSyYri-h0",
           "Content-Type": "application/json",
         },
       });
@@ -83,7 +84,7 @@ export const removefromWishlist = (itemId) => {
           method: "post",
           body: JSON.stringify({ Itemid: itemId }),
           headers: {
-            token: await fetchToken(),
+            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNTI1ODIyMSwiZXhwIjoxNzI3ODUwMjIxfQ.-Fs3uZ7Pncevhw6jzPBHA6cx-9nr10wLEQBSyYri-h0",
             "Content-Type": "application/json",
           },
         }
