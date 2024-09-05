@@ -155,12 +155,20 @@ function ItemContainer(item) {
                         <p className="flex-1 text-white bg-[#896439] rounded-tr text-center">
                             Action
                         </p>
+                        <div>
                         <button
-                            className=" flex-3 w-36 bg-[#619524] rounded-full text-white items-center justify-center mx-12 my-9"
+                            className=" flex-3 w-36 bg-[#619524] rounded-full text-white items-center justify-center mx-12 my-4"
                             onClick={openModal}
                         >
                             Proceed
                         </button>
+                        <button
+                            className=" flex-3 w-36 bg-[#619524] rounded-full text-white items-center justify-center mx-12"
+                            // onClick={}
+                        >
+                            Remove
+                        </button>
+                        </div>
                     </div>
                 </div>
             </div>

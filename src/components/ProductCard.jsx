@@ -1,4 +1,4 @@
-import React, {useState, useEffect , useCallback} from "react";
+import React, {useState, useEffect , useCallback, useRef} from "react";
 import { FiHeart } from "react-icons/fi";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,9 +13,9 @@ function ProductCard(item) {
   const dispatch = useDispatch();
   const { wishlistData } = useSelector((state) => state.wishlist);
   const { items } = useSelector((state) => state.cart);
-  const [weightKg, setWeightKg] = useState(0);
-  const [weightG, setWeightG] = useState(0);
-  const [weight, setWeight] = useState(0);
+  const [weightKg, setWeightKg] = useState("");
+  const [weightG, setWeightG] = useState("");
+  const [weight, setWeight] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   
@@ -25,20 +25,37 @@ function ProductCard(item) {
 
 
   // console.log(item,"....")
-    const getQuantity = () => {
-      let kg = 0, grams = 0, packet = 0, piece = 0, litre = 0;
-      if (item?.item.itemDetails.unit === "kg") {
-        kg = (weightKg);
-        grams = (weightG);
-      } else if (item?.item.itemDetails.unit === "packet") {
-        packet = (weight);
-      } else if (item?.item.itemDetails.unit === "litre") {
-        litre = (weight);
-      } else if (item?.item.itemDetails.unit === "piece") {
-        piece = (weight);
-      }
-      return { kg, gram: grams, piece, packet, litre };
-    };
+  const weightKgRef = useRef(weightKg);
+  const weightGRef = useRef(weightG);
+  const weightRef = useRef(weight);
+  
+  useEffect(() => {
+    weightKgRef.current = weightKg;
+  }, [weightKg]);
+  
+  useEffect(() => {
+    weightGRef.current = weightG;
+  }, [weightG]);
+  
+  useEffect(() => {
+    weightRef.current = weight;
+  }, [weight]);
+  
+  const getQuantity = async () => {
+    let kg = 0, grams = 0, packet = 0, piece = 0, litre = 0;
+    if (item?.item.itemDetails.unit === "kg") {
+      kg = weightKgRef.current || 0;
+      grams = weightGRef.current || 0;
+    } else if (item?.item.itemDetails.unit === "packet") {
+      packet = weightRef.current || 0;
+    } else if (item?.item.itemDetails.unit === "litre") {
+      litre = weightRef.current || 0;
+    } else if (item?.item.itemDetails.unit === "piece") {
+      piece = weightRef.current || 0;
+    }
+    console.log("Quantity: ", { kg, grams, piece, packet, litre }); // Debugging statement
+    return { kg, gram: grams, piece, packet, litre };
+  };
 
   const isItemInWishlist = wishlistData?.some(
     (wishlistItem) => wishlistItem.items._id === item?.item.itemId
@@ -79,23 +96,30 @@ function ProductCard(item) {
     setIsLoading(true);
     try {
       if (isItemInCart) {
-         dispatch(removeFromCart(item?.item.itemId));
-        console.log("removed")
+        dispatch(removeFromCart(item?.item.itemId));
+        console.log("Removed from cart");
       } else {
-         dispatch(
+        // Ensure latest state values are used
+        const quantity = await getQuantity();
+        console.log("Final Quantity: ", quantity); // Debugging statement
+        dispatch(
           addItemToCart({
             itemId: item?.item.itemId,
-            quantity: getQuantity(),
+            quantity: quantity,
             unit: item?.item.itemDetails.unit,
             vendorId: item?.item.vendorId,
           })
         );
+        console.log("Added to cart with quantity", quantity);
       }
     } catch (err) {
       setError(err.message);
     }
     setIsLoading(false);
-  }, [dispatch, setIsLoading, setError, isItemInCart, item.itemId]);
+  }, [dispatch, isItemInCart, item]);
+  
+  
+  
 
   function func(img) {
     let image = img?.substr(12);
@@ -145,11 +169,6 @@ function ProductCard(item) {
                                       setWeightKg(value);
                                   }
                               }}
-                                style={{
-                                    WebkitAppearance: 'none',
-                                    MozAppearance: 'textfield',
-                                    appearance: 'none'
-                                }}
                             />
 
 
@@ -164,9 +183,10 @@ function ProductCard(item) {
                             onChange={(e) => {
                               const value = e.target.value;
                               if (value >= 0 && value <= 999) {
-                                  setWeightG(value);
+                                console.log("G value: ", value); // Debugging statement
+                                setWeightG(value);
                               }
-                          }}
+                            }}
                             />
                             <label  className='text-xs'>In G</label>
                             </div>
