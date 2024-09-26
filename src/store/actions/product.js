@@ -20,7 +20,7 @@ export const fetchItems = (categoryId) => {
       const response = await fetch(`${baseUrl}/hotel/getalltemsforhotel`, {
         method: "post",
         headers: {
-          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNTI1ODIyMSwiZXhwIjoxNzI3ODUwMjIxfQ.-Fs3uZ7Pncevhw6jzPBHA6cx-9nr10wLEQBSyYri-h0",
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNzA5MDg3OSwiZXhwIjoxNzI5NjgyODc5fQ.lKCzPGpicR6QnZUfmbyCMXjyFdrxjDLXqYV0E3c7gYo",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -51,6 +51,7 @@ export const getAllCategories = () => {
         method: "get",
         headers: {
           // token: await fetchToken(),
+          "Cache-Control": "no-cache",
         },
       });
 

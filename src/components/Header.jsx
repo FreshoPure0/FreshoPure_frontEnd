@@ -25,32 +25,32 @@ function Icon({ name, size }) {
 function Header() {
   return (
     <div className="flex flex-col lg:w-1/5 md:w-2/6 h-[85vh] flex-shrink-0">
-      <img src="./assets/logo_1.jpg" alt="logo" className="w-20 rounded-2xl mx-auto mt-4" />
+      <img src="/assets/logo_1.jpg" alt="logo" className="w-20 rounded-2xl mx-auto mt-4" />
       <div className="flex flex-col justify-between mt-4 py-2 w-full h-full bg-gradient-to-r from-orange-200 to-orange-100 rounded-lg">
         <div>
           <Link
-            to="/"
+            to="/hotel"
             className="flex items-center shadow-sm rounded-lg overflow-hidden mt-2 mx-8 px-4 bg-[#FDFCFB] focus:bg-[#FFF4E8] focus:border-l-4 focus:border-[#896439]"
           >
             <Icon name="home" size={20} />
             <p className="flex-grow p-2 text-base text-yellow-900">Home</p>
           </Link>
           <Link
-            to="/cart"
+            to="/hotel/cart"
             className="flex items-center shadow-sm rounded-lg overflow-hidden mt-2 mx-8 px-4 bg-[#FDFCFB] focus:bg-[#FFF4E8] focus:border-l-4 focus:border-[#896439]"
           >
             <Icon name="cart" size={20} />
             <p className="flex-grow p-2 text-base text-yellow-900">Cart</p>
           </Link>
           <Link
-            to="/wishlist"
+            to="/hotel/wishlist"
             className="flex items-center shadow-sm rounded-lg overflow-hidden mt-2 mx-8 px-4 bg-[#FDFCFB] focus:bg-[#FFF4E8] focus:border-l-4 focus:border-[#896439]"
           >
             <Icon name="wishlist" size={20} />
             <p className="flex-grow p-2 text-base text-yellow-900">Wishlist</p>
           </Link>
           <Link
-            to="/profile"
+            to="/hotel/profile"
             className="flex items-center shadow-sm rounded-lg overflow-hidden mt-2 mx-8 px-4 bg-[#FDFCFB] focus:bg-[#FFF4E8] focus:border-l-4 focus:border-[#896439]"
           >
             <Icon name="profile" size={20} />

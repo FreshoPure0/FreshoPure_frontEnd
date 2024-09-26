@@ -12,7 +12,8 @@ import {
     CLEAR_ORDERS_SUCCESS,
     CLEAR_ORDERS,
     GET_ALL_COMPILED_ORDERS,
-    COMPILED_ORDER_DETAIL
+    COMPILED_ORDER_DETAIL,
+    UPDATE_COMPILED_ORDER_QUANTITY,
   } from "../actions/order";
   // import { CHANGE_QUANTITY } from "../actions/vendor";
   

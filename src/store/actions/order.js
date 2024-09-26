@@ -13,6 +13,7 @@ export const CLEAR_ORDERS = "CLEAR_ORDERS";
 export const GET_ALL_COMPILED_ORDERS = "GET_ALL_COMPILED_ORDERS";
 export const COMPILED_ORDER_DETAIL = "COMPILED_ORDER_DETAIL";
 export const COMPILED_ORDER_DETAIL_PDF = "COMPILED_ORDER_DETAIL_PDF";
+export const UPDATE_COMPILED_ORDER_QUANTITY = "UPDATE_COMPILED_ORDER_QUANTITY";
 // import Toast from "react-native-toast-message";
 // import axios from "axios";
 import { baseUrl } from "../baseUrl";
@@ -20,13 +21,13 @@ import { baseUrl } from "../baseUrl";
 // import RNFS from "react-native-fs"; // Import react-native-fs library
 
 const fetchToken = async () => {
-  const userData = await AsyncStorage.getItem("userData");
-  const activeId = await AsyncStorage.getItem("activeUserId");
-  const parsedData = JSON.parse(userData);
+  // const userData = await AsyncStorage.getItem("userData");
+  // const activeId = await AsyncStorage.getItem("activeUserId");
+  // const parsedData = JSON.parse(userData);
 
-  const user = parsedData?.filter((user) => user.id === activeId);
+  const user = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNzA4Mjc0MCwiZXhwIjoxNzI5Njc0NzQwfQ.RaAfyudWgHFePipY0IfQVu3EFlZ_9TOgVdxUMKbLAC8";
 
-  return user[0]?.token;
+  return user;
 };
 
 export const fetchOrders = ({ offset, status, date }) => {
@@ -58,6 +59,41 @@ export const fetchOrders = ({ offset, status, date }) => {
     } catch (err) {
       throw err;
     }
+  };
+};
+
+export const updateCompiledItemQuantity = ( itemId,quantity ) => {
+  return async (dispatch, getState) => {
+    let response = await fetch(`${baseUrl}/vendor/updateCompiledItemQuantity`, {
+      method: "post",
+      body: JSON.stringify({ itemId,quantity }),
+      headers: {
+        token: await fetchToken(),
+        "Content-Type": "application/json",
+      },
+    });
+
+    // if (!response.ok) {
+    //   Toast.show({
+    //     type: "error",
+    //     text1: "Something went wrong!",
+    //   });
+    // }
+
+    // if (response.ok) {
+    //   Toast.show({
+    //     type: "success",
+    //     text1: "Quantity Updated successfully",
+    //   });
+    // }
+
+    const resData = await response.json();
+    console.log("hit")
+
+    dispatch({
+      type: UPDATE_COMPILED_ORDER_QUANTITY,
+      payload: resData.data,
+    });
   };
 };
 

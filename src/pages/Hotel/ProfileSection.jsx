@@ -1,9 +1,10 @@
 import React from "react";
+import AnalyticsSection from "../Hotel/AnalyticsSection";
 
 function ProfileSection() {
   return (
     <>
-      <h1>Profile</h1>
+      <AnalyticsSection/>
     </>
   );
 }

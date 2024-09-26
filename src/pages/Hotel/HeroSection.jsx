@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import SearchBar from "../components/SearchBar";
-import ProductCard from "../components/ProductCard";
-import { getAllCategories, fetchItems } from "../store/actions/product";
+import SearchBar from "../../components/SearchBar";
+import ProductCard from "../../components/ProductCard";
+import { getAllCategories, fetchItems } from "../../store/actions/product";
 
 function HeroSection() {
   // const [categories, setCategories] = useState();

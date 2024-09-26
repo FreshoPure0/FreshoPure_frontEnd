@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Lato', sans-serif;;
+  font-family: 'Lato', sans-serif;
   color-scheme: light dark;
   color: rgba(0, 0, 0, 0.87);
   background-color: #fbf5ec;
@@ -23,7 +23,7 @@ a:hover {
 
 html, body {
   margin: 0;
-  padding: 2vh 2vh ;
+  padding: 1vh 2vh 1vh ;
   box-sizing: border-box;
 }
 
@@ -51,4 +51,16 @@ input[type="number"]::-webkit-inner-spin-button {
 /* Hide the spinner for Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+@layer utilities {
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
 }

@@ -22,5 +22,8 @@ module.exports = {
         'scrollbar-width': 'none', /* Firefox */
       },
     });
-  },],
+  },
+  require('@tailwindcss/forms')
+],
+
 }

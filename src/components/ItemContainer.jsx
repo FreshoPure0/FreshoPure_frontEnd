@@ -3,6 +3,8 @@ import QuantityModal from "../components/QuantityModal";
 import Modal from 'react-modal'; // If you haven't installed this, run `npm install react-modal`
 import { useSelector, useDispatch } from "react-redux";
 import { getAllAddress } from "../store/actions/address";
+import { removeFromCart } from "../store/actions/cart";
+
 
 Modal.setAppElement('#root'); // Set the root element for accessibility
 
@@ -22,7 +24,7 @@ function ItemContainer(item) {
     const [state, setState] = useState();
     const [pincode, setPincode] = useState();
 
-    // console.log(item,"cont")
+    console.log(item,"cont")
 
     const openModal = async() => {
         setModalIsOpen(true);
@@ -40,14 +42,21 @@ function ItemContainer(item) {
           fetchAddress();
     },[])
 
+    const handleRemoveCart = async() => {
+        await dispatch(removeFromCart(item?.item.cartItems.itemId))
+    };
+
     const closeModal = () => {
         setModalIsOpen(false);
         setOrderPlaced(false); // Reset to address details after closing
     };
 
     const handlePlaceOrder = () => {
+        
         setOrderPlaced(true);
     };
+
+
 
     function func(img) {
         let image = img?.substr(12);
@@ -155,19 +164,22 @@ function ItemContainer(item) {
                         <p className="flex-1 text-white bg-[#896439] rounded-tr text-center">
                             Action
                         </p>
-                        <div>
+                        <div className="flex min-h-[16vh] flex-1 justify-center items-center align-middle">
                         <button
                             className=" flex-3 w-36 bg-[#619524] rounded-full text-white items-center justify-center mx-12 my-4"
                             onClick={openModal}
                         >
                             Proceed
                         </button>
-                        <button
+                        {/* <button
                             className=" flex-3 w-36 bg-[#619524] rounded-full text-white items-center justify-center mx-12"
-                            // onClick={}
-                        >
+                            onClick={() => {
+                                console.log("Remove button clicked");
+                                handleRemoveCart()   
+                            }}
+                            >
                             Remove
-                        </button>
+                        </button> */}
                         </div>
                     </div>
                 </div>
