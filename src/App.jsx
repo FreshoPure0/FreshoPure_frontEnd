@@ -12,6 +12,7 @@ import SubVendorSection from "./pages/Vendor/SubVendorSection";
 import HotelsSection from "./pages/Vendor/HotelsSection";
 import MyOrderSection from "./pages/Vendor/ProfileMyOrderSection";
 import MyItemSection from "./pages/Vendor/ProfileMyItemSection";
+import AnalyticsSection from "./pages/Hotel/AnalyticsSection";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/hotel/cart" element={<CartSection />} />
             <Route path="/hotel/wishlist" element={<WishlistSection />} />
             <Route path="/hotel/profile" element={<ProfileSection />} />
+            <Route path="/hotel/profile/analytics" element={<AnalyticsSection/>} />
             <Route path="/vendor" element={<HeroSectionVendor/>} />
             <Route path="/vendor/subvendor" element={<SubVendorSection/>} />
             <Route path="/vendor/hotels" element={<HotelsSection/>} />
