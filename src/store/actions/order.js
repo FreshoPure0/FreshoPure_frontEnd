@@ -25,7 +25,7 @@ const fetchToken = async () => {
   // const activeId = await AsyncStorage.getItem("activeUserId");
   // const parsedData = JSON.parse(userData);
 
-  const user = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNzA4Mjc0MCwiZXhwIjoxNzI5Njc0NzQwfQ.RaAfyudWgHFePipY0IfQVu3EFlZ_9TOgVdxUMKbLAC8";
+  const user = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNzk0OTExMSwiZXhwIjoxNzMwNTQxMTExfQ.FLtpx8L_3ptCqDCR-8SLB2JH14RbrB_xrt7bNR2Y6ds";
 
   return user;
 };

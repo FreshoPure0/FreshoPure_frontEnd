@@ -13,28 +13,25 @@ import HotelsSection from "./pages/Vendor/HotelsSection";
 import MyOrderSection from "./pages/Vendor/ProfileMyOrderSection";
 import MyItemSection from "./pages/Vendor/ProfileMyItemSection";
 import AnalyticsSection from "./pages/Hotel/AnalyticsSection";
+import LoginById from "./pages/Auth/LoginById";
 
 function App() {
   return (
     <Router>
-      <div className="flex">
-        <Header/>
-        <div className="lg:w-4/5 md:w-4/5">
           <Routes>
-            <Route path="/hotel" element={<HeroSection />} />
-            <Route path="/hotel/cart" element={<CartSection />} />
-            <Route path="/hotel/wishlist" element={<WishlistSection />} />
-            <Route path="/hotel/profile" element={<ProfileSection />} />
-            <Route path="/hotel/profile/analytics" element={<AnalyticsSection/>} />
-            <Route path="/vendor" element={<HeroSectionVendor/>} />
-            <Route path="/vendor/subvendor" element={<SubVendorSection/>} />
-            <Route path="/vendor/hotels" element={<HotelsSection/>} />
-            <Route path="/vendor/profile/orders" element={<MyOrderSection/>} />
-            <Route path="/vendor/profile/items" element={<MyItemSection/>} />
+            <Route path="/loginbyid" element= {<LoginById/>}  />
+            <Route path="/hotel" element= {<div className="flex"><Header/><HeroSection /></div>}  />
+            <Route path="/hotel/cart" element={<div className="flex"><Header/><CartSection /></div>} />
+            <Route path="/hotel/wishlist" element={<div className="flex"><Header/><WishlistSection /></div>} />
+            <Route path="/hotel/profile" element={<div className="flex"><Header/><ProfileSection /></div>} />
+            <Route path="/hotel/profile/analytics" element={<div className="flex"><Header/><AnalyticsSection/></div>} />
+            <Route path="/vendor" element={<div className="flex"><Header/><HeroSectionVendor/></div>} />
+            <Route path="/vendor/subvendor" element={<div className="flex"><Header/><SubVendorSection/></div>} />
+            <Route path="/vendor/hotels" element={<div className="flex"><Header/><HotelsSection/></div>} />
+            <Route path="/vendor/profile/orders" element={<div className="flex"><Header/><MyOrderSection/></div>} />
+            <Route path="/vendor/profile/items" element={<div className="flex"><Header/><MyItemSection/></div>} />
           </Routes>
-        </div>
         <ToastContainer />
-      </div>
     </Router>
   );
 }

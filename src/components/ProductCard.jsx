@@ -42,19 +42,19 @@ function ProductCard(item) {
   }, [weight]);
   
   const getQuantity = async () => {
-    let kg = 0, grams = 0, packet = 0, piece = 0, litre = 0;
+    let kg = 0, gram = 0, packet = 0, piece = 0, litre = 0;
     if (item?.item.itemDetails.unit === "kg") {
-      kg = weightKgRef.current || 0;
-      grams = weightGRef.current || 0;
+      kg = parseFloat(weightKgRef.current) || 0;
+      gram = parseFloat(weightGRef.current) || 0;
     } else if (item?.item.itemDetails.unit === "packet") {
-      packet = weightRef.current || 0;
+      packet = parseFloat(weightRef.current) || 0;
     } else if (item?.item.itemDetails.unit === "litre") {
-      litre = weightRef.current || 0;
+      litre = parseFloat(weightRef.current) || 0;
     } else if (item?.item.itemDetails.unit === "piece") {
-      piece = weightRef.current || 0;
+      piece = parseFloat(weightRef.current) || 0;
     }
-    console.log("Quantity: ", { kg, grams, piece, packet, litre }); // Debugging statement
-    return { kg, gram: grams, piece, packet, litre };
+    console.log("Quantity: ", { kg, gram, piece, packet, litre }); // Debugging statement
+    return { kg, gram, piece, packet, litre };
   };
 
   const isItemInWishlist = wishlistData?.some(
@@ -166,6 +166,7 @@ function ProductCard(item) {
                                 onChange={(e) => {
                                   const value = e.target.value;
                                   if (value >= 0 && value <= 200) {
+                                    console.log("kG value: ", value);
                                       setWeightKg(value);
                                   }
                               }}
