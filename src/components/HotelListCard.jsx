@@ -54,19 +54,19 @@ function HotelListCard({ hotel }) {
       </div>
 
       <button
-        className="w-full border border-[#619524] mt-2 rounded-full text-[#619524]"
+        className="w-full border border-[#619524] mt-2 rounded-full text-[#619524] min-w-[100px]"
         onClick={HotelOrderList}
         disabled={loadingOrder}
       >
-        {loadingOrder ? "Loading Orders..." : "View Orders"}
+        {loadingOrder ? "Loading..." : "View Orders"}
       </button>
 
       <button
-        className="w-full bg-[#619524] mt-2 rounded-full text-white"
+        className="w-full bg-[#619524] mt-2 rounded-full text-white min-w-[100px]"
         onClick={HotelItemList}
         disabled={loadingItem}
       >
-        {loadingItem ? "Loading Items..." : "View Items"}
+        {loadingItem ? "Loading..." : "View Items"}
       </button>
 
       {isItemsDrawerOpen || isOrdersDrawerOpen ? (

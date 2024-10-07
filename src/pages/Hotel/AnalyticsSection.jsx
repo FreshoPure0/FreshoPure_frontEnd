@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState, forwardRef } from "react";
 import { FiArrowLeft, FiCalendar, FiChevronDown } from "react-icons/fi";
 import DatePicker from "react-datepicker";
@@ -16,8 +17,8 @@ function AnalyticsSection() {
   const { itemAnalytics } = useSelector((state) => state.hotel);
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(allCategories,"Cat")
-  console.log(itemAnalytics,"Items")
+  console.log(allCategories, "Cat");
+  console.log(itemAnalytics, "Items");
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -70,9 +71,6 @@ function AnalyticsSection() {
 
   return (
     <section className="flex flex-col ml-6">
-      <div className="flex flex-row justify-start mt-10 mb-4">
-        <h2 className="text-3xl font-bold mb-0">Analytics</h2>
-      </div>
       <div className="flex flex-col mt-4 p-4 bg-[#EFE5D8] h-[67vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
         <div className="flex flex-row">
           <FiArrowLeft
@@ -163,10 +161,17 @@ function AnalyticsSection() {
             </div>
           </div>
           {itemAnalytics?.map((item, index) => (
-            <div className="flex flex-row border border-[#00000033]" key={index}>
+            <div
+              className="flex flex-row border border-[#00000033]"
+              key={index}
+            >
               <div className="flex flex-col flex-1 bg-[#FFF7EC]">
                 <div className="flex items-center justify-center border-r border-b border-[#00000033]">
-                  <img src={func(item?.image)} alt="" className="h-6 w-fit my-1" />
+                  <img
+                    src={func(item?.image)}
+                    alt=""
+                    className="h-6 w-fit my-1"
+                  />
                 </div>
               </div>
               <div className="flex flex-col flex-1 bg-[#FFF7EC]">
@@ -193,7 +198,10 @@ function AnalyticsSection() {
               </div>
               <div className="flex flex-col flex-1 bg-[#FFF7EC]">
                 <p className="text-center border-b border-[#00000033] py-1">
-                  ₹ {(Math.round(item?.orderedItems?.totalPrice * 100) / 100).toFixed(2)}
+                  ₹{" "}
+                  {(
+                    Math.round(item?.orderedItems?.totalPrice * 100) / 100
+                  ).toFixed(2)}
                   /-
                 </p>
               </div>
