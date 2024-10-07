@@ -10,28 +10,28 @@ export const cardData = [
   },
   {
     id: 2,
-    image: "Frame 1000002952",
+    image: "/public/assets/personal_info.png",
     title: "Personal Info",
     text: "Name, Email, etc",
     component: "personalInfo",
   },
   {
     id: 3,
-    image: "https://via.placeholder.com/150",
+    image: "/public/assets/analystic.jpg",
     title: "Analytics",
     text: "",
     component: "analytics", // Updated component reference
   },
   {
     id: 4,
-    image: "https://via.placeholder.com/150",
+    image: "/public/assets/order.jpg",
     title: "My Orders",
     text: "",
     component: "myOrders", // Updated component reference
   },
   {
     id: 5,
-    image: "https://via.placeholder.com/150",
+    image: "/public/assets/address.jpg",
     title: "My Addresses",
     text: "Delivery locations",
     component: "myAddresses", // Updated component reference

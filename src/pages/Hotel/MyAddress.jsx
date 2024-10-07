@@ -1,9 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
-import { LuPencil } from "react-icons/lu";
 
-const MyAddress = () => {
+const MyAddress = ({ onBack }) => {
   const [address, setAddress] = useState({
     line1: "",
     line2: "",
@@ -45,6 +44,7 @@ const MyAddress = () => {
       <div className="flex flex-col mt-4 p-4 bg-[#EFE5D8] h-[67vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
         <div className="flex flex-row items-center">
           <FiArrowLeft
+            onClick={onBack}
             className="bg-white rounded-md shadow p-1 h-7 w-7 mx-4 mt-1 mb-2 flex flex-shrink-0"
             size={20}
           />

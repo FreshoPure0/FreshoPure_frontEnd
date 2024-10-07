@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getHotelItemAnalytics } from "../../store/actions/hotel";
 import { getAllCategories } from "../../store/actions/product";
 
-function AnalyticsSection() {
+function AnalyticsSection({ onBack }) {
   const dispatch = useDispatch();
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -74,6 +74,7 @@ function AnalyticsSection() {
       <div className="flex flex-col mt-4 p-4 bg-[#EFE5D8] h-[67vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
         <div className="flex flex-row">
           <FiArrowLeft
+            onClick={onBack}
             className="bg-white rounded-md shadow p-1 h-7 w-7 mx-4 mt-1 mb-2 flex flex-shrink-0"
             size={20}
           />
