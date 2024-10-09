@@ -9,15 +9,27 @@ export const GET_ALL_ASSIGNABLE_ITEMS = "GET_ALL_ASSIGNABLE_ITEMS";
 export const ADD_SUBVENDOR_ITEM = "ADD_SUBVENDOR_ITEM";
 
 import { baseUrl } from "../baseUrl";
+import Cookies from 'js-cookie';
 
-const fetchToken = async () => {
-  // const userData = await AsyncStorage.getItem("userData");
-  // const activeId = await AsyncStorage.getItem("activeUserId");
-  // const parsedData = JSON.parse(userData);
+const fetchToken = () => {
+  // Get the cookies using js-cookie
+  const userDataCookie = Cookies.get("userData");
+  const activeUserIdCookie = Cookies.get("activeUserId");
 
-  const user ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNzA4Mjc0MCwiZXhwIjoxNzI5Njc0NzQwfQ.RaAfyudWgHFePipY0IfQVu3EFlZ_9TOgVdxUMKbLAC8";
+  // If userData or activeUserId doesn't exist, return null
+  if (!userDataCookie || !activeUserIdCookie) {
+    return null;
+  }
 
-  return user;
+  // Parse the JSON data
+  const parsedData = JSON.parse(userDataCookie);
+
+  // Find the user with the active ID
+  const user = parsedData?.filter((user) => user.id === activeUserIdCookie);
+
+  // Return the token if found
+  return user[0]?.token;
+  // console.log(user[0]?.token)
 };
 
 export const fetchSubVendors = () => {

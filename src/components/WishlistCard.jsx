@@ -36,19 +36,54 @@ function WishlistCard(item) {
       packet = 0,
       piece = 0,
       litre = 0;
-    if (item?.item.itemDetails.unit === "kg") {
+    if (item?.item?.items?.unit === "kg") {
       kg = parseFloat(weightKgRef.current) || 0;
       gram = parseFloat(weightGRef.current) || 0;
-    } else if (item?.item.itemDetails.unit === "packet") {
+    } else if (item?.item?.items?.unit === "packet") {
       packet = parseFloat(weightRef.current) || 0;
-    } else if (item?.item.itemDetails.unit === "litre") {
+    } else if (item?.item?.items?.unit === "litre") {
       litre = parseFloat(weightRef.current) || 0;
-    } else if (item?.item.itemDetails.unit === "piece") {
+    } else if (item?.item?.items?.unit === "piece") {
       piece = parseFloat(weightRef.current) || 0;
     }
     console.log("Quantity: ", { kg, gram, piece, packet, litre }); // Debugging statement
     return { kg, gram, piece, packet, litre };
   };
+
+  const handleRemoveFromWishlist = async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(removefromWishlist(item?.item?.items?._id));
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setIsLoading(false);
+  };
+
+  const handleCart = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+        // Ensure latest state values are used
+        const quantity = await getQuantity();
+        console.log("Final Quantity: ", quantity); // Debugging statement
+        dispatch(
+          addItemToCart({
+            itemId: item?.item?.items?._id,
+            quantity: quantity,
+            unit: item?.item?.items?.unit,
+            vendorId: item?.item?.items?.price?.vendorId,
+          })
+        );
+        console.log("Added to cart with quantity", quantity);
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false);
+  }, [dispatch, item]);
+
 
   function func(img) {
     let image = img?.substr(12);
@@ -63,6 +98,7 @@ function WishlistCard(item) {
         <FiHeart
           className="text-red-600 fill-current pointer-cursor flex float-right mr-2 mt-2 z-40"
           size={20}
+          onClick={()=>{handleRemoveFromWishlist()}}
         />
         <img
           src={func(item?.item?.items.image.img)}
@@ -173,6 +209,8 @@ function WishlistCard(item) {
           className="w-36 bg-[#619524] mx-2 my-1 rounded-full text-white z-10"
           onClick={() => {
             console.log("Add button clicked");
+            handleCart()
+            handleRemoveFromWishlist()
           }}
         >
           Add to cart

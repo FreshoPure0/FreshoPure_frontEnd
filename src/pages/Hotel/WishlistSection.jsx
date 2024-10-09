@@ -23,7 +23,7 @@ function WishlistSection() {
         <h2 className="text-3xl font-bold mb-0">Wishlist</h2>
         <SearchBar/>
       </div>
-      <div className="flex flex-row overflow-x-auto h-[67vh] bg-[#EFE5D8] rounded-lg overflow-y-hidden hide-scrollbar flex-nowrap mt-4">
+      <div className="flex flex-row overflow-x-auto h-[67vh] w-[75vw] bg-[#EFE5D8] rounded-lg overflow-y-scroll hide-scrollbar flex-wrap mt-4">
         {wishlistData?.map((item,index)=>
         <WishlistCard index={index} item={item}/>
       )}

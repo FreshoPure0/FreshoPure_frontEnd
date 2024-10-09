@@ -1,6 +1,6 @@
 import {
   AUTHENTICATE,
-  LOGOUT,
+  LOGOUT_USER,
   SET_DID_TRY_AUTO_LOGIN,
   LOGIN,
   CLEAR_INFO,
@@ -12,11 +12,13 @@ import {
   UPDATE_USER_DETAILS,
   GET_PROFILE_DATA,
   SWITCH_PROFILE,
+  FETCH_USER_ROLE,
 } from "../actions/auth";
 
 const initialState = {
   users: [],
   activeUserId: null, // ID of the currently active user
+  role: null,
 };
 
 export default (state = initialState, action) => {
@@ -84,6 +86,11 @@ export default (state = initialState, action) => {
         activeUserId,
       };
     }
+    case FETCH_USER_ROLE:
+      return {
+        ...state,
+        role: action.role, // Update the role in state
+      };
 
     case SET_DID_TRY_AUTO_LOGIN: {
       const userIndex = state.users.findIndex(
@@ -122,11 +129,11 @@ export default (state = initialState, action) => {
       return state;
     }
 
-    case LOGOUT: {
+    case LOGOUT_USER: {
        return {
            ...state,
-           users:action.restUsers,
-           activeUserId:action.activeUserId
+           users:[],
+           activeUserId:[]
        };
       }
 

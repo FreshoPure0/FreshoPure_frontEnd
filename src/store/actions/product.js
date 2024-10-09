@@ -4,15 +4,27 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 import { baseUrl } from "../baseUrl";
+import Cookies from 'js-cookie';
 
-const fetchToken = async () => {
-  // const userData = await AsyncStorage.getItem("userData");
-  // const activeId = await AsyncStorage.getItem("activeUserId");
-  // const parsedData = JSON.parse(userData);
+const fetchToken = () => {
+  // Get the cookies using js-cookie
+  const userDataCookie = Cookies.get("userData");
+  const activeUserIdCookie = Cookies.get("activeUserId");
 
-  const user ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNzk0OTExMSwiZXhwIjoxNzMwNTQxMTExfQ.FLtpx8L_3ptCqDCR-8SLB2JH14RbrB_xrt7bNR2Y6ds";
+  // If userData or activeUserId doesn't exist, return null
+  if (!userDataCookie || !activeUserIdCookie) {
+    return null;
+  }
 
-  return user;
+  // Parse the JSON data
+  const parsedData = JSON.parse(userDataCookie);
+
+  // Find the user with the active ID
+  const user = parsedData?.filter((user) => user.id === activeUserIdCookie);
+
+  // Return the token if found
+  return user[0]?.token;
+  // console.log(user[0]?.token)
 };
 
 export const fetchItems = (categoryId) => {

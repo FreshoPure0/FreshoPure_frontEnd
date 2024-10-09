@@ -3,15 +3,28 @@ export const GET_SELECTED_ADDRESS = "GET_SELECTED_ADDRESS";
 export const ADD_NEW_ADDRESS = "ADD_NEW_ADDRESS";
 export const REMOVE_ADDRESS = "REMOVE_ADDRESS";
 import { baseUrl } from "../baseUrl";
+import Cookies from 'js-cookie';
 
-const fetchToken = async () => {
-  // const userData = await AsyncStorage.getItem("userData");
-  // const activeId = await AsyncStorage.getItem("activeUserId");
-  // const parsedData = JSON.parse(userData);
 
-  const user ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNzk0OTExMSwiZXhwIjoxNzMwNTQxMTExfQ.FLtpx8L_3ptCqDCR-8SLB2JH14RbrB_xrt7bNR2Y6ds";
+const fetchToken = () => {
+  // Get the cookies using js-cookie
+  const userDataCookie = Cookies.get("userData");
+  const activeUserIdCookie = Cookies.get("activeUserId");
 
-  return user;
+  // If userData or activeUserId doesn't exist, return null
+  if (!userDataCookie || !activeUserIdCookie) {
+    return null;
+  }
+
+  // Parse the JSON data
+  const parsedData = JSON.parse(userDataCookie);
+
+  // Find the user with the active ID
+  const user = parsedData?.filter((user) => user.id === activeUserIdCookie);
+
+  // Return the token if found
+  return user[0]?.token;
+  // console.log(user[0]?.token)
 };
 
 export const getAllAddress = (addressId) => {

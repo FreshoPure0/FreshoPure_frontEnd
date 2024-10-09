@@ -17,17 +17,29 @@ export const UPDATE_COMPILED_ORDER_QUANTITY = "UPDATE_COMPILED_ORDER_QUANTITY";
 // import Toast from "react-native-toast-message";
 // import axios from "axios";
 import { baseUrl } from "../baseUrl";
+import Cookies from 'js-cookie';
 
 // import RNFS from "react-native-fs"; // Import react-native-fs library
 
-const fetchToken = async () => {
-  // const userData = await AsyncStorage.getItem("userData");
-  // const activeId = await AsyncStorage.getItem("activeUserId");
-  // const parsedData = JSON.parse(userData);
+const fetchToken = () => {
+  // Get the cookies using js-cookie
+  const userDataCookie = Cookies.get("userData");
+  const activeUserIdCookie = Cookies.get("activeUserId");
 
-  const user = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM1ZWVlYjJlNjNhMWM0YThlZjg1OCIsImlhdCI6MTcyNzk0OTExMSwiZXhwIjoxNzMwNTQxMTExfQ.FLtpx8L_3ptCqDCR-8SLB2JH14RbrB_xrt7bNR2Y6ds";
+  // If userData or activeUserId doesn't exist, return null
+  if (!userDataCookie || !activeUserIdCookie) {
+    return null;
+  }
 
-  return user;
+  // Parse the JSON data
+  const parsedData = JSON.parse(userDataCookie);
+
+  // Find the user with the active ID
+  const user = parsedData?.filter((user) => user.id === activeUserIdCookie);
+
+  // Return the token if found
+  return user[0]?.token;
+  // console.log(user[0]?.token)
 };
 
 export const fetchOrders = ({ offset, status, date }) => {

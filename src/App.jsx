@@ -19,7 +19,7 @@ function App() {
   return (
     <Router>
           <Routes>
-            <Route path="/loginbyid" element= {<LoginById/>}  />
+            <Route path="/" element= {<LoginById/>}  />
             <Route path="/hotel" element= {<div className="flex"><Header/><HeroSection /></div>}  />
             <Route path="/hotel/cart" element={<div className="flex"><Header/><CartSection /></div>} />
             <Route path="/hotel/wishlist" element={<div className="flex"><Header/><WishlistSection /></div>} />

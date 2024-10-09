@@ -1,15 +1,23 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Toast from "react-native-toast-message";
-import { registerIndieID, unregisterIndieDevice } from "native-notify";
-import axios from "axios";
-import createAsyncThunk from "@reduxjs/toolkit";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import Toast from "react-native-toast-message";
+import { ToastContainer, toast } from "react-toastify";
+// import { registerIndieID, unregisterIndieDevice } from "native-notify";
+// import axios from "axios";
+// import createAsyncThunk from "@reduxjs/toolkit";
 import { activeVendorSubscription } from "./vendor";
-import { StackActions } from "@react-navigation/native";
+// import { StackActions } from "@react-navigation/native";
 import { baseUrl } from "../baseUrl";
 import { useSelector } from "react-redux";
+import Cookies from 'js-cookie';
+
+// Action Types
+export const SET_USER_ROLE = 'SET_USER_ROLE';
+
+
 
 export const AUTHENTICATE = "AUTHENTICATE";
-export const LOGOUT = "LOGOUT";
+// export const LOGOUT = "LOGOUT";
+export const LOGOUT_USER = "LOGOUT_USER";
 export const SET_DID_TRY_AUTO_LOGIN = "SET_DID_TRY_AUTO_LOGIN";
 export const SET_USER = "SET_USER";
 export const LOGIN = "LOGIN";
@@ -21,17 +29,52 @@ export const REVIEW_PROFILE = "REVIEW_PROFILE";
 export const UPDATE_USER_DETAILS = "UPDATE_USER_DETAILS";
 export const GET_PROFILE_DATA = "GET_PROFILE_DATA";
 export const SWITCH_PROFILE = "SWITCH_PROFILE";
+export const FETCH_USER_ROLE = "FETCH_USER_ROLE";
 let timer;
 
-const fetchToken = async () => {
-  const userData = await AsyncStorage.getItem("userData");
-  const activeId = await AsyncStorage.getItem("activeUserId");
-  const parsedData = JSON.parse(userData);
+const fetchToken = () => {
+  // Get the cookies using js-cookie
+  const userDataCookie = Cookies.get("userData");
+  const activeUserIdCookie = Cookies.get("activeUserId");
 
-  const user = parsedData?.filter((user) => user.id === activeId);
+  // If userData or activeUserId doesn't exist, return null
+  if (!userDataCookie || !activeUserIdCookie) {
+    return null;
+  }
 
+  // Parse the JSON data
+  const parsedData = JSON.parse(userDataCookie);
+
+  // Find the user with the active ID
+  const user = parsedData?.filter((user) => user.id === activeUserIdCookie);
+
+  // Return the token if found
   return user[0]?.token;
+  // console.log(user[0]?.token)
 };
+
+const fetchRole = () => {
+  // Get the cookies using js-cookie
+  const userDataCookie = Cookies.get("userData");
+  const activeUserIdCookie = Cookies.get("activeUserId");
+
+  // If userData or activeUserId doesn't exist, return null
+  if (!userDataCookie || !activeUserIdCookie) {
+    return null;
+  }
+
+  // Parse the JSON data
+  const parsedData = JSON.parse(userDataCookie);
+
+  // Find the user with the active ID
+  const user = parsedData?.filter((user) => user.id === activeUserIdCookie);
+
+  // Return the token if found
+  return user[0]?.role;
+  // console.log(user[0]?.role)
+};
+
+
 
 export const setDidTryAutoLogin = () => {
   return {
@@ -71,6 +114,14 @@ export const authenticate = (
   };
 };
 
+// Action Creator
+export const setUserRole = (role) => {
+  return {
+    type: SET_USER_ROLE,
+    payload: role,
+  };
+};
+
 export const otpVerify = (phone, otp) => {
   return async (dispatch) => {
     const response = await fetch(baseUrl + "/user/emailverification", {
@@ -84,12 +135,12 @@ export const otpVerify = (phone, otp) => {
       }),
     });
 
-    if (!response.ok) {
-      return Toast.show({
-        type: "error",
-        text1: "Try Again!",
-      });
-    }
+    // if (!response.ok) {
+    //   return Toast.show({
+    //     type: "error",
+    //     text1: "Try Again!",
+    //   });
+    // }
 
     const resData = await response.json();
 
@@ -98,10 +149,10 @@ export const otpVerify = (phone, otp) => {
     }
 
     if (!resData.success) {
-      Toast.show({
-        type: "error",
-        text1: "Invalid Otp!",
-      });
+      // Toast.show({
+      //   type: "error",
+      //   text1: "Invalid Otp!",
+      // });
     } else {
       const userData = await AsyncStorage.getItem("userData");
 
@@ -163,6 +214,25 @@ export const otpVerify = (phone, otp) => {
   };
 };
 
+export const getUserRole = () => {
+  return async (dispatch) => {
+    try {
+      const role = fetchRole(); // Function to fetch the role
+      dispatch({
+        type: FETCH_USER_ROLE,
+        role: role, // Dispatch the fetched role
+      });
+    } catch (err) {
+      console.error("Error fetching user role:", err);
+      dispatch({
+        type: FETCH_USER_ROLE,
+        role: null, // Handle error case
+      });
+    }
+  };
+};
+
+
 // Modified login to handle multiple profiles
 export const login = ({ phone, code }) => {
   return async (dispatch) => {
@@ -176,35 +246,37 @@ export const login = ({ phone, code }) => {
       });
 
       if (!response.ok) {
-        return Toast.show({
-          type: "error",
-          text1: "Invalid credentials",
-        });
+        // return Toast.show({
+        //   type: "error",
+        //   text1: "Invalid credentials",
+        // });
+        console.log("Invalid credentials")
       }
 
       const resData = await response.json();
+      console.log(resData)
+      // if (resData?.success) {
+      //   registerIndieID(resData?.user?._id, 21751, "ZkTW5huO0kRCf7UXI6DmJL");
+      // }
 
-      if (resData?.success) {
-        registerIndieID(resData?.user?._id, 21751, "ZkTW5huO0kRCf7UXI6DmJL");
-      }
-
-      if (resData.otp === true) {
-        return Toast.show({
-          type: "success",
-          text1: "Otp Sent",
-        });
-      }
+      // if (resData.otp === true) {
+      //   return Toast.show({
+      //     type: "success",
+      //     text1: "Otp Sent",
+      //   });
+      // }
 
       if (!resData.success) {
-        Toast.show({
-          type: "error",
-          text1: "Invalid UniqueId!",
-        });
+        console.log("Invalid Unique ID")
+        toast.error("Invalid UniqueId!")
+        // Toast.show({
+        //   type: "error",
+        //   text1: "Invalid UniqueId!",
+        // });
         return;
       }
-
-      const userData = await AsyncStorage.getItem("userData");
-      let parsedData = JSON.parse(userData);
+      const userData = Cookies.get('userData');
+      let parsedData = userData ? JSON.parse(userData) : null;
 
       if (parsedData === null) {
         parsedData = [
@@ -226,10 +298,10 @@ export const login = ({ phone, code }) => {
         );
 
         if (index !== -1) {
-          return Toast.show({
-            type: "error",
-            text1: "Already Logged In",
-          });
+          // return Toast.show({
+          //   type: "error",
+          //   text1: "Already Logged In",
+          // });
         }
 
         const newUser = {
@@ -247,7 +319,7 @@ export const login = ({ phone, code }) => {
       }
 
       saveDataToStorage(parsedData, resData.user._id);
-
+      fetchToken()
       dispatch(
         authenticate(
           resData.user._id,
@@ -261,20 +333,25 @@ export const login = ({ phone, code }) => {
       );
     } catch (err) {
       console.log(err);
-      Toast.show({
-        type: "error",
-        text1: "An error occurred during login.",
-      });
+      // Toast.show({
+      //   type: "error",
+      //   text1: "An error occurred during login.",
+      // });
     }
   };
 };
 
 
-// Function to handle storing multiple user data in AsyncStorage
 const saveDataToStorage = (userData, activeUserId) => {
-  AsyncStorage.setItem("userData", JSON.stringify(userData));
-  AsyncStorage.setItem("activeUserId", activeUserId);
+  // Save userData as a cookie with 1-week expiration
+  Cookies.set('userData', JSON.stringify(userData), { expires: 7, path: '/' });
+
+  // Save activeUserId as a cookie with 1-week expiration
+  Cookies.set('activeUserId', activeUserId, { expires: 7, path: '/' });
+  console.log("cookie Saved")
 };
+
+
 
 export const resend = (phone) => {
   try {
@@ -290,10 +367,10 @@ export const resend = (phone) => {
       });
 
       if (!response.ok) {
-        return Toast.show({
-          type: "error",
-          text1: "Invalid Number",
-        });
+        // return Toast.show({
+        //   type: "error",
+        //   text1: "Invalid Number",
+        // });
       }
     };
   } catch (err) {
@@ -336,10 +413,10 @@ export const setUser = () => {
       const activeUserId = await AsyncStorage.getItem("activeUserId");
 
       if (!userData) {
-        return Toast.show({
-          type: "error",
-          text1: "Session Expired",
-        });
+        // return Toast.show({
+        //   type: "error",
+        //   text1: "Session Expired",
+        // });
       }
 
       const users = JSON.parse(userData);
@@ -419,16 +496,16 @@ export const setUserProfile = (userData) => {
     console.log(resData)
 
     if (!response.ok) {
-      Toast.show({
-        type: "error",
-        text1: "Something went wrong!!",
-      });
+      // Toast.show({
+      //   type: "error",
+      //   text1: "Something went wrong!!",
+      // });
     } else {
 
-      Toast.show({
-        type: "success",
-        text1: "Profile Completed successfully",
-      });
+      // Toast.show({
+      //   type: "success",
+      //   text1: "Profile Completed successfully",
+      // });
 
       dispatch(
         authenticate(
@@ -539,34 +616,49 @@ export const clearinfo = () => {
 };
 
 // Modified logout to handle multiple profiles
+// export const logout = () => {
+//   return async (dispatch) => {
+//     try {
+//       const userData = await AsyncStorage.getItem("userData");
+//       const activeId = await AsyncStorage.getItem("activeUserId");
+
+//       if (userData) {
+//         const parsedUserData = JSON.parse(userData);
+//         const otherUsers = parsedUserData?.filter(
+//           (user) => user?.user?._id !== activeId
+//         );
+
+//         saveDataToStorage(otherUsers, otherUsers[0]?.user?._id);
+
+//         dispatch({
+//           type: LOGOUT,
+//           restUsers: otherUsers,
+//           activeUserId: otherUsers[0]?.user?._id,
+//         });
+//       } else {
+//         // Toast.show({
+//         //   type: "error",
+//         //   text1: "Unknown Error occurred",
+//         // });
+//       }
+//     } catch (error) {
+//       console.error("Logout failed:", error);
+//     }
+//   };
+// };
+
 export const logout = () => {
-  return async (dispatch) => {
-    try {
-      const userData = await AsyncStorage.getItem("userData");
-      const activeId = await AsyncStorage.getItem("activeUserId");
+  return (dispatch) => {
+    // Clear cookies
+    Cookies.remove("userData");
+    Cookies.remove("activeUserId");
 
-      if (userData) {
-        const parsedUserData = JSON.parse(userData);
-        const otherUsers = parsedUserData?.filter(
-          (user) => user?.user?._id !== activeId
-        );
+    // Dispatch logout action to reset the state
+    dispatch({ type: LOGOUT_USER });
 
-        saveDataToStorage(otherUsers, otherUsers[0]?.user?._id);
+    // Optionally, if you want to clear localStorage/sessionStorage or any other related storage, do it here
 
-        dispatch({
-          type: LOGOUT,
-          restUsers: otherUsers,
-          activeUserId: otherUsers[0]?.user?._id,
-        });
-      } else {
-        Toast.show({
-          type: "error",
-          text1: "Unknown Error occurred",
-        });
-      }
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+    // If you're using routing in your action, you can navigate here as well
   };
 };
 
@@ -606,17 +698,17 @@ export const updateUserProfile = (profileData) => {
     });
 
     if (!response.ok) {
-      Toast.show({
-        type: "error",
-        text1: "Profile Not Updated! Please Try Again Later.",
-      });
+      // Toast.show({
+      //   type: "error",
+      //   text1: "Profile Not Updated! Please Try Again Later.",
+      // });
     }
 
     if (response.ok) {
-      Toast.show({
-        type: "success",
-        text1: "Profile Updated Successfully!",
-      });
+      // Toast.show({
+      //   type: "success",
+      //   text1: "Profile Updated Successfully!",
+      // });
     }
 
     const resData = await response.json();

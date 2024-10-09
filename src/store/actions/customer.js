@@ -1,16 +1,28 @@
 export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import { baseUrl } from "../baseUrl";
+import Cookies from 'js-cookie';
 
-const fetchToken = async () => {
-  const userData = await AsyncStorage.getItem("userData");
-  const activeId = await AsyncStorage.getItem("activeUserId");
-  const parsedData = JSON.parse(userData);
+const fetchToken = () => {
+  // Get the cookies using js-cookie
+  const userDataCookie = Cookies.get("userData");
+  const activeUserIdCookie = Cookies.get("activeUserId");
 
-  const user = parsedData?.filter((user) => user.id === activeId);
+  // If userData or activeUserId doesn't exist, return null
+  if (!userDataCookie || !activeUserIdCookie) {
+    return null;
+  }
 
+  // Parse the JSON data
+  const parsedData = JSON.parse(userDataCookie);
+
+  // Find the user with the active ID
+  const user = parsedData?.filter((user) => user.id === activeUserIdCookie);
+
+  // Return the token if found
   return user[0]?.token;
+  // console.log(user[0]?.token)
 };
 
 export const getAllCategories = () => {
