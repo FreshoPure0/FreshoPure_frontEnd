@@ -9,40 +9,44 @@ import { getProfileData, updateUserProfile } from "./../../store/actions/auth";
 function PersonalInfo({ onBack }) {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user);
-
+  console.log(users)
   // Memoize profileDetail to avoid re-calculation on every render
-  const profileDetail = useMemo(() => users[0]?.user, [users]);
+  const profileDetail =  users;
 
   console.log("profileDetail:", profileDetail);
   const [formData, setFormData] = useState({
     fullName: "",
-    organizationName: "",
-    phoneNumber: "",
+    organization: "",
+    phone: "",
     email: "",
   });
 
   const [editableFields, setEditableFields] = useState({
     fullName: false,
-    organizationName: false,
-    phoneNumber: false,
+    organization: false,
+    phone: false,
     email: false,
   });
 
   useEffect(() => {
     const loadUserDetails = async () => {
-      dispatch(getProfileData());
+      try {
+        await dispatch(getProfileData());
+      } catch (error) {
+        console.log(error)
+      }
+      
     };
-
     loadUserDetails();
   }, [dispatch]);
 
   useEffect(() => {
     if (profileDetail) {
       setFormData({
-        fullName: profileDetail.fullName || "",
-        organizationName: profileDetail.organization || "",
-        phoneNumber: profileDetail.phone || "",
-        email: profileDetail.email || "",
+        fullName: profileDetail?.imageDetails?.fullName || "",
+        organization: profileDetail?.imageDetails?.organization || "",
+        phone: profileDetail?.phone || "",
+        email: profileDetail?.imageDetails?.email || "",
       });
     }
   }, [profileDetail]);
@@ -62,27 +66,38 @@ function PersonalInfo({ onBack }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Updated Data:", formData);
-
-    // Create an object that contains previous data and updated fields
+  
+    // Optimistically update the profileDetail with formData for immediate UI feedback
     const updatedProfileData = {
-      ...profileDetail,
-      ...formData,
+      ...profileDetail, // previous profile details
+      ...formData, // updated form data
     };
-
-    // Dispatch the action to update the user profile
-    dispatch(updateUserProfile(updatedProfileData));
-
+  
+    // Dispatch the action to update the user profile in the backend
+    try {
+      await dispatch(updateUserProfile(updatedProfileData));
+  
+      // Optimistically update the UI with the updated profile data
+      setFormData(updatedProfileData);
+  
+      // Optionally, you can re-fetch the profile if needed
+      // await dispatch(getProfileData());
+    } catch (error) {
+      console.log("Error updating profile:", error);
+    }
+  
     // Optionally reset editable fields after submission
     setEditableFields({
       fullName: false,
-      organizationName: false,
-      phoneNumber: false,
+      organization: false,
+      phone: false,
       email: false,
     });
   };
+  
 
   return (
     <div className="flex flex-col mt-4 p-4 bg-[#EFE5D8] h-[67vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
@@ -126,7 +141,7 @@ function PersonalInfo({ onBack }) {
           {/* Organization Name */}
           <div className="relative">
             <label
-              htmlFor="organizationName"
+              htmlFor="organization"
               className="block text-sm font-medium text-gray-700"
             >
               Organization Name
@@ -134,17 +149,17 @@ function PersonalInfo({ onBack }) {
             <LuPencil
               className="absolute left-60  top-8 text-gray-500 cursor-pointer"
               size={20}
-              onClick={() => handlePencilClick("organizationName")}
+              onClick={() => handlePencilClick("organization")}
             />
             <input
               type="text"
-              name="organizationName"
-              id="organizationName"
-              value={formData.organizationName}
+              name="organization"
+              id="organization"
+              value={formData.organization}
               onChange={handleChange}
-              disabled={!editableFields.organizationName}
+              disabled={!editableFields.organization}
               className={`focus:ring-indigo-500 focus:border-indigo-500 block w-3/5 pl-3 pr-10 sm:text-sm border-gray-300 rounded-md mt-1 ${
-                !editableFields.organizationName ? "bg-gray-100" : ""
+                !editableFields.organization ? "bg-gray-100" : ""
               }`}
               placeholder="Enter your organization name"
             />
@@ -180,7 +195,7 @@ function PersonalInfo({ onBack }) {
           {/* Phone Number */}
           <div className="relative">
             <label
-              htmlFor="phoneNumber"
+              htmlFor="phone"
               className="block text-sm font-medium text-gray-700"
             >
               Phone Number
@@ -188,17 +203,17 @@ function PersonalInfo({ onBack }) {
             <LuPencil
               className="absolute left-60  top-8 text-gray-500 cursor-pointer"
               size={20}
-              onClick={() => handlePencilClick("phoneNumber")}
+              onClick={() => handlePencilClick("phone")}
             />
             <input
               type="tel"
-              name="phoneNumber"
-              id="phoneNumber"
-              value={formData.phoneNumber}
+              name="phone"
+              id="phone"
+              value={formData.phone}
               onChange={handleChange}
-              disabled={!editableFields.phoneNumber}
+              disabled={!editableFields.phone}
               className={`focus:ring-indigo-500 focus:border-indigo-500 block w-3/5 pl-3 pr-10 sm:text-sm border-gray-300 rounded-md mt-1 ${
-                !editableFields.phoneNumber ? "bg-gray-100" : ""
+                !editableFields.phone ? "bg-gray-100" : ""
               }`}
               placeholder="Enter your phone number"
             />

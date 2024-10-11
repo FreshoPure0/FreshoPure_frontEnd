@@ -13,15 +13,18 @@ function ProfileSection() {
   const [selectedComponent, setSelectedComponent] = useState(null);
 
   const cardData = useProfileCardData();
-  // Function to handle card click
+
+  // Function to handle card click, sets the selected component to be rendered
   const handleCardClick = (component) => {
     setSelectedComponent(component);
   };
 
+  // Function to handle back button, sets selectedComponent back to null
   const handleBack = () => {
     setSelectedComponent(null); // Go back to the main profile view
   };
 
+  // Function to render the selected component based on user selection
   const renderComponent = () => {
     switch (selectedComponent) {
       case "personalInfo":
@@ -49,25 +52,28 @@ function ProfileSection() {
     }
   };
 
+  // Destructure the `title` and `component` from the result of `renderComponent`
   const { title, component } = selectedComponent
     ? renderComponent()
     : { title: "Profile Details", component: null };
 
   return (
-    <section className="ml-8 mt-10 flex flex-col lg:w-full md:w-1/5 h-[80vh]">
+    <section className="ml-8 mt-10 flex flex-col lg:w-full md:w-1/5 h-[80vh] ">
       <div className="flex justify-between mb-4">
         <h2 className="text-3xl font-bold mb-0">{title}</h2>
         <SearchBar className="mb-4" />
       </div>
+      
+      {/* Check if a component is selected, otherwise show the profile cards */}
       {component ? (
-        component
+        component // Render the selected component (e.g., Personal Info)
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 p-4 bg-[#EFE5D8] rounded-lg overflow-y-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 p-4 bg-[#EFE5D8] rounded-lg overflow-y-auto hide-scrollbar">
           {cardData.map((profile, index) => (
             <div
               key={profile.id}
               className="w-full cursor-pointer"
-              onClick={() => handleCardClick(profile.component)}
+              onClick={() => handleCardClick(profile.component)} // Set the clicked component
             >
               <ProfileCard
                 text={profile.text}

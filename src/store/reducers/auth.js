@@ -130,12 +130,12 @@ export default (state = initialState, action) => {
     }
 
     case LOGOUT_USER: {
-       return {
-           ...state,
-           users:[],
-           activeUserId:[]
-       };
-      }
+      return {
+        ...state,
+        users: [],
+        activeUserId: [],
+      };
+    }
 
     case CLEAR_INFO: {
       const userIndex = state.users?.findIndex(
@@ -183,34 +183,31 @@ export default (state = initialState, action) => {
     }
 
     case UPDATE_USER_DETAILS: {
-      const userIndex = state.users.findIndex((user) => user.id === action.id);
-      if (userIndex !== -1) {
-        const updatedUsers = [...state.users];
-        updatedUsers[userIndex].user = action.payload;
-
-        return {
-          ...state,
-          users: updatedUsers,
-        };
-      }
-      return state;
+      return {
+        ...state,
+        users: {
+          ...state.users, // Keep other properties of `users` intact
+          ...action.payload, // Override with the new profile data
+        },
+      };
     }
 
     case GET_PROFILE_DATA: {
-      const userIndex = state.users.findIndex(
-        (user) => user.id === action.payload.id
-      );
-      if (userIndex !== -1) {
-        const updatedUsers = [...state.users];
-        updatedUsers[userIndex] = {
-          ...updatedUsers[userIndex],
-          profilePicture: action.payload,
-        };
-        return {
-          ...state,
-          users: updatedUsers,
-        };
-      }
+      // const userIndex = state.users.findIndex(
+      //   (user) => user.id === action.payload.id
+      // );
+      // if (userIndex !== -1) {
+      //   const updatedUsers = [...state.users];
+      //   updatedUsers[userIndex] = {
+      //     ...updatedUsers[userIndex],
+      //     profilePicture: action.payload,
+      //   };
+      return {
+        ...state,
+        // users: updatedUsers,
+        users: action.payload,
+      };
+      // }
       return state;
     }
 

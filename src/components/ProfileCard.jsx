@@ -1,8 +1,11 @@
 // eslint-disable-next-line no-unused-vars
 import React from "react";
 import { Link } from "react-router-dom";
+import decrypt from "../../utils/decryptService";
 
 function ProfileCard({ image, title, text, link, isFirst }) {
+  const code = decrypt(text);
+
   return (
     <Link to={link}>
       {/* Wrap the card in a Link component */}
@@ -21,7 +24,7 @@ function ProfileCard({ image, title, text, link, isFirst }) {
             className={`w-full object-cover ${
               isFirst
                 ? "h-[200px]"
-                : "h-[120px] w-[120px] scale-90 mx-auto my-10" // Set fixed height for images
+                : "max-h-[120px] max-w-[120px] object-fill scale-90 mx-auto my-10" // Set fixed height for images
             }  `}
           />
         </div>
@@ -29,7 +32,7 @@ function ProfileCard({ image, title, text, link, isFirst }) {
           {title}
         </h3>
         <p className="text-sm text-gray-500 line-clamp-2">
-          {text ? text : <br />}
+          {code ? code : <br />}
         </p>
       </div>
     </Link>

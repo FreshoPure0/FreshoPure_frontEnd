@@ -62,28 +62,33 @@ function WishlistCard(item) {
     setIsLoading(false);
   };
 
+  const truncatedName = item?.item?.items?.name
+    ? item?.item?.items?.name.length > 12
+      ? `${item?.item?.items?.name.slice(0, 12)}...`
+      : item?.item?.items?.name
+    : "";
+
   const handleCart = useCallback(async () => {
     setError(null);
     setIsLoading(true);
     try {
-        // Ensure latest state values are used
-        const quantity = await getQuantity();
-        console.log("Final Quantity: ", quantity); // Debugging statement
-        dispatch(
-          addItemToCart({
-            itemId: item?.item?.items?._id,
-            quantity: quantity,
-            unit: item?.item?.items?.unit,
-            vendorId: item?.item?.items?.price?.vendorId,
-          })
-        );
-        console.log("Added to cart with quantity", quantity);
+      // Ensure latest state values are used
+      const quantity = await getQuantity();
+      console.log("Final Quantity: ", quantity); // Debugging statement
+      dispatch(
+        addItemToCart({
+          itemId: item?.item?.items?._id,
+          quantity: quantity,
+          unit: item?.item?.items?.unit,
+          vendorId: item?.item?.items?.price?.vendorId,
+        })
+      );
+      console.log("Added to cart with quantity", quantity);
     } catch (err) {
       setError(err.message);
     }
     setIsLoading(false);
   }, [dispatch, item]);
-
 
   function func(img) {
     let image = img?.substr(12);
@@ -98,14 +103,16 @@ function WishlistCard(item) {
         <FiHeart
           className="text-red-600 fill-current pointer-cursor flex float-right mr-2 mt-2 z-40"
           size={20}
-          onClick={()=>{handleRemoveFromWishlist()}}
+          onClick={() => {
+            handleRemoveFromWishlist();
+          }}
         />
         <img
           src={func(item?.item?.items.image.img)}
           alt=""
           className="h-16 mt-9 mx-auto"
         />
-        <p className="px-2 mt-2">{item?.item?.items?.name}</p>
+        <p className="px-2 mt-2">{truncatedName}</p>
         <p className="px-2 font-light text-xs mb-2 text-[#619524]">
           {item?.item?.items?.unit === "kg"
             ? `${(item?.item?.items?.price?.todayCostPrice).toFixed(2)}/${
@@ -209,8 +216,8 @@ function WishlistCard(item) {
           className="w-36 bg-[#619524] mx-2 my-1 rounded-full text-white z-10"
           onClick={() => {
             console.log("Add button clicked");
-            handleCart()
-            handleRemoveFromWishlist()
+            handleCart();
+            handleRemoveFromWishlist();
           }}
         >
           Add to cart

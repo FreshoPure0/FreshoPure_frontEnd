@@ -5,7 +5,7 @@ export const ORDER_ANALYTICS = "ORDER_ANALYTICS";
 export const COMPILED_ORDER = "COMPILED_ORDER";
 export const GET_ORDER_DETAIL = "GET_ORDER_DETAIL";
 export const CLEAR_INFO = "CLEAR_INFO";
-export const CLEAR_ORDERS_SUCCESS="CLEAR_ORDERS_SUCCESS";
+export const CLEAR_ORDERS_SUCCESS = "CLEAR_ORDERS_SUCCESS";
 export const GENERATE_INVOICE = "GENERATE_INVOICE";
 export const CANCEL_ORDER = "CANCEL_ORDER";
 export const STATUS_CHANGE = "STATUS_CHANGE";
@@ -17,7 +17,7 @@ export const UPDATE_COMPILED_ORDER_QUANTITY = "UPDATE_COMPILED_ORDER_QUANTITY";
 // import Toast from "react-native-toast-message";
 // import axios from "axios";
 import { baseUrl } from "../baseUrl";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 // import RNFS from "react-native-fs"; // Import react-native-fs library
 
@@ -74,11 +74,11 @@ export const fetchOrders = ({ offset, status, date }) => {
   };
 };
 
-export const updateCompiledItemQuantity = ( itemId,quantity ) => {
+export const updateCompiledItemQuantity = (itemId, quantity) => {
   return async (dispatch, getState) => {
     let response = await fetch(`${baseUrl}/vendor/updateCompiledItemQuantity`, {
       method: "post",
-      body: JSON.stringify({ itemId,quantity }),
+      body: JSON.stringify({ itemId, quantity }),
       headers: {
         token: await fetchToken(),
         "Content-Type": "application/json",
@@ -100,7 +100,7 @@ export const updateCompiledItemQuantity = ( itemId,quantity ) => {
     // }
 
     const resData = await response.json();
-    console.log("hit")
+    console.log("hit");
 
     dispatch({
       type: UPDATE_COMPILED_ORDER_QUANTITY,
@@ -169,7 +169,7 @@ export const orderHistoryItems = (order_id) => {
 export const clearInfo = () => {
   return (dispatch) => {
     dispatch({
-      type: CLEAR_INFO, 
+      type: CLEAR_INFO,
     });
   };
 };
@@ -177,55 +177,50 @@ export const clearInfo = () => {
 export const clearOrderSuccess = () => {
   return (dispatch) => {
     dispatch({
-      type: CLEAR_ORDERS_SUCCESS, 
+      type: CLEAR_ORDERS_SUCCESS,
     });
   };
 };
 
 // export const getAllCompiledOrders = () => {
 //   return (dispatch) => {
-    
+
 //     dispatch({
-//       type: GET_ALL_COMPILED_ORDERS, 
+//       type: GET_ALL_COMPILED_ORDERS,
 //     });
 //   };
 // };
-export const getAllCompiledOrders =() => {
+export const getAllCompiledOrders = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch(
-        `${baseUrl}/order/getAllCompiledOrders`,
-        {
-          method: "GET", // Use GET method since parameters are in the URL
-          headers: {
-            token: await fetchToken(),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${baseUrl}/order/getAllCompiledOrders`, {
+        method: "GET", // Use GET method since parameters are in the URL
+        headers: {
+          token: await fetchToken(),
+          "Content-Type": "application/json",
+        },
+      });
 
-      console.log(await response)
+      console.log(await response);
 
       if (!response.ok) {
         throw new Error("Something went wrong while fetching orders!!");
       }
 
       const orders = await response.json();
-      console.log(orders)
+      console.log(orders);
 
       dispatch({
-              type: GET_ALL_COMPILED_ORDERS, 
-              payload:orders.data,
-            });
+        type: GET_ALL_COMPILED_ORDERS,
+        payload: orders.data,
+      });
     } catch (err) {
       throw err;
     }
   };
 };
 
-
 export const placeorder = (notes) => {
-
   return async (dispatch, getState) => {
     let response = await fetch(`${baseUrl}/order/placeorder`, {
       method: "post",
@@ -238,10 +233,11 @@ export const placeorder = (notes) => {
 
     const resData = await response.json();
 
+    // const userData = await AsyncStorage.getItem("userData");
+    // const parsedData = JSON.parse(userData);
 
-    const userData = await AsyncStorage.getItem("userData");
-    const parsedData = JSON.parse(userData);
-
+    const userData = Cookies.get("userData");
+    let parsedData = userData ? JSON.parse(userData) : null;
 
     if (resData.success) {
       const vendordata = {
@@ -254,8 +250,8 @@ export const placeorder = (notes) => {
         title: "Order Placed!",
         message: `Hey ${parsedData?.user?.fullName}!, Your order has been placed. You will be notified once the order is in process.`,
       };
-      sendNotification(vendordata);
-      sendNotification(hotelData);
+      // sendNotification(vendordata);
+      // sendNotification(hotelData);
     }
 
     if (!response.ok) {
@@ -337,7 +333,7 @@ export const compiledOrders = () => {
   };
 };
 
-  export const getOrderDetails = (orderId) => {
+export const getOrderDetails = (orderId) => {
   return async (dispatch, getState) => {
     try {
       const response = await fetch(`${baseUrl}/order/orderDetails`, {
@@ -405,16 +401,19 @@ export const compiledOrders = () => {
 //   };
 // };
 
-export const compiledOrderHotelDetails =() => {
+export const compiledOrderHotelDetails = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${baseUrl}/vendor/compiledorderhoteldetails`, {
-        method: "get",
-        headers: {
-          token: await fetchToken(),
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${baseUrl}/vendor/compiledorderhoteldetails`,
+        {
+          method: "get",
+          headers: {
+            token: await fetchToken(),
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Something went wrong while fetching compiled Order!!");
@@ -432,7 +431,6 @@ export const compiledOrderHotelDetails =() => {
     }
   };
 };
-
 
 // export const compiledOrderHotelDetailsPdf =() => {
 //   return async (dispatch) => {
@@ -471,7 +469,6 @@ export const compiledOrderHotelDetails =() => {
 //     }
 //   };
 // };
-
 
 // export const cancelOrder = ({ orderNumber }) => {
 //   return async (dispatch, getState) => {
