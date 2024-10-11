@@ -239,8 +239,11 @@ export const placeorder = (notes) => {
     const resData = await response.json();
 
 
-    const userData = await AsyncStorage.getItem("userData");
-    const parsedData = JSON.parse(userData);
+    // const userData = await AsyncStorage.getItem("userData");
+    // const parsedData = JSON.parse(userData);
+
+    const userData = Cookies.get('userData');
+    let parsedData = userData ? JSON.parse(userData) : null;
 
 
     if (resData.success) {
@@ -254,8 +257,8 @@ export const placeorder = (notes) => {
         title: "Order Placed!",
         message: `Hey ${parsedData?.user?.fullName}!, Your order has been placed. You will be notified once the order is in process.`,
       };
-      sendNotification(vendordata);
-      sendNotification(hotelData);
+      // sendNotification(vendordata);
+      // sendNotification(hotelData);
     }
 
     if (!response.ok) {

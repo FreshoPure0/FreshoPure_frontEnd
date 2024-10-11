@@ -344,10 +344,10 @@ export const login = ({ phone, code }) => {
 
 const saveDataToStorage = (userData, activeUserId) => {
   // Save userData as a cookie with 1-week expiration
-  Cookies.set('userData', JSON.stringify(userData), { expires: 7, path: '/' });
+  Cookies.set('userData', JSON.stringify(userData), { expires: 30, path: '/' });
 
   // Save activeUserId as a cookie with 1-week expiration
-  Cookies.set('activeUserId', activeUserId, { expires: 7, path: '/' });
+  Cookies.set('activeUserId', activeUserId, { expires: 30, path: '/' });
   console.log("cookie Saved")
 };
 
@@ -394,10 +394,10 @@ export const getProfileData = () => {
       }
 
       const resData = await response.json();
-
+      console.log(resData, "resData")
       dispatch({
         type: GET_PROFILE_DATA,
-        payload: resData?.user?.imageDetails?.img,
+        payload: resData?.user,
       });
     };
   } catch (err) {

@@ -62,6 +62,12 @@ function WishlistCard(item) {
     setIsLoading(false);
   };
 
+  const truncatedName = item?.item?.items?.name
+  ? item?.item?.items?.name.length > 12
+    ? `${item?.item?.items?.name.slice(0, 12)}...`
+    : item?.item?.items?.name
+  : "";
+
   const handleCart = useCallback(async () => {
     setError(null);
     setIsLoading(true);
@@ -105,7 +111,7 @@ function WishlistCard(item) {
           alt=""
           className="h-16 mt-9 mx-auto"
         />
-        <p className="px-2 mt-2">{item?.item?.items?.name}</p>
+        <p className="px-2 mt-2">{truncatedName}</p>
         <p className="px-2 font-light text-xs mb-2 text-[#619524]">
           {item?.item?.items?.unit === "kg"
             ? `${(item?.item?.items?.price?.todayCostPrice).toFixed(2)}/${

@@ -118,7 +118,11 @@ function ProductCard(item) {
     setIsLoading(false);
   }, [dispatch, isItemInCart, item]);
   
-  
+  const truncatedName = item?.item.itemDetails.name
+  ? item?.item.itemDetails.name.length > 12
+    ? `${item?.item.itemDetails.name.slice(0, 12)}...`
+    : item?.item.itemDetails.name
+  : "";
   
 
   function func(img) {
@@ -145,7 +149,7 @@ function ProductCard(item) {
         />
         )}
         <img src={func(item?.item.itemDetails.image.img)} alt="" className="h-16 mt-9 mx-auto" />
-        <p className="px-2 mt-2">{item?.item.itemDetails.name}</p>
+        <p className="px-2 mt-2">{truncatedName}</p>
         <p className="px-2 font-light text-xs mb-2 text-[#619524]">
   {item?.item.itemDetails.unit === "kg" ? (
     `${(item?.item.todayCostPrice).toFixed(2)}/${item?.item.itemDetails.unit}`
