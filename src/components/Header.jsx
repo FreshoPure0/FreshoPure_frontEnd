@@ -139,7 +139,9 @@ function Header() {
         <Link
           to="/"
           className="flex items-center justify-center mt-2 mx-8 px-2 bg-[#FDFCFB] shadow-sm rounded-lg focus:bg-[#FFF4E8] focus:border-l-4 focus:border-[#896439] transition-all duration-200"
-        onClick={()=>{handleLogout()}}
+          onClick={() => {
+            handleLogout();
+          }}
         >
           <Icon name="logout" size={30} />
           <p className="flex-grow pl-2 text-base text-yellow-900 hidden lg:block">

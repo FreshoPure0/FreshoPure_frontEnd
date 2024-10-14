@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import VendorOrderDetailsDrawer from "./VendorOrderDetailsDrawer"; // Import the Drawer component
+// import VendorOrderDetailsDrawer from "./VendorOrderDetailsDrawer"; // Import the Drawer component
+import HotelOrderDetailsDrawer from "./HotelOrderDetailsDrawer";
 
 function OrderContainer({ orders = [], activeStatus }) {
   const [displayedOrders, setDisplayedOrders] = useState([]);
@@ -9,6 +10,8 @@ function OrderContainer({ orders = [], activeStatus }) {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 7; // Number of orders to load at once
   const scrollRef = useRef(null);
+
+  console.log("displayedOrders", displayedOrders);
 
   useEffect(() => {
     loadMoreOrders();
@@ -57,37 +60,37 @@ function OrderContainer({ orders = [], activeStatus }) {
       >
         {/* Table header */}
         <div className="flex flex-row border border-[#00000033]">
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col w-1/6">
             <p className="border-r border-white bg-[#896439] text-center text-sm text-white p-1">
               Order Number
             </p>
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col w-1/6">
             <p className="border-r border-white bg-[#896439] text-center text-sm text-white p-1">
               Order Date
             </p>
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col w-1/6">
             <p className="border-r border-white bg-[#896439] text-center text-sm text-white p-1">
               Order Time
             </p>
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col w-1/6">
             <p className="bg-[#896439] border-r border-white text-center text-sm text-white p-1">
               Price
             </p>
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col w-1/6">
             <p className="bg-[#896439] border-r border-white text-center text-sm text-white p-1">
               Status
             </p>
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col w-1/6">
             <p className="bg-[#896439] border-r border-white text-center text-sm text-white p-1">
               Items
             </p>
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col w-1/6">
             <p className="bg-[#896439] text-center text-sm text-white p-1">
               Action
             </p>
@@ -97,29 +100,29 @@ function OrderContainer({ orders = [], activeStatus }) {
         {/* Displaying the current page orders */}
         {displayedOrders.map((order, index) => (
           <div className="flex flex-row border border-[#00000033]" key={index}>
-            <div className="flex flex-col flex-1 bg-[#FFF7EC]">
-              <p className="text-center border-r border-b border-[#00000033] py-3 text-xs">
+            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
+              <p className="text-center border-r border-b border-[#00000033] py-2 text-xs">
                 {order?.orderNumber}
               </p>
             </div>
-            <div className="flex flex-col flex-1 bg-[#FFF7EC]">
-              <p className="text-center border-r border-b border-[#00000033] py-3 text-xs">
+            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
+              <p className="text-center border-r border-b border-[#00000033] py-2 text-xs">
                 {getDateAndTime(order?.createdAt).date}
               </p>
             </div>
-            <div className="flex flex-col flex-1 bg-[#FFF7EC]">
-              <p className="text-center border-r border-b border-[#00000033] py-3 text-xs">
+            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
+              <p className="text-center border-r border-b border-[#00000033] py-2 text-xs">
                 {getDateAndTime(order?.createdAt).time}
               </p>
             </div>
-            <div className="flex flex-col flex-1 bg-[#FFF7EC]">
-              <p className="text-center border-b border-r border-[#00000033] py-3 text-xs">
+            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
+              <p className="text-center border-b border-r border-[#00000033] py-2 text-xs">
                 ₹ {parseFloat(order?.totalPrice).toFixed(2)} /-
               </p>
             </div>
-            <div className="flex flex-col flex-1 bg-[#FFF7EC]">
+            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
               <p
-                className={`text-center border-b border-r border-[#00000033] py-3 text-xs ${
+                className={`text-center border-b border-r border-[#00000033] py-2 text-xs ${
                   order?.orderStatusDetails?.status === "Order Placed"
                     ? "text-yellow-500"
                     : order?.orderStatusDetails?.status === "Cancelled"
@@ -132,19 +135,20 @@ function OrderContainer({ orders = [], activeStatus }) {
                 {order?.orderStatusDetails?.status}
               </p>
             </div>
-            <div className="flex flex-col flex-1 items-center justify-center border-r border-b border-[#00000033] bg-[#FFF7EC]">
+            <div className="flex flex-col w-1/6 items-center justify-center border-r border-b border-[#00000033] bg-[#FFF7EC]">
               <button
-                className="w-[12vh] border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs transition duration-200"
+                className="w-[10vh] border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs shadow-md transition-transform duration-200 transform hover:scale-105 focus:scale-95"
                 onClick={() => {
-                  setOrderStatus(order?.orderStatusDetails?.status)
-                  handleViewDetails(order)}}
+                  setOrderStatus(order?.orderStatusDetails?.status);
+                  handleViewDetails(order); // Trigger view details logic
+                }}
               >
                 View ({order?.orderedItems.length})
               </button>
             </div>
 
-            <div className="flex flex-col flex-1 items-center justify-center border-b border-[#00000033] bg-[#FFF7EC]">
-              <button className="w-[12vh] border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs transition duration-200">
+            <div className="flex flex-col w-1/6 items-center justify-center border-b border-[#00000033] bg-[#FFF7EC]">
+              <button className="w-[10vh] border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs transition duration-200">
                 Receipt
               </button>
             </div>
@@ -153,7 +157,7 @@ function OrderContainer({ orders = [], activeStatus }) {
       </div>
 
       {/* Drawer Component */}
-      <VendorOrderDetailsDrawer
+      <HotelOrderDetailsDrawer
         isOpen={isDetailsDrawerOpen}
         onClose={() => setIsDetailsDrawerOpen(false)}
         selectedOrder={selectedOrder}

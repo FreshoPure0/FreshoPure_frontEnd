@@ -1,14 +1,18 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { FiX } from "react-icons/fi";
 import { OrderStatusToDelivered } from "../store/actions/vendor";
 import { useDispatch } from "react-redux";
 
-
-function VendorOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus }) {
-//   console.log(selectedOrder, "order");
+function VendorOrderDetailsDrawer({
+  isOpen,
+  onClose,
+  selectedOrder,
+  activeStatus,
+}) {
+  //   console.log(selectedOrder, "order");
   const [selectedStatus, setSelectedStatus] = useState("");
-  const dispatch = useDispatch()
-//   console.log(selectedStatus,"status")
+  const dispatch = useDispatch();
+  //   console.log(selectedStatus,"status")
   // Effect to update the status when the order prop is available
   useEffect(() => {
     if (selectedOrder?.orderStatusDetails?.status) {
@@ -16,12 +20,11 @@ function VendorOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus
     }
   }, [selectedOrder]);
 
-  
   // Handle change for dropdown selection
   const handleStatusChange = (e) => {
     setSelectedStatus(e.target.value);
   };
-  console.log('Active Status:', activeStatus);
+  console.log("Active Status:", activeStatus);
 
   const getDrawerPosition = () => {
     if (!isOpen) return "translateY(100%)"; // Hidden when closed
@@ -64,12 +67,12 @@ function VendorOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus
   }
 
   return (
-    <div       
-    className={`fixed inset-x-0 bottom-0 z-50 transition-transform bg-[#fbf5ec] shadow-lg h-[390px] border-t border-[#fbf5ec]`}
-    style={{
-      transform: getDrawerPosition(),
-      transition: 'transform 0.3s ease-in-out', // Smooth transition
-    }}
+    <div
+      className={`fixed inset-x-0 bottom-0 z-50 transition-transform bg-[#fbf5ec] shadow-lg h-[390px] border-t border-[#fbf5ec]`}
+      style={{
+        transform: getDrawerPosition(),
+        transition: "transform 0.3s ease-in-out", // Smooth transition
+      }}
     >
       <div className="p-4 pb-0 flex justify-between items-center">
         <h2 className="text-lg font-semibold">Order Details</h2>
@@ -107,9 +110,14 @@ function VendorOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus
                       : "text-gray-600"
                   } border-none py-0`}
                 >
-                  <option value={selectedStatus} className="text-xs">{selectedStatus}</option>
+                  <option value={selectedStatus} className="text-xs">
+                    {selectedStatus}
+                  </option>
                   {selectedStatus !== "Delivered" && (
-                    <option value="Delivered" className="text-green-600 text-xs">
+                    <option
+                      value="Delivered"
+                      className="text-green-600 text-xs"
+                    >
                       Delivered
                     </option>
                   )}
@@ -121,15 +129,16 @@ function VendorOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus
                 </select>{" "}
               </div>
               <p>
-              <strong>Delivery Address: </strong>
-              {selectedOrder?.address?.addressLine1} {selectedOrder?.address?.addressLine2},{" "}
-              {selectedOrder?.address?.city}, {selectedOrder?.address?.state},{" "}
-              {selectedOrder?.address?.pinCode}
-            </p>
-            <p>
-              <strong>Note: </strong>
-              {selectedOrder?.notes}
-            </p>
+                <strong>Delivery Address: </strong>
+                {selectedOrder?.address?.addressLine1}{" "}
+                {selectedOrder?.address?.addressLine2},{" "}
+                {selectedOrder?.address?.city}, {selectedOrder?.address?.state},{" "}
+                {selectedOrder?.address?.pinCode}
+              </p>
+              <p>
+                <strong>Note: </strong>
+                {selectedOrder?.notes}
+              </p>
             </div>
 
             <div className="bg-white w-[50%] h-[200px] rounded p-2 shadow mb-2 overflow-y-auto hide-scrollbar">
@@ -183,7 +192,7 @@ function VendorOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus
           <p>No order details available.</p>
         )}
       </div>
-      </div>
+    </div>
   );
 }
 
