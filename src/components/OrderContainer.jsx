@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import VendorOrderDetailsDrawer from "./VendorOrderDetailsDrawer"; // Import the Drawer component
+import HotelOrderDetailsDrawer from "./HotelOrderDetailsDrawer"; // Import the Drawer component
 
 function OrderContainer({ orders = [], activeStatus }) {
   const [displayedOrders, setDisplayedOrders] = useState([]);
@@ -153,7 +153,7 @@ function OrderContainer({ orders = [], activeStatus }) {
       </div>
 
       {/* Drawer Component */}
-      <VendorOrderDetailsDrawer
+      <HotelOrderDetailsDrawer
         isOpen={isDetailsDrawerOpen}
         onClose={() => setIsDetailsDrawerOpen(false)}
         selectedOrder={selectedOrder}

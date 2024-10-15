@@ -1,8 +1,5 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState, forwardRef } from "react";
-import { FiArrowLeft, FiCalendar, FiChevronDown } from "react-icons/fi";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useEffect, useState } from "react";
+import { FiArrowLeft, FiChevronDown } from "react-icons/fi";
 import Charts from "../../components/chart";
 import { useSelector, useDispatch } from "react-redux";
 import { getHotelItemAnalytics } from "../../store/actions/hotel";
@@ -10,20 +7,19 @@ import { getAllCategories } from "../../store/actions/product";
 
 function AnalyticsSection({ onBack }) {
   const dispatch = useDispatch();
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
   const { allCategories } = useSelector((state) => state.products);
-  const [selectedCategory, setSelectedCategory] = useState("Select a Category");
+  const [selectedCategory, setSelectedCategory] = useState({
+    id: null,
+    name: "Select a Category",
+  });
   const { itemAnalytics } = useSelector((state) => state.hotel);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [selectedTimeInterval, setSelectedTimeInterval] = useState("Week");
+  const [isTimeOpen, setIsTimeOpen] = useState(false);
 
-  console.log(allCategories, "Cat");
+  console.log(allCategories, "Categories");
   console.log(itemAnalytics, "Items");
-
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-    setIsOpen(false);
-  };
+  console.log(selectedCategory, "sel");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -33,19 +29,34 @@ function AnalyticsSection({ onBack }) {
   }, [dispatch]);
 
   useEffect(() => {
-    const analy = async () => {
-      await dispatch(getHotelItemAnalytics("week"));
-    };
-    analy();
-  }, []);
+    dispatch(getHotelItemAnalytics(selectedTimeInterval.toLowerCase()));
+  }, [dispatch, selectedTimeInterval]);
 
-  const formatDate = (date) => {
-    return new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }).format(date);
+  const handleCategoryChange = (category) => {
+    setSelectedCategory({ id: category._id, name: category.name });
+    setIsCategoryOpen(false);
   };
+
+  const handleDeselectCategory = () => {
+    setSelectedCategory({ id: null, name: "Select a Category" });
+    setIsCategoryOpen(false);
+  };
+
+  // Filter items based on selected category
+  const filteredItems = selectedCategory.id
+    ? itemAnalytics.filter((item) => {
+        console.log(`Filtering: ${item.name}, Category ID: ${item.categoryId}, Selected Category ID: ${selectedCategory.id}`);
+        return item.categoryId === selectedCategory.id; 
+      })
+    : itemAnalytics; 
+
+  console.log(filteredItems, "filter")
+
+  // Calculate total sales
+  const totalSales = filteredItems?.reduce(
+    (acc, item) => acc + (item?.orderedItems?.totalPrice || 0),
+    0
+  );
 
   function func(img) {
     let image = img?.substr(12);
@@ -54,20 +65,6 @@ function AnalyticsSection({ onBack }) {
 
     return retImage;
   }
-
-  // Custom input component to display "Time Interval" when no date is selected
-  const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button
-      className="flex items-center cursor-pointer"
-      onClick={onClick}
-      ref={ref}
-    >
-      <p className="text-[#619524] font-semibold px-2">
-        {value ? value : "Time Interval"}
-      </p>
-      <FiCalendar size={15} className="cursor-pointer" />
-    </button>
-  ));
 
   return (
     <section className="flex flex-col ml-6">
@@ -80,31 +77,41 @@ function AnalyticsSection({ onBack }) {
           />
           <div className="bg-[#FFF7EC] flex flex-1 flex-col p-2 px-4 mx-2 mb-4 rounded-md shadow justify-center items-center text-center">
             <p className="text-sm mb-2 text-[#896439]">Current / Total sales</p>
-            <p className="text-[#619524] font-semibold">₹ 12500</p>
+            <p className="text-[#619524] font-semibold">₹ {totalSales.toFixed(2)}</p>
           </div>
-          <div className="bg-[#FFF7EC] flex flex-1 flex-col px-4 p-2 mx-2 mb-4 rounded-md shadow justify-center items-center text-center">
-            <p className="text-sm mb-2 text-[#896439]">Date Range</p>
+          <div className="bg-[#FFF7EC] flex flex-1 flex-col px-4 p-2 mx-2 mb-4 rounded-md shadow justify-center items-center text-center relative">
+            <p className="text-sm mb-2 text-[#896439]">Time Interval</p>
             <div className="flex flex-row items-center">
-              <DatePicker
-                selected={startDate}
-                onChange={(update) => setDateRange(update)}
-                startDate={startDate}
-                endDate={endDate}
-                selectsRange
-                customInput={
-                  <CustomInput
-                    value={
-                      startDate && endDate
-                        ? `${formatDate(startDate)} - ${formatDate(endDate)}`
-                        : ""
-                    }
-                  />
-                }
-                dateFormat="dd MMM, yyyy"
-                popperPlacement="bottom-end"
-                popperClassName="shadow-lg rounded-lg"
-                calendarClassName="bg-white border border-gray-300 rounded-lg shadow-lg"
-              />
+              <p
+                className="text-[#619524] font-semibold px-2 cursor-pointer flex items-center"
+                onClick={() => setIsTimeOpen(!isTimeOpen)}
+              >
+                {selectedTimeInterval}
+                <FiChevronDown
+                  className={`ml-2 transition-transform ${isTimeOpen ? "rotate-180" : "rotate-0"}`}
+                />
+              </p>
+              {isTimeOpen && (
+                <div className="absolute top-full mt-1 bg-white border border-gray-300 shadow-lg rounded-lg z-50">
+                  {[
+                    { label: "Week", value: "week" },
+                    { label: "Month", value: "month" },
+                    { label: "Six Months", value: "sixMonths" },
+                  ].map((interval, index) => (
+                    <div
+                      key={index}
+                      className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      onClick={() => {
+                        setSelectedTimeInterval(interval.label);
+                        dispatch(getHotelItemAnalytics(interval.value));
+                        setIsTimeOpen(false);
+                      }}
+                    >
+                      {interval.label}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className="bg-[#FFF7EC] flex flex-1 flex-col px-4 p-2 mx-2 mb-4 rounded-md shadow justify-center items-center text-center relative">
@@ -112,22 +119,27 @@ function AnalyticsSection({ onBack }) {
             <div className="flex flex-row items-center">
               <p
                 className="text-[#619524] font-semibold px-2 cursor-pointer flex items-center"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
               >
-                {selectedCategory}
+                {selectedCategory.name}
                 <FiChevronDown
-                  className={`ml-2 transition-transform ${
-                    isOpen ? "rotate-180" : "rotate-0"
-                  }`}
+                  className={`ml-2 transition-transform ${isCategoryOpen ? "rotate-180" : "rotate-0"}`}
                 />
               </p>
-              {isOpen && (
-                <div className="absolute top-full mt-1 bg-white border border-gray-300 shadow-lg rounded-lg z-50">
+              {isCategoryOpen && (
+                <div className="absolute h-40 top-full mt-1 bg-white border border-gray-300 shadow-lg rounded-lg z-50 overflow-scroll hide-scrollbar">
+                  {/* Add an option to deselect or view all items */}
+                  <div
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                    onClick={handleDeselectCategory}
+                  >
+                    All Items
+                  </div>
                   {allCategories.map((category, index) => (
                     <div
                       key={index}
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleCategoryChange(category.name)}
+                      onClick={() => handleCategoryChange(category)}
                     >
                       {category.name}
                     </div>
@@ -161,7 +173,7 @@ function AnalyticsSection({ onBack }) {
               </p>
             </div>
           </div>
-          {itemAnalytics?.map((item, index) => (
+          {filteredItems.map((item, index) => (
             <div
               className="flex flex-row border border-[#00000033]"
               key={index}
@@ -200,9 +212,7 @@ function AnalyticsSection({ onBack }) {
               <div className="flex flex-col flex-1 bg-[#FFF7EC]">
                 <p className="text-center border-b border-[#00000033] py-1">
                   ₹{" "}
-                  {(
-                    Math.round(item?.orderedItems?.totalPrice * 100) / 100
-                  ).toFixed(2)}
+                  {(Math.round(item?.orderedItems?.totalPrice * 100) / 100).toFixed(2)}
                   /-
                 </p>
               </div>

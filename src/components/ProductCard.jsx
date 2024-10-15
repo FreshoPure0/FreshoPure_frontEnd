@@ -137,13 +137,13 @@ function ProductCard(item) {
       <div className="h-fit w-fit bg-white rounded-md shadow m-2 ml-4 p-2">
         {isItemInWishlist ? (
                   <FiHeart
-                  className="text-red-600 fill-current pointer-cursor flex float-right mr-2 mt-2 z-40"
+                  className="text-red-600 fill-current cursor-pointer flex float-right mr-2 mt-2 z-40"
                   size={20}
                   onClick={handleToggleWishlist}
                 />
         ) : (
           <FiHeart
-          className="text-gray-600 flex pointer-cursor float-right mr-2 mt-2 z-40"
+          className="text-gray-600 flex cursor-pointer float-right mr-2 mt-2 z-40"
           size={20}
           onClick={handleToggleWishlist}
         />
