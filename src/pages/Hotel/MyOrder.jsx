@@ -1,11 +1,12 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBar from "../../components/SearchBar";
 import { FiArrowLeft } from "react-icons/fi";
 import OrderContainer from "../../components/OrderContainer";
 import { fetchOrders } from "../../store/actions/order";
 const PAGE_SIZE = 7;
 
+// eslint-disable-next-line react/prop-types
 function MyOrderSection({ onBack }) {
   const dispatch = useDispatch();
   const [activeStatus, setActiveStatus] = useState("Order Placed");
@@ -32,7 +33,8 @@ function MyOrderSection({ onBack }) {
       setOffset(offset + PAGE_SIZE);
     };
     fetchOrder();
-  }, [activeStatus]); // Re-fetch orders when status changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeStatus]);
 
   const loadMoreOrders = () => {
     dispatch(
