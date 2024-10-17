@@ -30,7 +30,7 @@ const fetchToken = () => {
 export const fetchItems = (categoryId) => {
   try {
     return async (dispatch, getState) => {
-      const response = await fetch(`${baseUrl}/hotel/getalltemsforhotel`, {
+      const response = await fetch(`${baseUrl}/hotel/getalltemsforhotelandvendor`, {
         method: "post",
         headers: {
           token: await fetchToken(),
