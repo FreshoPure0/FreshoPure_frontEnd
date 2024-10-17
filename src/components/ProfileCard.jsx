@@ -32,7 +32,7 @@ function ProfileCard({ image, title, text, link, isFirst }) {
           {title}
         </h3>
         <p className="text-sm text-gray-500 line-clamp-2">
-          {code ? code : <br />}
+          {code ? code : text}
         </p>
       </div>
     </Link>

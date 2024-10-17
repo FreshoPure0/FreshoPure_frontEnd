@@ -145,12 +145,21 @@ function ProductCard(item) {
             size={20}
             onClick={handleToggleWishlist}
           />
+                  <FiHeart
+                  className="text-red-600 fill-current cursor-pointer flex float-right mr-2 mt-2 z-40"
+                  size={20}
+                  onClick={handleToggleWishlist}
+                />
         ) : (
           <FiHeart
             className="text-gray-600 flex pointer-cursor float-right mr-2 mt-2 z-40"
             size={20}
             onClick={handleToggleWishlist}
           />
+          className="text-gray-600 flex cursor-pointer float-right mr-2 mt-2 z-40"
+          size={20}
+          onClick={handleToggleWishlist}
+        />
         )}
         <img
           src={func(item?.item.itemDetails.image.img)}

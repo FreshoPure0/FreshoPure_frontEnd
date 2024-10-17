@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-// import VendorOrderDetailsDrawer from "./VendorOrderDetailsDrawer"; // Import the Drawer component
-import HotelOrderDetailsDrawer from "./HotelOrderDetailsDrawer";
+import HotelOrderDetailsDrawer from "./HotelOrderDetailsDrawer"; // Import the Drawer component
 
 function OrderContainer({ orders = [], activeStatus }) {
   const [displayedOrders, setDisplayedOrders] = useState([]);
