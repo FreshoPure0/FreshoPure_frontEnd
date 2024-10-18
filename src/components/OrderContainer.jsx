@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from "react";
 import HotelOrderDetailsDrawer from "./HotelOrderDetailsDrawer"; // Import the Drawer component
 

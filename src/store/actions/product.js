@@ -4,7 +4,7 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 export const GET_ALL_CATEGORIES = "GET_ALL_CATEGORIES";
 import { baseUrl } from "../baseUrl";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const fetchToken = () => {
   // Get the cookies using js-cookie
@@ -30,16 +30,19 @@ const fetchToken = () => {
 export const fetchItems = (categoryId) => {
   try {
     return async (dispatch, getState) => {
-      const response = await fetch(`${baseUrl}/hotel/getalltemsforhotel`, {
-        method: "post",
-        headers: {
-          token: await fetchToken(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          categoryId: categoryId,
-        }),
-      });
+      const response = await fetch(
+        `${baseUrl}/hotel/getalltemsforhotelandvendor`,
+        {
+          method: "post",
+          headers: {
+            token: await fetchToken(),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            categoryId: categoryId,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Something went wrong while fetching items!!");
@@ -69,7 +72,7 @@ export const getAllCategories = () => {
       });
 
       const resData = await response.json();
-      console.log("hit")
+      console.log("hit");
 
       if (!response.ok) {
         throw new Error("Something went wrong while fetching categories!!");

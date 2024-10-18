@@ -222,7 +222,7 @@ export const getAllCompiledOrders = () => {
 
 export const placeorder = (notes) => {
   return async (dispatch, getState) => {
-    let response = await fetch(`${baseUrl}/order/placeorder`, {
+    let response = await fetch(`${baseUrl}/order/placeordernew`, {
       method: "post",
       body: JSON.stringify({ notes }),
       headers: {

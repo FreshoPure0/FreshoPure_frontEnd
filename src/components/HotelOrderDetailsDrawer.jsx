@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { FiX } from "react-icons/fi";
 import { OrderStatusToDelivered } from "../store/actions/vendor";
