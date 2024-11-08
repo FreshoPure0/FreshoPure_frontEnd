@@ -1,29 +1,29 @@
 module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
-        lato: ['Lato', 'sans-serif'],
+        lato: ["Lato", "sans-serif"],
+      },
+      screens: {
+        "md-small": "940px", // Custom breakpoint
       },
     },
   },
-  plugins: [function({ addUtilities }) {
-    addUtilities({
-      '.hide-scrollbar': {
-        /* Hide scrollbar for WebKit browsers */
-        '&::-webkit-scrollbar': {
-          display: 'none',
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        ".hide-scrollbar": {
+          /* Hide scrollbar for WebKit browsers */
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+          /* Hide scrollbar for IE, Edge, and Firefox */
+          "-ms-overflow-style": "none" /* IE and Edge */,
+          "scrollbar-width": "none" /* Firefox */,
         },
-        /* Hide scrollbar for IE, Edge, and Firefox */
-        '-ms-overflow-style': 'none', /* IE and Edge */
-        'scrollbar-width': 'none', /* Firefox */
-      },
-    });
-  },
-  require('@tailwindcss/forms')
-],
-
-}
+      });
+    },
+    require("@tailwindcss/forms"),
+  ],
+};

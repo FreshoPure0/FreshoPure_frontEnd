@@ -8,6 +8,7 @@ import { placeorder } from "../../store/actions/order";
 import { getAllAddress } from "../../store/actions/address";
 import Modal from "react-modal"; // If you haven't installed this, run `npm install react-modal`
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root"); // Set the root element for accessibility
 
@@ -26,6 +27,8 @@ function CartSection() {
   const [state, setState] = useState();
   const [pincode, setPincode] = useState();
   const [searchTerm, setSearchTerm] = useState(""); // Added search term state
+
+  const navigate = useNavigate();
 
   const openModal = async () => {
     setModalIsOpen(true);
@@ -79,6 +82,10 @@ function CartSection() {
     item.itemDetails.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleBack = () => {
+    navigate("/hotel"); // Navigate to the login page
+  };
+
   return (
     <>
       <section className="flex flex-col ml-6 w-[78vw]">
@@ -96,8 +103,11 @@ function CartSection() {
           </div>
         </div>
         {filteredItems.length > 0 ? (
-          <div className="py-2 h-[73vh] relative bg-[#EFE5D8] rounded-lg flex flex-col overflow-y-auto hide-scrollbar">
+          <div className="py-2 w-full mt-4 h-[69vh] relative bg-[#EFE5D8] rounded-lg flex flex-col overflow-y-auto hide-scrollbar">
             <FiArrowLeft
+              onClick={() => {
+                handleBack();
+              }}
               className="bg-white rounded-md shadow p-1 h-7 w-7 ml-4 mt-1 mb-2 flex flex-shrink-0"
               size={20}
             />
@@ -116,7 +126,7 @@ function CartSection() {
             </div>
           </div>
         ) : (
-          <div className="py-2 w-full h-full bg-[#EFE5D8] rounded-lg flex flex-col items-center justify-center text-center">
+          <div className="py-2 w-full mt-4 h-[69vh] bg-[#EFE5D8] rounded-lg flex flex-col items-center justify-center text-center">
             <img
               src="/assets/cart.png"
               alt=""

@@ -1,17 +1,15 @@
-// src/components/ProfileSection.js
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import ProfileCard from "../../components/ProfileCard";
 import useProfileCardData from "../../data/profileCardData";
-import SearchBar from "../../components/SearchBar";
 import PersonalInfo from "./PersonalInfo";
 import AnalyticsSection from "../Hotel/AnalyticsSection";
 import MyOrder from "../Hotel/MyOrder";
 import MyAddress from "../Hotel/MyAddress";
+import InventarySection from "./InventarySection";
 
 function ProfileSection() {
   const [selectedComponent, setSelectedComponent] = useState(null);
-
   const cardData = useProfileCardData();
 
   // Function to handle card click, sets the selected component to be rendered
@@ -30,7 +28,7 @@ function ProfileSection() {
       case "personalInfo":
         return {
           title: "Personal Information",
-          component: <PersonalInfo onBack={handleBack} />, // Pass the back handler
+          component: <PersonalInfo onBack={handleBack} />,
         };
       case "analytics":
         return {
@@ -47,6 +45,11 @@ function ProfileSection() {
           title: "My Addresses",
           component: <MyAddress onBack={handleBack} />,
         };
+      case "Inventory":
+        return {
+          title: "Inventory Management",
+          component: <InventarySection onBack={handleBack} />,
+        };
       default:
         return null; // Return nothing if no component is selected
     }
@@ -58,21 +61,19 @@ function ProfileSection() {
     : { title: "Profile Details", component: null };
 
   return (
-    <section className="ml-8 mt-10 flex flex-col lg:w-full md:w-1/5 h-[80vh] ">
+    <section className="mt-10 flex flex-col w-full lg:w-full md:w-4/5 h-[80vh] md:px-8 overflow-y-auto">
       <div className="flex justify-between mb-4">
-        <h2 className="text-3xl font-bold mb-0">{title}</h2>
-        <SearchBar className="mb-4" />
+        <h2 className="text-3xl font-bold  mb-0">{title}</h2>
       </div>
-      
-      {/* Check if a component is selected, otherwise show the profile cards */}
+
       {component ? (
-        component // Render the selected component (e.g., Personal Info)
+        component
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 p-4 bg-[#EFE5D8] rounded-lg overflow-y-auto hide-scrollbar">
+        <div className="mt-5 -ml-2 p-4 w-full lg:h-[69vh] bg-[#EFE5D8] rounded-lg flex items-center justify-evenly flex-wrap overflow-y-auto hide-scrollbar">
           {cardData.map((profile, index) => (
             <div
               key={profile.id}
-              className="w-full cursor-pointer"
+              className="w-full max-w-xs min-w-0 cursor-pointer p-2 flex justify-center"
               onClick={() => handleCardClick(profile.component)} // Set the clicked component
             >
               <ProfileCard

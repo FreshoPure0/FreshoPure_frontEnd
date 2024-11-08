@@ -1,28 +1,31 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from "react";
 import HotelOrderDetailsDrawer from "./HotelOrderDetailsDrawer"; // Import the Drawer component
+
+const ORDERS_PER_PAGE = 7; // Number of orders to load at once
+const STATUS_COLORS = {
+  "Order Placed": "text-yellow-500",
+  Cancelled: "text-red-600",
+  Delivered: "text-green-600",
+  default: "text-gray-600",
+};
 
 function OrderContainer({ orders = [], activeStatus }) {
   const [displayedOrders, setDisplayedOrders] = useState([]);
   const [orderStatus, setOrderStatus] = useState("");
   const [isDetailsDrawerOpen, setIsDetailsDrawerOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null); // Store the selected order
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 7; // Number of orders to load at once
   const scrollRef = useRef(null);
 
-  console.log("displayedOrders", displayedOrders);
-
   useEffect(() => {
-    loadMoreOrders();
+    filterAndLoadOrders();
   }, [orders, activeStatus]);
 
-  const loadMoreOrders = () => {
+  const filterAndLoadOrders = () => {
     const filteredOrders = orders.filter(
       (order) => order?.orderStatusDetails?.status === activeStatus
     );
-    const nextOrders = filteredOrders.slice(0, currentPage * ordersPerPage);
+    const nextOrders = filteredOrders.slice(0, currentPage * ORDERS_PER_PAGE);
     setDisplayedOrders(nextOrders);
 
     if (nextOrders.length < filteredOrders.length) {
@@ -33,11 +36,9 @@ function OrderContainer({ orders = [], activeStatus }) {
   const getDateAndTime = (createdAt) => {
     const createdAtDate = new Date(createdAt);
     const year = createdAtDate.getFullYear();
-    const month = createdAtDate.getMonth() + 1;
-    const day = createdAtDate.getDate();
-    const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day
-      .toString()
-      .padStart(2, "0")}`;
+    const month = String(createdAtDate.getMonth() + 1).padStart(2, "0");
+    const day = String(createdAtDate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
 
     return {
       date: formattedDate,
@@ -54,109 +55,101 @@ function OrderContainer({ orders = [], activeStatus }) {
   };
 
   return (
-    <div>
+    <div className="md:overflow-x-auto">
       <div
-        className="flex flex-col mx-2 h-[300px] overflow-y-auto mb-20 hide-scrollbar"
+        className="flex flex-col h-[300px] overflow-y-auto mb-20 hide-scrollbar"
         ref={scrollRef}
       >
         {/* Table header */}
-        <div className="flex flex-row border border-[#00000033]">
-          <div className="flex flex-col w-1/6">
-            <p className="border-r border-white bg-[#896439] text-center text-sm text-white p-1">
-              Order Number
-            </p>
-          </div>
-          <div className="flex flex-col w-1/6">
-            <p className="border-r border-white bg-[#896439] text-center text-sm text-white p-1">
-              Order Date
-            </p>
-          </div>
-          <div className="flex flex-col w-1/6">
-            <p className="border-r border-white bg-[#896439] text-center text-sm text-white p-1">
-              Order Time
-            </p>
-          </div>
-          <div className="flex flex-col w-1/6">
-            <p className="bg-[#896439] border-r border-white text-center text-sm text-white p-1">
-              Price
-            </p>
-          </div>
-          <div className="flex flex-col w-1/6">
-            <p className="bg-[#896439] border-r border-white text-center text-sm text-white p-1">
-              Status
-            </p>
-          </div>
-          <div className="flex flex-col w-1/6">
-            <p className="bg-[#896439] border-r border-white text-center text-sm text-white p-1">
-              Items
-            </p>
-          </div>
-          <div className="flex flex-col w-1/6">
-            <p className="bg-[#896439] text-center text-sm text-white p-1">
-              Action
-            </p>
-          </div>
+        <div className="flex flex-row border border-[#00000033] text-sm min-w-[600px]">
+          {[
+            "Order Number",
+            "Order Date",
+            "Order Time",
+            "Price",
+            "Status",
+            "Items",
+            "Action",
+          ].map((header, index) => (
+            <div className="flex flex-col w-1/6 sm:w-1/4" key={index}>
+              <p className="border-r border-white bg-[#896439] text-center text-white p-1 h-12 flex items-center justify-center">
+                {header}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* Displaying the current page orders */}
-        {displayedOrders.map((order, index) => (
-          <div className="flex flex-row border border-[#00000033]" key={index}>
-            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
-              <p className="text-center border-r border-b border-[#00000033] py-2 text-xs">
-                {order?.orderNumber}
-              </p>
-            </div>
-            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
-              <p className="text-center border-r border-b border-[#00000033] py-2 text-xs">
-                {getDateAndTime(order?.createdAt).date}
-              </p>
-            </div>
-            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
-              <p className="text-center border-r border-b border-[#00000033] py-2 text-xs">
-                {getDateAndTime(order?.createdAt).time}
-              </p>
-            </div>
-            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
-              <p className="text-center border-b border-r border-[#00000033] py-2 text-xs">
-                ₹ {parseFloat(order?.totalPrice).toFixed(2)} /-
-              </p>
-            </div>
-            <div className="flex flex-col w-1/6 bg-[#FFF7EC]">
-              <p
-                className={`text-center border-b border-r border-[#00000033] py-2 text-xs ${
-                  order?.orderStatusDetails?.status === "Order Placed"
-                    ? "text-yellow-500"
-                    : order?.orderStatusDetails?.status === "Cancelled"
-                    ? "text-red-600"
-                    : order?.orderStatusDetails?.status === "Delivered"
-                    ? "text-green-600"
-                    : "text-gray-600"
-                }`}
-              >
-                {order?.orderStatusDetails?.status}
-              </p>
-            </div>
-            <div className="flex flex-col w-1/6 items-center justify-center border-r border-b border-[#00000033] bg-[#FFF7EC]">
-              <button
-                className="w-[10vh] border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs shadow-md transition-transform duration-200 transform hover:scale-105 focus:scale-95"
-                onClick={() => {
-                  setOrderStatus(order?.orderStatusDetails?.status);
-                  handleViewDetails(order); // Trigger view details logic
-                }}
-              >
-                View ({order?.orderedItems.length})
-              </button>
-            </div>
+        {displayedOrders.map((order, index) => {
+          const {
+            orderNumber,
+            createdAt,
+            totalPrice,
+            orderedItems,
+            orderStatusDetails,
+          } = order;
+          const { date, time } = getDateAndTime(createdAt);
+          const statusClass =
+            STATUS_COLORS[orderStatusDetails?.status] || STATUS_COLORS.default;
 
-            <div className="flex flex-col w-1/6 items-center justify-center border-b border-[#00000033] bg-[#FFF7EC]">
-              <button className="w-[10vh] border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs transition duration-200">
-                Receipt
-              </button>
+          return (
+            <div
+              className="flex flex-col sm:flex-row border border-[#00000033] min-w-[600px]" // Minimum width to ensure horizontal scrolling
+              key={index}
+            >
+              <div className="flex flex-col w-full sm:w-1/6 bg-[#FFF7EC]">
+                <p className="text-center border-r border-b border-[#00000033] py-2 text-xs h-12 flex items-center justify-center">
+                  {orderNumber.split("-").map((part, i) => (
+                    <React.Fragment key={i}>
+                      {part}
+                      {i < orderNumber.split("-").length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
+                </p>
+              </div>
+              <div className="flex flex-col w-full sm:w-1/6 bg-[#FFF7EC]">
+                <p className="text-center border-r border-b border-[#00000033] py-2 text-xs h-12 flex items-center justify-center">
+                  {date}
+                </p>
+              </div>
+              <div className="flex flex-col w-full sm:w-1/6 bg-[#FFF7EC]">
+                <p className="text-center border-r border-b border-[#00000033] py-2 text-xs h-12 flex items-center justify-center">
+                  {time}
+                </p>
+              </div>
+              <div className="flex flex-col w-full sm:w-1/6 bg-[#FFF7EC]">
+                <p className="text-center border-b border-r border-[#00000033] py-2 text-xs h-12 flex items-center justify-center">
+                  ₹ {parseFloat(totalPrice).toFixed(2)} /-
+                </p>
+              </div>
+              <div className="flex flex-col w-full sm:w-1/6 bg-[#FFF7EC]">
+                <p
+                  className={`text-center border-b border-r border-[#00000033] py-2 text-xs h-12 flex items-center justify-center ${statusClass}`}
+                >
+                  {orderStatusDetails?.status}
+                </p>
+              </div>
+              <div className="flex p-2 flex-col w-full sm:w-1/6 items-center justify-center border-r border-b border-[#00000033] bg-[#FFF7EC]">
+                <button
+                  className="w-full border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs shadow-md transition-transform duration-200 transform hover:scale-105 focus:scale-95"
+                  onClick={() => {
+                    setOrderStatus(orderStatusDetails?.status);
+                    handleViewDetails(order); // Trigger view details logic
+                  }}
+                >
+                  View ({orderedItems.length})
+                </button>
+              </div>
+
+              <div className="flex p-2 flex-col w-full sm:w-1/6 items-center justify-center border-b border-[#00000033] bg-[#FFF7EC]">
+                <button className="w-full border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs transition duration-200">
+                  Receipt
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-
       {/* Drawer Component */}
       <HotelOrderDetailsDrawer
         isOpen={isDetailsDrawerOpen}

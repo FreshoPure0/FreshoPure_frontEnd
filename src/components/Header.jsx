@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -11,7 +11,7 @@ import {
   FiLogOut,
   FiSettings,
 } from "react-icons/fi";
-import { getUserRole, logout } from "../store/actions/auth"; // Ensure getUserRole is imported
+import { getUserRole, logout } from "../store/actions/auth";
 
 function Icon({ name, size }) {
   const iconMap = {
@@ -45,10 +45,10 @@ function Header() {
 
   useEffect(() => {
     dispatch(getUserRole());
-  }, []);
+  }, [dispatch]);
 
   return (
-    <div className="flex flex-col lg:w-fit md:w-1/5 h-[85vh] flex-shrink-0">
+    <div className="flex flex-col mx-4 lg:w-fit md:w-1/5 min-h-[60.5vh] h-[85vh] overflow-y-auto flex-shrink-0">
       <div className="flex justify-center items-center h-20 mt-4">
         <img
           src="/assets/logo_1.jpg"
@@ -56,7 +56,7 @@ function Header() {
           className="w-20 rounded-2xl transition-all duration-300 ease-in-out"
         />
       </div>
-      <div className="flex flex-col justify-between mt-4 py-2 w-fit h-full bg-gradient-to-r from-orange-200 to-orange-100 rounded-lg">
+      <div className="flex mt-4 flex-col justify-between py-2 w-fit h-full bg-gradient-to-r from-orange-200 to-orange-100 rounded-lg">
         {role === "Hotel" ? (
           <div className="flex-grow">
             <Link

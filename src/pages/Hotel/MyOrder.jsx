@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBar from "../../components/SearchBar";
+// import SearchBar from "../../components/SearchBar";
 import { FiArrowLeft } from "react-icons/fi";
 import OrderContainer from "../../components/OrderContainer";
 import { fetchOrders } from "../../store/actions/order";
@@ -13,6 +13,7 @@ function MyOrderSection({ onBack }) {
 
   const { orders } = useSelector((state) => state.orders);
   console.log("orders", orders);
+  console.log("activeStatus", activeStatus);
 
   // Handle status change
   const handleStatusChange = (status) => {
@@ -61,58 +62,60 @@ function MyOrderSection({ onBack }) {
 
   return (
     <section>
-      <div className="flex flex-col ml-6">
-        <div className="py-3 h-[67vh] relative bg-[#EFE5D8] rounded-lg p-1 flex flex-col items-center overflow-y-scroll hide-scrollbar">
-          <FiArrowLeft
-            onClick={onBack}
-            className="bg-white rounded-md absolute left-0 shadow p-1 h-7 w-7 ml-4 mt-1 mb-2 flex flex-shrink-0"
-            size={20}
-          />
-          {/* Buttons */}
-          <div className="container px-6 py-2 mx-auto">
-            <div className="relative flex items-center bg-white rounded-xl justify-center w-full max-w-md mx-auto">
-              {/* Slider background */}
-              <div
-                className="absolute top-0 left-0 bottom-0 my-1 -mx-1 bg-[#619524] transition-transform duration-300 ease-in-out rounded-xl"
-                style={{
-                  width: "33.33%", // Each button is one-third of the width
-                  transform: `translateX(${getSliderPosition()})`,
-                }}
-              />
+      <div className="mt-5 -ml-2 p-4 w-full lg:h-[69vh] bg-[#EFE5D8] rounded-lg flex items-center justify-evenly flex-wrap overflow-y-auto hide-scrollbar">
+        <div className="py-3 h-[67vh] relative p-1 flex flex-col items-center overflow-y-scroll hide-scrollbar">
+          <div className=" ">
+            <FiArrowLeft
+              onClick={onBack}
+              className="bg-white rounded-md absolute left-0 shadow p-1 h-7 w-7 ml-4 mt-1 mb-2 flex flex-shrink-0"
+              size={20}
+            />
+            {/* Buttons */}
+            <div className="container px-6 mt-10 py-2 mx-auto">
+              <div className="relative flex items-center bg-white rounded-xl justify-center w-full max-w-md mx-auto">
+                {/* Slider background */}
+                <div
+                  className="absolute top-0 left-0 bottom-0 my-1 -mx-1 bg-[#619524] transition-transform duration-300 ease-in-out rounded-xl"
+                  style={{
+                    width: "33.33%", // Each button is one-third of the width
+                    transform: `translateX(${getSliderPosition()})`,
+                  }}
+                />
 
-              <div className="flex items-center w-full border border-[#896439] dark:border-[#896439] rounded-xl relative z-10">
-                <button
-                  onClick={() => handleStatusChange("Order Placed")}
-                  className={`flex-1 px-4 py-3 text-sm font-semibold capitalize md:py-3 rounded-xl transition-colors duration-300 relative z-20 ${
-                    activeStatus === "Order Placed"
-                      ? "text-white"
-                      : "text-[#896439]"
-                  }`}
-                >
-                  Order Placed
-                </button>
+                <div className="flex items-center w-full border border-[#896439] dark:border-[#896439] rounded-xl relative z-10">
+                  <button
+                    onClick={() => handleStatusChange("Order Placed")}
+                    className={`flex-1 px-4 py-3 text-sm font-semibold capitalize md:py-3 rounded-xl transition-colors duration-300 relative z-20 ${
+                      activeStatus === "Order Placed"
+                        ? "text-white"
+                        : "text-[#896439]"
+                    }`}
+                  >
+                    Order Placed
+                  </button>
 
-                <button
-                  onClick={() => handleStatusChange("In Process")}
-                  className={`flex-1 px-4 py-3 text-sm font-semibold capitalize rounded-xl transition-colors duration-300 relative z-20 ${
-                    activeStatus === "In Process"
-                      ? "text-white"
-                      : "text-[#896439]"
-                  }`}
-                >
-                  In Process
-                </button>
+                  <button
+                    onClick={() => handleStatusChange("In Process")}
+                    className={`flex-1 px-4 py-3 text-sm font-semibold capitalize rounded-xl transition-colors duration-300 relative z-20 ${
+                      activeStatus === "In Process"
+                        ? "text-white"
+                        : "text-[#896439]"
+                    }`}
+                  >
+                    In Process
+                  </button>
 
-                <button
-                  onClick={() => handleStatusChange("Delivered")}
-                  className={`flex-1 px-4 py-3 text-sm font-semibold capitalize rounded-xl transition-colors duration-300 relative z-20 ${
-                    activeStatus === "Delivered"
-                      ? "text-white"
-                      : "text-[#896439]"
-                  }`}
-                >
-                  Delivered
-                </button>
+                  <button
+                    onClick={() => handleStatusChange("Delivered")}
+                    className={`flex-1 px-4 py-3 text-sm font-semibold capitalize rounded-xl transition-colors duration-300 relative z-20 ${
+                      activeStatus === "Delivered"
+                        ? "text-white"
+                        : "text-[#896439]"
+                    }`}
+                  >
+                    Delivered
+                  </button>
+                </div>
               </div>
             </div>
           </div>

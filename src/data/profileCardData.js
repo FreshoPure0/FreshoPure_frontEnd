@@ -8,7 +8,7 @@ import { getProfileData } from "../store/actions/auth";
 const useProfileCardData = () => {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user);
-console.log(users, "user")
+  console.log(users, "user");
   const profileDetail = users;
 
   const uniqueId = profileDetail?.uniqueId || " ";
@@ -19,9 +19,8 @@ console.log(users, "user")
       try {
         await dispatch(getProfileData());
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-      
     };
     loadUserDetails();
   }, [dispatch]);
@@ -63,6 +62,13 @@ console.log(users, "user")
       title: "My Addresses",
       text: "Delivery locations",
       component: "myAddresses",
+    },
+    {
+      id: 6,
+      image: "/assets/address.jpg",
+      title: "Inventory Management",
+      text: "Delivery locations",
+      component: "Inventory",
     },
   ];
 };

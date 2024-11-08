@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { FiArrowLeft, FiChevronDown } from "react-icons/fi";
 import Charts from "../../components/chart";
@@ -18,7 +19,7 @@ function AnalyticsSection({ onBack }) {
   const [isTimeOpen, setIsTimeOpen] = useState(false);
 
   console.log(allCategories, "Categories");
-  console.log(itemAnalytics, "Items");
+  console.log("itemAnalytics", itemAnalytics);
   console.log(selectedCategory, "sel");
 
   useEffect(() => {
@@ -43,14 +44,19 @@ function AnalyticsSection({ onBack }) {
   };
 
   // Filter items based on selected category
+
+  console.log("selectedCategory.id", selectedCategory.id);
+
   const filteredItems = selectedCategory.id
     ? itemAnalytics.filter((item) => {
-        console.log(`Filtering: ${item.name}, Category ID: ${item.categoryId}, Selected Category ID: ${selectedCategory.id}`);
-        return item.categoryId === selectedCategory.id; 
+        console.log(
+          `Filtering: ${item.name}, Category ID: ${item.categoryId}, Selected Category ID: ${selectedCategory.id}`
+        );
+        return item.categoryId === selectedCategory.id;
       })
-    : itemAnalytics; 
+    : itemAnalytics;
 
-  console.log(filteredItems, "filter")
+  console.log(filteredItems, "filter");
 
   // Calculate total sales
   const totalSales = filteredItems?.reduce(
@@ -67,8 +73,8 @@ function AnalyticsSection({ onBack }) {
   }
 
   return (
-    <section className="flex flex-col ml-6">
-      <div className="flex flex-col mt-4 p-4 bg-[#EFE5D8] h-[67vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
+    <section>
+      <div className="flex flex-col w-full mt-5 -ml-2 p-4 bg-[#EFE5D8] min-h-[69vh] lg:h-[69vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
         <div className="flex flex-row">
           <FiArrowLeft
             onClick={onBack}
@@ -77,7 +83,9 @@ function AnalyticsSection({ onBack }) {
           />
           <div className="bg-[#FFF7EC] flex flex-1 flex-col p-2 px-4 mx-2 mb-4 rounded-md shadow justify-center items-center text-center">
             <p className="text-sm mb-2 text-[#896439]">Current / Total sales</p>
-            <p className="text-[#619524] font-semibold">₹ {totalSales.toFixed(2)}</p>
+            <p className="text-[#619524] font-semibold">
+              ₹ {totalSales.toFixed(2)}
+            </p>
           </div>
           <div className="bg-[#FFF7EC] flex flex-1 flex-col px-4 p-2 mx-2 mb-4 rounded-md shadow justify-center items-center text-center relative">
             <p className="text-sm mb-2 text-[#896439]">Time Interval</p>
@@ -88,7 +96,9 @@ function AnalyticsSection({ onBack }) {
               >
                 {selectedTimeInterval}
                 <FiChevronDown
-                  className={`ml-2 transition-transform ${isTimeOpen ? "rotate-180" : "rotate-0"}`}
+                  className={`ml-2 transition-transform ${
+                    isTimeOpen ? "rotate-180" : "rotate-0"
+                  }`}
                 />
               </p>
               {isTimeOpen && (
@@ -103,6 +113,9 @@ function AnalyticsSection({ onBack }) {
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
                       onClick={() => {
                         setSelectedTimeInterval(interval.label);
+                        console.log("Selected time interval", interval.label);
+                        console.log("Selected time ", interval.value);
+
                         dispatch(getHotelItemAnalytics(interval.value));
                         setIsTimeOpen(false);
                       }}
@@ -123,7 +136,9 @@ function AnalyticsSection({ onBack }) {
               >
                 {selectedCategory.name}
                 <FiChevronDown
-                  className={`ml-2 transition-transform ${isCategoryOpen ? "rotate-180" : "rotate-0"}`}
+                  className={`ml-2 transition-transform ${
+                    isCategoryOpen ? "rotate-180" : "rotate-0"
+                  }`}
                 />
               </p>
               {isCategoryOpen && (
@@ -149,7 +164,10 @@ function AnalyticsSection({ onBack }) {
             </div>
           </div>
         </div>
-        <Charts />
+        <Charts
+          selectedCategory={selectedCategory}
+          filteredItems={filteredItems}
+        />
         <div className="flex flex-col mx-2">
           <div className="flex flex-row border border-[#00000033]">
             <div className="flex flex-col flex-1">
@@ -212,7 +230,9 @@ function AnalyticsSection({ onBack }) {
               <div className="flex flex-col flex-1 bg-[#FFF7EC]">
                 <p className="text-center border-b border-[#00000033] py-1">
                   ₹{" "}
-                  {(Math.round(item?.orderedItems?.totalPrice * 100) / 100).toFixed(2)}
+                  {(
+                    Math.round(item?.orderedItems?.totalPrice * 100) / 100
+                  ).toFixed(2)}
                   /-
                 </p>
               </div>

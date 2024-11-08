@@ -4,7 +4,6 @@ import { login, getUserRole } from "../../store/actions/auth"; // Ensure getUser
 import { toast } from "react-toastify"; // Correctly import toast
 import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
 
-
 function LoginById() {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize the navigate function
@@ -29,10 +28,10 @@ function LoginById() {
     setIsLoading(true);
     try {
       // Attempt to login
-      await dispatch(login({ phone: phone, code: id })); 
-      
+      await dispatch(login({ phone: phone, code: id }));
+
       // Fetch the user role after successful login
-      dispatch(getUserRole()); 
+      dispatch(getUserRole());
     } catch (err) {
       console.error(err);
       setError(err.message); // Handle error appropriately
@@ -42,11 +41,9 @@ function LoginById() {
     }
   };
 
-
-
   // Navigate based on user role after it has been updated
   useEffect(() => {
-    dispatch(getUserRole()); 
+    dispatch(getUserRole());
     if (role) {
       if (role === "Vendor") {
         navigate("/vendor"); // Navigate to the vendor section
@@ -61,7 +58,7 @@ function LoginById() {
   return (
     <section className="flex">
       <div className="w-[45vw] flex justify-center items-center">
-      <img src="/assets/basket.png" alt="" className="h-[95vh] rounded-lg" />
+        <img src="/assets/basket.png" alt="" className="h-[95vh] rounded-lg" />
       </div>
       <div className="flex justify-center items-center w-[50vw] ">
         <div className="bg-gradient-to-r from-orange-200 to-orange-100 h-[75vh] w-fit p-8 rounded-lg flex flex-col items-center justify-center align-middle">
@@ -96,7 +93,8 @@ function LoginById() {
               onClick={handlePress}
               disabled={isLoading} // Disable the button when loading
             >
-              {isLoading ? "Logging In..." : "Login"} {/* Update button text based on loading */}
+              {isLoading ? "Logging In..." : "Login"}{" "}
+              {/* Update button text based on loading */}
             </button>
           </div>
           <p>

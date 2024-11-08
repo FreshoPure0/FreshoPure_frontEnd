@@ -2,6 +2,12 @@ export const GET_COMPILED_ORDER = "GET_COMPILED_ORDER";
 export const HOTEL_ORDER_ANALYTICS = "HOTEL_ORDER_ANALYTICS";
 export const GET_HOTEL_ITEM_ANALYTICS = "GET_HOTEL_ITEM_ANALYTICS";
 export const TOTAL_SALES = "TOTAL_SALES";
+export const HOTEL_INVENTORY_DATA = "HOTEL_INVENTORY_DATA";
+export const UPDATED_HOTEL_INVENTORY_DATA = "UPDATED_HOTEL_INVENTORY_DATA";
+
+// actionTypes.js
+export const GET_ANALYTICS_CHART = "GET_ANALYTICS_CHART";
+
 // export const GET_ALL_ORDERS = "GET_ALL_ORDERS";
 // export const GET_ALL_HOTELS = "GET_ALL_HOTELS";
 // export const GET_ALL_HOTEL_ITEMS = "GET_ALL_HOTEL_ITEMS";
@@ -20,7 +26,8 @@ export const TOTAL_SALES = "TOTAL_SALES";
 // export const CLEAR_INFO = "CLEAR_INFO";
 
 import { baseUrl } from "../baseUrl";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const fetchToken = () => {
   // Get the cookies using js-cookie
@@ -123,6 +130,35 @@ export const getHotelItemList = (HotelId) => {
   };
 };
 
+export const getAnalyticsChart = () => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("url:", `${baseUrl}/hotel/analyticsChart`);
+      const response = await fetch(`${baseUrl}/hotel/analyticsChart`, {
+        method: "GET",
+        headers: {
+          token: await fetchToken(),
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          "Something went wrong while fetching analytics chart data!!"
+        );
+      }
+
+      const data = await response.json();
+
+      dispatch({
+        type: GET_ANALYTICS_CHART,
+        payload: data,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+};
+
 export const hotelOrderAnalytics = (duration) => {
   return async (dispatch, getState) => {
     try {
@@ -170,6 +206,7 @@ export const getHotelItemAnalytics = (duration) => {
       }
 
       const data = await response.json();
+      console.log("data", data);
 
       dispatch({
         type: GET_HOTEL_ITEM_ANALYTICS,
@@ -201,6 +238,65 @@ export const getTotalSales = (data) => {
       dispatch({
         type: TOTAL_SALES,
         payload: resData.sales,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
+export const getHotelInventory = () => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await fetch(`${baseUrl}/hotel/getHotelInventory`, {
+        method: "get",
+        headers: {
+          token: await fetchToken(),
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Something went wrong while fetching inventory data!!");
+      }
+
+      const resData = await response.json();
+
+      dispatch({
+        type: HOTEL_INVENTORY_DATA,
+        payload: resData.data[0].items,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
+export const updateHotelInventory = (item) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await fetch(`${baseUrl}/hotel/updateHotelInventory`, {
+        method: "post",
+        body: JSON.stringify({ item }),
+        headers: {
+          token: await fetchToken(),
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          "Something went wrong while fetching updated inventory data!!"
+        );
+      }
+
+      toast.success("Inventory Item Updated!");
+
+      const resData = await response.json();
+
+      dispatch({
+        type: UPDATED_HOTEL_INVENTORY_DATA,
+        payload: resData?.data[0]?.items,
       });
     } catch (err) {
       throw err;

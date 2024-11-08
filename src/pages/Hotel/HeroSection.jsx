@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FiSearch } from "react-icons/fi";
-import SearchBar from "../../components/SearchBar";
+// import SearchBar from "../../components/SearchBar";
 import ProductCard from "../../components/ProductCard";
 import { getAllCategories, fetchItems } from "../../store/actions/product";
 
@@ -49,7 +50,7 @@ function HeroSection() {
   );
 
   return (
-    <section className="flex flex-col ml-6 w-[78vw]">
+    <section className="flex flex-col mx-6 w-[78vw]">
       <div className="flex flex-row justify-between mt-10 mb-4">
         <h2 className="text-3xl font-bold mb-0">Top Categories</h2>
         <div className="w-2/5 h-10 flex items-center border rounded-xl overflow-hidden px-2 bg-white">
@@ -63,7 +64,7 @@ function HeroSection() {
           />
         </div>
       </div>
-      <div className="flex flex-row overflow-x-auto overflow-y-hidden hide-scrollbar flex-nowrap mt-4">
+      <div className="flex flex-row px-4   overflow-x-auto overflow-y-hidden hide-scrollbar flex-nowrap mt-4">
         {allCategories?.map((cat, index) => (
           <div
             key={index}
@@ -86,13 +87,13 @@ function HeroSection() {
       </div>
 
       {/* Display filtered items */}
-      <div className="mt-3 py-2 w-full lg:h-[58vh] md:h-[69vh] bg-[#EFE5D8] rounded-lg flex items-center justify-evenly flex-wrap overflow-y-auto hide-scrollbar">
+      <div className="mt-3 py-2 w-full min-h-[60.5vh] h-[60.5vh] bg-[#EFE5D8] rounded-lg flex items-center justify-evenly flex-wrap overflow-y-auto hide-scrollbar">
         {filteredItems?.length > 0 ? (
           filteredItems.map((item, index) => (
             <ProductCard key={index} item={item} />
           ))
         ) : (
-          <p>No items available.</p> // Show a message if no items match
+          <p>No items available.</p>
         )}
       </div>
     </section>

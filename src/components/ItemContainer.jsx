@@ -60,125 +60,125 @@ function ItemContainer(item) {
   };
 
   return (
-    <>
-      <div className="flex bg-white h-32 m-2 mx-4 rounded-lg shadow">
-        <div className=" flex-1 border rounded-l">
-          <div className="flex flex-col">
-            <p className="flex-1 text-white bg-[#896439] rounded-tl text-center">
-              Item image
-            </p>
-            <div className="flex h-24 p-4 justify-center items-center">
-              <img
-                src={func(item?.item.itemDetails.image.img)}
-                alt="Item Image"
-                className="h-16"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 border">
-          <div className="flex flex-col">
-            <p className="flex-1 text-white bg-[#896439] text-center">
-              Item name
-            </p>
-            <p className="flex-3 text-center justify-center my-9 font-bold">
-              {truncatedName}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex-1 border relative">
-          <div className="flex flex-col">
-            <p className="flex-1 text-white bg-[#896439] text-center">
-              Quantity
-            </p>
-            <div className="flex items-center justify-center flex-col my-8">
-              {item?.item.itemDetails.unit === "kg" ? (
-                <div className="flex relative">
-                  <div className="flex flex-col text-center mx-1 relative">
-                    <input
-                      type="number"
-                      className="w-24 bg-white border text-center border-gray-400 rounded outline-none px-2 focus:border-[#619524] pr-8" // Adjust padding for icon
-                      placeholder="Kg"
-                      value={weightKg}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value >= 0 && value <= 200) {
-                          setWeightKg(value);
-                        }
-                      }}
-                    />
-                    <label className="text-sm">In Kg</label>
-                    <FiCheck
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-green-600 cursor-pointer"
-                      onClick={handleUpdateQuantity}
-                    />
-                  </div>
-                  <div className="flex flex-col text-center mx-1 relative">
-                    <input
-                      type="number"
-                      className="w-24 bg-white border text-center border-gray-400 rounded outline-none px-2 focus:border-[#619524] pr-8" // Adjust padding for icon
-                      placeholder="Grams"
-                      value={weightG}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value >= 0 && value <= 999) {
-                          setWeightG(value);
-                        }
-                      }}
-                    />
-                    <label className="text-sm">In G</label>
-                    <FiCheck
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-green-600 cursor-pointer"
-                      onClick={handleUpdateQuantity}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col text-center relative">
-                  <input
-                    type="number"
-                    className="w-24 bg-white border text-center border-gray-400 rounded outline-none px-2 focus:border-[#619524] pr-8" // Adjust padding for icon
-                    placeholder={item?.item.itemDetails.unit}
-                    value={weight}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (value >= 0 && value <= 200) {
-                        setWeight(value);
-                      }
-                    }}
-                  />
-                  <label className="text-sm">
-                    In {item?.item.itemDetails.unit}
-                  </label>
-                  <FiCheck
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-green-600 cursor-pointer"
-                    onClick={handleUpdateQuantity}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 border">
-          <div className="flex flex-col">
-            <p className="flex-1 text-white bg-[#896439] rounded-tr text-center">
-              Action
-            </p>
-            <div className="flex min-h-[16vh] flex-1 justify-center items-center align-middle">
-              <button
-                className="flex-3 w-36 bg-[#619524] rounded-full py-1 text-white items-center justify-center mx-12 my-4"
-                onClick={handleRemoveCart}
-              >
-                Remove
-              </button>
-            </div>
+    <div className="grid grid-cols-2 md:grid-cols-4 bg-white h-auto m-2 mx-4 rounded-lg shadow">
+      {/* First Column: Item Image */}
+      <div className="border rounded-tl">
+        <div className="flex flex-col">
+          <p className="flex-1 text-white bg-[#896439] text-center">
+            Item Image
+          </p>
+          <div className="flex h-24 p-4 justify-center items-center">
+            <img
+              src={func(item?.item.itemDetails.image.img)}
+              alt="Item Image"
+              className="h-16 w-auto max-w-full object-cover"
+            />
           </div>
         </div>
       </div>
-    </>
+
+      {/* Second Column: Item Name */}
+      <div className="border">
+        <div className="flex flex-col">
+          <p className="flex-1 text-white bg-[#896439] text-center">
+            Item Name
+          </p>
+          <p className="flex-3 text-center justify-center my-9 font-bold text-sm sm:text-base">
+            {truncatedName}
+          </p>
+        </div>
+      </div>
+
+      {/* Third Column: Quantity */}
+      <div className="border relative">
+        <div className="flex flex-col">
+          <p className="flex-1 text-white bg-[#896439] text-center">Quantity</p>
+          <div className="flex items-center justify-center flex-col my-8">
+            {item?.item.itemDetails.unit === "kg" ? (
+              <div className="flex flex-wrap justify-center md:flex-wrap md:justify-center relative">
+                <div className="flex flex-col text-center mx-1 relative">
+                  <input
+                    type="number"
+                    className="w-24 bg-white border text-center border-gray-400 rounded outline-none px-2 focus:border-[#619524] pr-8"
+                    placeholder="Kg"
+                    value={weightKg}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value >= 0 && value <= 200) {
+                        setWeightKg(value);
+                      }
+                    }}
+                  />
+                  <label className="text-sm">In Kg</label>
+                  <FiCheck
+                    className="absolute right-2 top-1/3 transform -translate-y-1/2 text-green-600 cursor-pointer"
+                    onClick={handleUpdateQuantity}
+                  />
+                </div>
+                <div className="flex flex-col text-center mx-1 relative">
+                  <input
+                    type="number"
+                    className="w-24 bg-white border text-center border-gray-400 rounded outline-none px-2 focus:border-[#619524] pr-8"
+                    placeholder="Grams"
+                    value={weightG}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value >= 0 && value <= 999) {
+                        setWeightG(value);
+                      }
+                    }}
+                  />
+                  <label className="text-sm">In G</label>
+                  <FiCheck
+                    className="absolute right-2 top-1/3 transform -translate-y-1/2 text-green-600 cursor-pointer"
+                    onClick={handleUpdateQuantity}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col text-center relative">
+                <input
+                  type="number"
+                  className="w-24 bg-white border text-center border-gray-400 rounded outline-none px-2 focus:border-[#619524] pr-8"
+                  placeholder={item?.item.itemDetails.unit}
+                  value={weight}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value >= 0 && value <= 200) {
+                      setWeight(value);
+                    }
+                  }}
+                />
+                <label className="text-sm">
+                  In {item?.item.itemDetails.unit}
+                </label>
+                <FiCheck
+                  className="absolute right-2 top-1/3 transform -translate-y-1/2 text-green-600 cursor-pointer"
+                  onClick={handleUpdateQuantity}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Fourth Column: Action */}
+      <div className="border">
+        <div className="flex flex-col">
+          <p className="flex-1 text-white bg-[#896439] rounded-tr text-center">
+            Action
+          </p>
+          <div className="flex min-h-[16vh] flex-1 justify-center items-center align-middle">
+            <button
+              className="flex-3 w-36 bg-[#619524] rounded-full py-1 text-white items-center justify-center mx-12 my-4"
+              onClick={handleRemoveCart}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -8,7 +8,6 @@ function ProfileCard({ image, title, text, link, isFirst }) {
 
   return (
     <Link to={link}>
-      {/* Wrap the card in a Link component */}
       <div
         style={{ width: "232px", height: "300px" }} // Fixed width and height for the card
         className="border rounded-lg shadow-lg p-4 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300 bg-white"

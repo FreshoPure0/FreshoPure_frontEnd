@@ -36,7 +36,7 @@ function WishlistSection() {
           />
         </div>
       </div>
-      <div className="flex flex-row overflow-x-auto h-[67vh] w-full items-center justify-evenly bg-[#EFE5D8] rounded-lg overflow-y-scroll hide-scrollbar flex-wrap mt-4">
+      <div className="flex flex-row overflow-x-auto h-[69vh] w-full items-center justify-evenly bg-[#EFE5D8] rounded-lg overflow-y-scroll hide-scrollbar flex-wrap mt-4">
         {filteredWishlist?.length > 0 ? (
           filteredWishlist?.map((item, index) => (
             <WishlistCard key={index} item={item} />

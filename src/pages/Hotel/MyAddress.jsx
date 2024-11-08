@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import { FiArrowLeft, FiX } from "react-icons/fi"; // Import FiX for the cancel button
+import { FiArrowLeft, FiX, FiTrash } from "react-icons/fi"; // Import FiTrash for the delete icon
 import { useSelector, useDispatch } from "react-redux";
 import {
   getAllAddress,
@@ -20,12 +19,11 @@ const MyAddress = ({ onBack }) => {
     useLine1AsDelivery: false,
     useLine2AsDelivery: false,
   });
-  const [isAddingNew, setIsAddingNew] = useState(false); // To toggle the "Add New Address" form
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [selectedPrimaryId, setSelectedPrimaryId] = useState(null);
 
   const dispatch = useDispatch();
   const { allAddress, selectedAddress } = useSelector((state) => state.address);
-  console.log("allAddress", allAddress);
-  console.log("selectedAddress", selectedAddress);
 
   useEffect(() => {
     const loadUserDetails = async () => {
@@ -37,7 +35,6 @@ const MyAddress = ({ onBack }) => {
   useEffect(() => {
     if (allAddress.length > 0) {
       const primaryAddress = allAddress.find((address) => address.selected);
-      console.log("primaryAddress", primaryAddress);
       if (primaryAddress) {
         setAddress({
           line1: primaryAddress.addressLine1 || "",
@@ -88,16 +85,20 @@ const MyAddress = ({ onBack }) => {
   };
 
   const handleSetPrimary = (addressId) => {
-    dispatch(updateSelectedAddress(addressId));
+    setSelectedPrimaryId(addressId);
+
+    dispatch(updateSelectedAddress(addressId)).then(() => {
+      setSelectedPrimaryId(null);
+    });
   };
 
   const toggleAddNewAddress = () => {
-    setIsAddingNew(!isAddingNew); // Toggle the Add New Address form
+    setIsAddingNew(!isAddingNew);
   };
 
   return (
     <>
-      <div className="flex flex-col mt-4 p-4 bg-[#EFE5D8] h-[67vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
+      <div className="flex flex-col mt-5 -ml-2 p-4 bg-[#EFE5D8] h-[69vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
         <div className="flex flex-row items-center">
           <FiArrowLeft
             onClick={onBack}
@@ -126,7 +127,10 @@ const MyAddress = ({ onBack }) => {
           <h2 className="text-lg font-semibold">All Addresses</h2>
           <ul className="mt-2">
             {allAddress.map((addr, index) => (
-              <li key={index} className="border-b py-2 flex justify-between">
+              <li
+                key={index}
+                className="border-b py-2 flex justify-between items-center"
+              >
                 <div>
                   <strong>Address {index + 1}:</strong> {addr.addressLine1},{" "}
                   {addr.addressLine2}, {addr.city}, {addr.state} -{" "}
@@ -135,19 +139,18 @@ const MyAddress = ({ onBack }) => {
                     <span className="text-green-500"> (Primary)</span>
                   )}
                 </div>
-                <div className="flex gap-4">
-                  <button
-                    onClick={() => handleSetPrimary(addr._id)}
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
-                  >
-                    Set as Primary
-                  </button>
-                  <button
+                <div className="flex gap-4 items-center">
+                  <input
+                    type="radio"
+                    checked={selectedPrimaryId === addr._id}
+                    onChange={() => handleSetPrimary(addr._id)}
+                    className="h-4 w-4 text-green-500 focus:ring-green-600"
+                  />
+                  <FiTrash
                     onClick={() => handleRemoveAddress(addr._id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                  >
-                    Delete
-                  </button>
+                    className="cursor-pointer text-red-500 hover:text-red-700"
+                    size={20}
+                  />
                 </div>
               </li>
             ))}
@@ -157,7 +160,7 @@ const MyAddress = ({ onBack }) => {
         {/* Button to add new address */}
         <button
           onClick={toggleAddNewAddress}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded"
+          className=" bg-[#619524] text-white font-bold py-2 px-4 mt-4 rounded transition-colors duration-300"
         >
           {isAddingNew ? "Cancel" : "Add New Address"}
         </button>
@@ -178,7 +181,7 @@ const MyAddress = ({ onBack }) => {
             >
               <FiX size={20} />
             </button>
-            <h2 className="text-lg font-semibold mb-4">Add New Address</h2>
+            <h2 className="text-lg  font-semibold mb-4">Add New Address</h2>
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <label
@@ -277,6 +280,7 @@ const MyAddress = ({ onBack }) => {
                   type="text"
                   id="city"
                   name="city"
+                  placeholder="Ex- Mumbai"
                   value={address.city}
                   onChange={handleChange}
                   className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-green-200"
@@ -284,31 +288,31 @@ const MyAddress = ({ onBack }) => {
               </div>
             </div>
 
-            <div className="mt-4">
-              <label
-                htmlFor="pinCode"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Pin Code
-              </label>
-              <input
-                type="number"
-                id="pinCode"
-                name="pinCode"
-                value={address.pinCode}
-                onChange={handleChange}
-                className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-green-200"
-              />
+            <div className="grid grid-cols-2 gap-6 mt-4">
+              <div>
+                <label
+                  htmlFor="pinCode"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Pin Code
+                </label>
+                <input
+                  type="text"
+                  id="pinCode"
+                  name="pinCode"
+                  placeholder="Ex- 400001"
+                  value={address.pinCode}
+                  onChange={handleChange}
+                  className="mt-1 p-2 w-full border rounded-md focus:ring focus:ring-green-200"
+                />
+              </div>
             </div>
-
-            <div className="mt-4 flex justify-end">
-              <button
-                type="submit"
-                className="mt-4 w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Submit Address
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mt-4 rounded transition-colors duration-300"
+            >
+              Save Address
+            </button>
           </form>
         </div>
       )}

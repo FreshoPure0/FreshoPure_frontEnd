@@ -3,7 +3,7 @@ export const REMOVE_FROM_WISHLIST = "REMOVE_FROM_WISHLIST";
 export const FETCH_WISHLIST_ITEMS = "FETCH_WISHLIST_ITEMS";
 
 import { baseUrl } from "../baseUrl";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const fetchToken = () => {
   // Get the cookies using js-cookie
