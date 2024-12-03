@@ -14,8 +14,10 @@ import MyOrderSection from "./pages/Vendor/ProfileMyOrderSection";
 import MyItemSection from "./pages/Vendor/ProfileMyItemSection";
 import AnalyticsSection from "./pages/Hotel/AnalyticsSection";
 import LoginById from "./pages/Auth/LoginById";
-import VenderComponents from "./components/VenderComponents";
+// import VenderComponents from "./components/VenderComponents";
 import { useSelector } from "react-redux";
+import VenderProfileSection from "./pages/Vendor/VenderProfileSection";
+import InventorySection from "./pages/Hotel/InventarySection";
 // import InventorySection from "./pages/Hotel/InventarySection";
 
 function App() {
@@ -61,7 +63,7 @@ function App() {
             </div>
           }
         />
-        <Route
+        {/* <Route
           path="/hotel/profile/analytics"
           element={
             <div className="flex min-h-[60.5vh] h-[85vh]">
@@ -70,7 +72,16 @@ function App() {
             </div>
           }
         />
-        {/* <Route
+        <Route
+          path="/hotel/profile/orders"
+          element={
+            <div className="flex min-h-[60.5vh] h-[85vh]">
+              <Header />
+              <MyOrderSection />
+            </div>
+          }
+        />
+        <Route
           path="/hotel/profile/inventory"
           element={
             <div className="flex min-h-[60.5vh] h-[85vh]">
@@ -79,57 +90,62 @@ function App() {
             </div>
           }
         /> */}
-        {role === "Vendor" ? (
-          <Route path="/vendor" element={<VenderComponents />} />
-        ) : (
-          <>
-            <Route
-              path="/vendor"
-              element={
-                <div className="flex">
-                  <Header />
-                  <HeroSectionVendor />
-                </div>
-              }
-            />
-            <Route
-              path="/vendor/subvendor"
-              element={
-                <div className="flex">
-                  <Header />
-                  <SubVendorSection />
-                </div>
-              }
-            />
-            <Route
-              path="/vendor/hotels"
-              element={
-                <div className="flex">
-                  <Header />
-                  <HotelsSection />
-                </div>
-              }
-            />
-            <Route
-              path="/vendor/profile/orders"
-              element={
-                <div className="flex">
-                  <Header />
-                  <MyOrderSection />
-                </div>
-              }
-            />
-            <Route
-              path="/vendor/profile/items"
-              element={
-                <div className="flex">
-                  <Header />
-                  <MyItemSection />
-                </div>
-              }
-            />
-          </>
-        )}
+        <>
+          <Route
+            path="/vendor"
+            element={
+              <div className="flex min-h-[60.5vh] h-[85vh]">
+                <Header />
+                <HeroSectionVendor />
+              </div>
+            }
+          />
+          <Route
+            path="/vendor/subvendor"
+            element={
+              <div className="flex">
+                <Header />
+                <SubVendorSection />
+              </div>
+            }
+          />
+          <Route
+            path="/vendor/hotels"
+            element={
+              <div className="flex">
+                <Header />
+                <HotelsSection />
+              </div>
+            }
+          />
+          <Route
+            path="/vendor/profile"
+            element={
+              <div className="flex">
+                <Header />
+                <VenderProfileSection />
+              </div>
+            }
+          />
+          <Route
+            path="/vendor/profile/orders"
+            element={
+              <div className="flex">
+                <Header />
+                <MyOrderSection />
+              </div>
+            }
+          />
+          <Route
+            path="/vendor/profile/items"
+            element={
+              <div className="flex">
+                <Header />
+                <MyItemSection />
+              </div>
+            }
+          />
+        </>
       </Routes>
       <ToastContainer />
     </Router>

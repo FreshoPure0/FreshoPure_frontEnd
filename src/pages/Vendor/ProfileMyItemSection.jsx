@@ -10,7 +10,7 @@ import {
 } from "../../store/actions/vendor";
 
 const PAGE_SIZE = 7;
-function MyItemSection() {
+function MyItemSection({ onBack }) {
   const dispatch = useDispatch();
   const [offset, setOffset] = useState(0);
   const { allVendorItems } = useSelector((state) => state.vendor);
@@ -38,18 +38,14 @@ function MyItemSection() {
 
   return (
     <section>
-      <div className="flex flex-col ml-6">
-        <div className="flex flex-row justify-between mt-10 mb-4">
-          <h2 className="text-3xl font-bold mb-4">My Items</h2>
-          <SearchBar />
-        </div>
-
-        <div className="py-3 h-[67vh] bg-[#EFE5D8] rounded-lg p-3 flex flex-col ">
+      <div className="mt-5 -ml-2 p-4 w-full lg:h-[69vh] bg-[#EFE5D8] rounded-lg flex items-center justify-evenly flex-wrap overflow-y-auto hide-scrollbar">
+        <div className="py-3 h-[67vh] relative p-1 flex flex-col items-center overflow-y-scroll hide-scrollbar">
           <FiArrowLeft
-            className="bg-white rounded-md  shadow p-1 h-7 w-7 ml-1 mt-1 mb-2 flex flex-shrink-0"
+            onClick={onBack}
+            className="bg-white rounded-md absolute left-0 shadow p-1 h-7 w-7 ml-4 mt-1 mb-2 flex flex-shrink-0"
             size={20}
           />
-          <div className="flex flex-wrap justify-evenly overflow-y-scroll hide-scrollbar ">
+          <div className="flex mt-10 flex-wrap justify-evenly overflow-y-scroll hide-scrollbar ">
             <VendorItemContainer Items={allVendorItems} />
           </div>
           <div className="w-full flex justify-center">

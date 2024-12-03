@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProfileCard from "../../components/ProfileCard";
 import useProfileCardData from "../../data/profileCardData";
 import PersonalInfo from "./PersonalInfo";
@@ -7,14 +7,27 @@ import AnalyticsSection from "../Hotel/AnalyticsSection";
 import MyOrder from "../Hotel/MyOrder";
 import MyAddress from "../Hotel/MyAddress";
 import InventarySection from "./InventarySection";
+import { useLocation } from "react-router-dom";
 
 function ProfileSection() {
   const [selectedComponent, setSelectedComponent] = useState(null);
   const cardData = useProfileCardData();
 
+  const location = useLocation();
+  const showOrder = location.state?.showOrder || false;
+
+  // Automatically open "My Orders" if `showOrder` is true
+  useEffect(() => {
+    if (showOrder) {
+      setSelectedComponent("myOrders");
+    }
+  }, [showOrder]);
+
   // Function to handle card click, sets the selected component to be rendered
   const handleCardClick = (component) => {
-    setSelectedComponent(component);
+    if (component) {
+      setSelectedComponent(component); // Handle in-app component rendering
+    }
   };
 
   // Function to handle back button, sets selectedComponent back to null
@@ -51,7 +64,7 @@ function ProfileSection() {
           component: <InventarySection onBack={handleBack} />,
         };
       default:
-        return null; // Return nothing if no component is selected
+        return null;
     }
   };
 
@@ -63,7 +76,7 @@ function ProfileSection() {
   return (
     <section className="mt-10 flex flex-col w-full lg:w-full md:w-4/5 h-[80vh] md:px-8 overflow-y-auto">
       <div className="flex justify-between mb-4">
-        <h2 className="text-3xl font-bold  mb-0">{title}</h2>
+        <h2 className="text-3xl font-bold mb-0">{title}</h2>
       </div>
 
       {component ? (

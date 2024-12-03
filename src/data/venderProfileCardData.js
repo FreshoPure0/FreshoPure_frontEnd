@@ -1,11 +1,8 @@
-// src/data/profileCardData.js
-
-import { useMemo, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileData } from "../store/actions/auth";
 
-// This function can be used in the component where cardData is needed
-const useProfileCardData = () => {
+const VenderProfileCardData = () => {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user);
   console.log(users, "user");
@@ -30,7 +27,7 @@ const useProfileCardData = () => {
     {
       id: 1,
       image:
-        "https://s3-alpha-sig.figma.com/img/9913/48e1/c591f24014fcc2f1215d47984442d440?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Jur9sC4GO2Kx4C5OEV-3767XQ7PH0UPqjcHHxmlTZRziJ8kyHxdJSZbVLsmdTcNEXJTZVAb2ndHdkJfEMmRbtPdlQ6QY-NlSp5kuUQm51ImeIpGJ3plieBDB8TgV-~NmtCbFCf5K8igjtga7S~d6Y6PkMxVFq7c6vaiDOH~xZy6jD4hf2R9qmHJ9ilkKdSFc9P1AyF5rWsS3~xXYE88m2aUO5yAQ7cY2fAzj314QUPERdizpWxU5Um2quD3V15uDR4YabUeiYTeWxVqsq5Gt8pnaCt7QZHne9yC5fMI40ncL4zHtORNTK5~5PIVQGSGt4CbIIxCs07hBijbStzPLDg__",
+        "https://s3-alpha-sig.figma.com/img/3c8d/1c0e/302cb16330f866e30689725dbb18c9dd?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=YSYUeKNLryaB3e-NIDKLZDXkoEFrX4J9IwGo335lbXmiQOcZI8vfhANeMfVX1173tNGbgCNwXIlp8euEEO3vtWc5X1NISrLHKjwEClO9wySuMYsZj9ysBwJENWzbeOF32JvAZDzgEpkH7zoZcWA44hX8ALijvzL-0mQO~t2LCoN20XaSBVimmMijL9Jy~79-nBksnP1JqoGcBcDRPKtwmXGBhg5EBvRqR026NUQyX4DjsBgQmZw6d0gKNmYWYsJ7l3-63RXZX9Y7ad8szVUBvUqX8rCZCPkaHusP5bLR1XLHN74fvYSqDNUfGPQEedVciMHPccoJa-PY9v7P0Mb7KA__",
       title: profileDetail?.imageDetails?.fullName || " ",
       text: uniqueId || " ",
       component: "personalInfo",
@@ -60,20 +57,12 @@ const useProfileCardData = () => {
     },
     {
       id: 5,
-      image: "/assets/address.jpg",
-      title: "My Address",
+      image: "/assets/items.jpg",
+      title: "My Items",
       text: "",
-      component: "myAddresses",
-    },
-    {
-      id: 6,
-      image: "/assets/address.jpg",
-      title: "Inventory Management",
-      text: "",
-      component: "Inventory",
-      // route: "/hotel/profile/inventory",
+      component: "myitems",
     },
   ];
 };
 
-export default useProfileCardData;
+export default VenderProfileCardData;

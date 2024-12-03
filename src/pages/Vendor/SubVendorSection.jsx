@@ -4,35 +4,38 @@ import SubVendorCard from "../../components/SubVendorCard";
 import { fetchSubVendors, addSubVendor } from "../../store/actions/subvendor";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-modal";
+import { FiSearch } from "react-icons/fi";
 
 Modal.setAppElement("#root");
 
 function SubVendorSection() {
+  const [searchTerm, setSearchTerm] = useState("");
+
   const dispatch = useDispatch();
   const { allSubVendors } = useSelector((state) => state.subVendor);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
 
-  console.log(fullName)
-  console.log(phone)
+  console.log(fullName);
+  console.log(phone);
 
-  const openModal = async() => {
+  const openModal = async () => {
     setModalIsOpen(true);
-};
-const closeModal = () => {
-  setModalIsOpen(false);
-  setFullName("")
-  setPhone("")
-};
+  };
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setFullName("");
+    setPhone("");
+  };
 
-const handleAddNewVendor = async() => {
-  try {
-    await dispatch(addSubVendor(fullName, phone));
-  } catch (error) {
-    console.log(error)
-  }
-}
+  const handleAddNewVendor = async () => {
+    try {
+      await dispatch(addSubVendor(fullName, phone));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const getSubVendor = async () => {
@@ -42,13 +45,22 @@ const handleAddNewVendor = async() => {
   }, []);
   // console.log(allSubVendors,"subVendors")
   return (
-    <section>
-      <div className="flex flex-col ml-6">
-        <div className="flex flex-row justify-between mt-10 mb-4">
-          <h2 className="text-3xl font-bold mb-4">Sub Vendors</h2>
-          <SearchBar />
+    <>
+      <section className="flex flex-col ml-6 w-[78vw]">
+        <div className="flex flex-row justify-between mt-10 h-fit mb-4">
+          <h2 className="text-3xl font-bold mb-0">Sub Venders</h2>
+          <div className="w-2/5 h-10 flex items-center border rounded-xl overflow-hidden px-2 bg-white">
+            <FiSearch className="text-gray-600" size={20} />
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm} // Bind search term state to input
+              onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+              className="p-2 text-base outline-none border-none bg-transparent"
+            />
+          </div>
         </div>
-        <div className="py-3 h-[67vh] bg-[#EFE5D8] rounded-lg flex flex-row overflow-y-auto hide-scrollbar justify-evenly relative">
+        <div className="py-2 w-full mt-4 h-[69vh] relative bg-[#EFE5D8] rounded-lg flex flex-col overflow-y-auto hide-scrollbar">
           {allSubVendors?.map((subVendor, index) => (
             <SubVendorCard key={`${index}`} subVendor={subVendor} />
           ))}
@@ -59,7 +71,7 @@ const handleAddNewVendor = async() => {
             Add Subvendor
           </button>
         </div>
-      </div>
+      </section>
 
       <Modal
         isOpen={modalIsOpen}
@@ -73,13 +85,8 @@ const handleAddNewVendor = async() => {
           <table className="w-full text-left border-collapse mb-4">
             <thead>
               <tr>
-                <th className="border-b border-[#896439] p-2 ">
-                  Fullname
-                </th>
-                <th className="border-b border-[#896439] p-2">
-                  Phone Number
-                </th>
-
+                <th className="border-b border-[#896439] p-2 ">Fullname</th>
+                <th className="border-b border-[#896439] p-2">Phone Number</th>
               </tr>
             </thead>
             <tbody>
@@ -105,16 +112,16 @@ const handleAddNewVendor = async() => {
           </table>
           <button
             className="bg-[#619524] text-white rounded-full px-4 py-2"
-            onClick={()=> {
-              handleAddNewVendor()
-              closeModal()
+            onClick={() => {
+              handleAddNewVendor();
+              closeModal();
             }}
           >
             Add Sub-Vendor
           </button>
         </div>
       </Modal>
-    </section>
+    </>
   );
 }
 
