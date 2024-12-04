@@ -64,7 +64,7 @@ function HeroSection() {
           />
         </div>
       </div>
-      <div className="flex flex-row px-4   overflow-x-auto overflow-y-hidden hide-scrollbar flex-nowrap mt-4">
+      <div className="flex flex-row px-4 overflow-x-auto hide-scrollbar flex-nowrap mt-4 ">
         {allCategories?.map((cat, index) => (
           <div
             key={index}

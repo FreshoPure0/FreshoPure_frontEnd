@@ -29,7 +29,7 @@ const InventorySection = ({ onBack }) => {
   return (
     <section>
       <div className="flex flex-col w-full mt-5 -ml-2 sm:flex-col  bg-[#EFE5D8] min-h-[69vh] lg:h-[69vh] rounded-lg overflow-hidden overflow-y-scroll no-scrollbar">
-        <div className="flex flex-col bg-white overflow-hidden">
+        <div className="flex flex-col bg-[#EFE5D8] overflow-hidden">
           <div className="flex flex-row items-center mb-4">
             <FiArrowLeft
               onClick={onBack}
@@ -39,9 +39,9 @@ const InventorySection = ({ onBack }) => {
           </div>
 
           {/* Search Bar */}
-          <div className="px-2 md:px-4 mb-4">
+          <div className="px-2 md:px-4 mb-4 ">
             <input
-              className="border border-gray-300 rounded-md p-2 w-auto"
+              className="border border-gray-300 rounded-md p-2 w-full"
               type="text"
               placeholder="Search items..."
               value={searchQuery}
@@ -196,14 +196,14 @@ const InputData = ({ item }) => {
       <div className="flex flex-row mt-2">
         <button
           onClick={handleUpdate}
-          className="bg-[#54B175] flex-1 flex justify-center items-center m-1 rounded-md p-3"
+          className="bg-[#619524] flex-1 flex justify-center items-center m-1 rounded-md p-3"
         >
           <span className="text-white font-semibold text-sm">Update</span>
         </button>
 
         <button
           onClick={handleWishlist}
-          className="bg-[#54B175] flex-1 flex justify-center items-center m-1 rounded-md p-3"
+          className="bg-[#619524] flex-1 flex justify-center items-center m-1 rounded-md p-3"
         >
           <span className="text-white font-semibold text-sm">
             Add to Wishlist

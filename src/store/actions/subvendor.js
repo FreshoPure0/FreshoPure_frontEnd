@@ -38,7 +38,7 @@ export const fetchSubVendors = () => {
       const response = await fetch(`${baseUrl}/vendor/getallsubvendors`, {
         method: "get",
         headers: {
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNTk2NjA2MSwiZXhwIjoxNzI4NTU4MDYxfQ.Mz9eS_od36BG-xWC1btUJoa9KQ099vxOWkoncQu5byg",
+          token: await fetchToken(),
         },
       });
 
@@ -65,7 +65,7 @@ export const getSubVendorItems = (_id) => {
         method: "post",
         body: JSON.stringify({ _id }),
         headers: {
-          // token: await fetchToken(),
+          token: await fetchToken(),
           "Content-Type": "application/json",
         },
       });
@@ -93,8 +93,7 @@ export const addSubVendor = (fullName, phone) => {
         method: "post",
         body: JSON.stringify({ fullName, phone }),
         headers: {
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNTk2NjA2MSwiZXhwIjoxNzI4NTU4MDYxfQ.Mz9eS_od36BG-xWC1btUJoa9KQ099vxOWkoncQu5byg",
-          "Content-Type": "application/json",
+          token: await fetchToken(),
         },
       });
 
@@ -125,7 +124,7 @@ export const removeSubVendor = (vendorId) => {
         method: "post",
         body: JSON.stringify({ vendorId }),
         headers: {
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNTk2NjA2MSwiZXhwIjoxNzI4NTU4MDYxfQ.Mz9eS_od36BG-xWC1btUJoa9KQ099vxOWkoncQu5byg",
+          token: await fetchToken(),
           "Content-Type": "application/json",
         },
       });
@@ -153,7 +152,7 @@ export const removeSubVendorItem = (_id, itemIds) => {
         method: "post",
         body: JSON.stringify({ _id, itemIds }),
         headers: {
-          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNTk2NjA2MSwiZXhwIjoxNzI4NTU4MDYxfQ.Mz9eS_od36BG-xWC1btUJoa9KQ099vxOWkoncQu5byg",
+          token: await fetchToken(),
           "Content-Type": "application/json",
         },
       });
@@ -182,7 +181,7 @@ export const getAssignableItems = () => {
         {
           method: "get",
           headers: {
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNTk2NjA2MSwiZXhwIjoxNzI4NTU4MDYxfQ.Mz9eS_od36BG-xWC1btUJoa9KQ099vxOWkoncQu5byg",
+            token: await fetchToken(),
             "Content-Type": "application/json",
           },
         }
@@ -213,7 +212,7 @@ export const AddSubVendorItem = (vendorId, itemIds) => {
         method: "post",
         body: JSON.stringify({ vendorId, itemIds }),
         headers: {
-          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNTk2NjA2MSwiZXhwIjoxNzI4NTU4MDYxfQ.Mz9eS_od36BG-xWC1btUJoa9KQ099vxOWkoncQu5byg",
+          token: await fetchToken(),
           "Content-Type": "application/json",
         },
       });
