@@ -6,7 +6,8 @@ import {
   GET_ALL_HOTEL_ITEMS,
   GET_ALL_HOTEL_ORDERS,
   GET_ALL_VENDOR_ORDERS,
-//   UPDATE_ITEM_PRICE,
+  GET_ANALYTICS_CHART,
+  //   UPDATE_ITEM_PRICE,
   UPDATE_STOCK,
   ADD_STOCK,
   GET_STOCK,
@@ -26,7 +27,7 @@ import {
   CLEAR_ALL_VENDOR_ORDERS,
   TOTAL_SALES,
   EMPTY_VENDOR_ITEMS,
-  OrderStatusToDelivered,
+  // OrderStatusToDelivered,
   ORDER_STATUS_TO_DELIVERED,
   CHANGE_HOTEL_ITEM_PRICE,
   REMOVE_HOTEL_ITEM,
@@ -54,6 +55,8 @@ const initialState = {
   compiledOrderTableData: [],
   updatedCompiledOrderTableData: [],
   totalSales: 0,
+  weeklySalesData: [],
+  sixMonthSalesData: [],
 };
 
 export default (state = initialState, action) => {
@@ -82,19 +85,19 @@ export default (state = initialState, action) => {
         ),
       };
     }
-    case HOTEL_TYPE_TOGGLE:{
-
-      const index = state?.linkedHotelsData?.findIndex(hotel=>hotel.hotelId === action.payload.hotelId)
+    case HOTEL_TYPE_TOGGLE: {
+      const index = state?.linkedHotelsData?.findIndex(
+        (hotel) => hotel.hotelId === action.payload.hotelId
+      );
 
       if (index !== -1) {
-
-        state.linkedHotelsData[index]['isPriceFixed'] = action.payload.toggle;
-    }
+        state.linkedHotelsData[index]["isPriceFixed"] = action.payload.toggle;
+      }
 
       return {
         ...state,
-        linkedHotelsData:state.linkedHotelsData
-      }
+        linkedHotelsData: state.linkedHotelsData,
+      };
     }
 
     case UPDATE_TODAY_COST_PRICE_C_O_TABLE:
@@ -103,13 +106,11 @@ export default (state = initialState, action) => {
         updatedCompiledOrderTableData: action.payload,
       };
 
-      
-      case GET_ALL_COMPILED_ORDERS_TABLE:
-        return {
-          ...state,
-          compiledOrderTableData: action.payload
-          
-        };
+    case GET_ALL_COMPILED_ORDERS_TABLE:
+      return {
+        ...state,
+        compiledOrderTableData: action.payload,
+      };
     case CHANGE_HOTEL_ITEM_PRICE: {
       const index = state.hotelItems.findIndex(
         (item) => item.itemId === action.payload.itemId
@@ -216,7 +217,7 @@ export default (state = initialState, action) => {
     case GET_VENDOR_ITEMS:
       const newItems = action.payload;
 
-      console.log(newItems,'newItems',newItems)
+      console.log(newItems, "newItems", newItems);
 
       // Create a set of existing item IDs
       const existingItemIds = new Set(
@@ -280,6 +281,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         itemAnalytics: action.payload,
+      };
+    case GET_ANALYTICS_CHART:
+      return {
+        ...state,
+        ...action.payload,
       };
     case SUBSCRIPTION_PLAN:
       return {

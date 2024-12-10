@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 // import useProfileCardData from "../../data/profileCardData";
-import AnalyticsSection from "../Hotel/AnalyticsSection";
 import PersonalInfo from "../Hotel/PersonalInfo";
 import ProfileCard from "../../components/ProfileCard";
 import MyOrderSection from "./ProfileMyOrderSection";
 import MyItemSection from "./ProfileMyItemSection";
 import VenderProfileCardData from "../../data/venderProfileCardData";
+import AnalyticSectionVendor from "./AnalyticSectionVendor";
 
 function VenderProfileSection() {
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -33,7 +33,7 @@ function VenderProfileSection() {
       case "analytics":
         return {
           title: "Analytics",
-          component: <AnalyticsSection onBack={handleBack} />,
+          component: <AnalyticSectionVendor onBack={handleBack} />,
         };
       case "myOrders":
         return {

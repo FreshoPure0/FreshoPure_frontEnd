@@ -1,26 +1,31 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Chart from "react-apexcharts";
-import { getAnalyticsChart } from "./../store/actions/hotel";
+import { getAnalyticsChart } from "../store/actions/hotel";
 
-function Charts({ selectedCategory, filteredItems }) {
+const HotelChart = ({ selectedCategory, filteredItems }) => {
   const dispatch = useDispatch();
+
+  // Fetch data from Redux store
   const { weeklySalesData, sixMonthSalesData } = useSelector(
     (state) => state.hotel
   );
 
-  // console.log("weeklySalesData", weeklySalesData);
+  // Dispatch the action to fetch analytics data
+  useEffect(() => {
+    dispatch(getAnalyticsChart(selectedCategory));
+  }, [dispatch, selectedCategory]);
 
-  const salesData = filteredItems.map(
-    (item) => item?.orderedItems?.totalPrice || 0
-  );
-
-  const formatAmount = (value) => {
-    if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
-    if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
-    return value.toFixed(2);
-  };
+  // Placeholder state for loading
+  if (!weeklySalesData || !sixMonthSalesData || !filteredItems) {
+    return (
+      <div className="flex items-center justify-center h-[300px]">
+        <div className="loader">Loading...</div>
+      </div>
+    );
+  }
 
   const monthNames = [
     "Jan",
@@ -37,46 +42,72 @@ function Charts({ selectedCategory, filteredItems }) {
     "Dec",
   ];
 
-  const weeklySalesAmounts = new Array(7).fill(0);
-  const weeklySalesDates = new Array(7).fill(""); // Array to hold the dates
-
-  const currentDate = new Date();
-  const firstDayOfWeek = new Date(
-    currentDate.setDate(currentDate.getDate() - currentDate.getDay())
+  // Donut Chart: Sales by Category
+  const salesData = filteredItems.map(
+    (item) => item?.orderedItems?.totalPrice || 0
   );
 
-  // Populate the weekly sales amounts and dates
-  weeklySalesData.forEach((item) => {
-    const date = new Date(item._id.date); // Extract the date from your data
-    const dayIndex = date.getDay(); // Get the day index (0-6 for Sun-Sat)
-    console.log(dayIndex);
-    weeklySalesAmounts[dayIndex] += parseFloat(item.totalAmount) || 0;
-  });
+  // Weekly Sales Data
+  const weeklySalesAmounts = new Array(7).fill(0);
+  const weeklySalesDates = [];
+  const currentDate = new Date();
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(currentDate.getDate() - i);
+    const formattedDate = `${date.getDate()}`; // Day number only
+    weeklySalesDates.push(formattedDate);
 
-  // Fill in the weeklySalesDates with the current week's dates
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(firstDayOfWeek);
-    date.setDate(firstDayOfWeek.getDate() + i); // Set to the corresponding day of the week
-    weeklySalesDates[i] = `${date.getDate()}`; // Only show the date as "DD"
+    const salesForDate = weeklySalesData
+      .filter((item) => {
+        const itemDate = new Date(item._id.date);
+        return (
+          itemDate.getDate() === date.getDate() &&
+          itemDate.getMonth() === date.getMonth() &&
+          itemDate.getFullYear() === date.getFullYear()
+        );
+      })
+      .reduce((acc, curr) => acc + (parseFloat(curr.totalAmount) || 0), 0);
+
+    weeklySalesAmounts[6 - i] = salesForDate;
   }
 
-  const monthlySalesAmounts = new Array(6).fill(0);
-  const currentMonth = new Date().getMonth();
+  // Monthly Sales Data
+  const monthlySalesAmounts = new Array(6).fill(0); // Initialize with 0 for 6 months
+  const displayMonths = [];
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
 
-  sixMonthSalesData.forEach((item, index) => {
-    const itemDate = new Date(item.date);
-    const itemMonth = itemDate.getMonth();
-    const monthIndex = (currentMonth - index + 12) % 12;
-    monthlySalesAmounts[monthIndex] = parseFloat(item.totalAmount) || 0;
-  });
+  // Generate last 6 months' labels and data
+  for (let i = 5; i >= 0; i--) {
+    const date = new Date();
+    date.setMonth(currentMonth - i);
+    const monthIndex = date.getMonth(); // Get month index
+    const year = date.getFullYear(); // Get year
 
-  useEffect(() => {
-    dispatch(getAnalyticsChart(selectedCategory));
-  }, [dispatch, selectedCategory]);
+    // Add month name to displayMonths
+    displayMonths.push(monthNames[monthIndex]);
+
+    // Find data for this month
+    const monthData = sixMonthSalesData.find(
+      (item) =>
+        item._id.month - 1 === monthIndex && // Adjust to 0-indexed months
+        item._id.year === year
+    );
+
+    // Add the totalAmount for this month or 0 if not found
+    monthlySalesAmounts[5 - i] = monthData ? monthData.totalAmount : 0;
+  }
+
+  // Format for Y-axis labels and tooltips
+  const formatAmount = (value) => {
+    if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+    if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
+    return value.toFixed(2);
+  };
 
   return (
     <div className="w-full flex flex-col md:flex-row flex-wrap justify-center items-start mb-4">
-      {/* Enhanced Donut Chart */}
+      {/* Donut Chart: Total Sales by Category */}
       <div className="bg-[#fbf5ec] mx-2 mb-2 flex flex-1 min-w-[300px] max-w-[400px] flex-col rounded-lg shadow-lg items-center">
         <p className="font-semibold text-lg my-4">Total Sales by Category</p>
         <Chart
@@ -121,21 +152,20 @@ function Charts({ selectedCategory, filteredItems }) {
         />
       </div>
 
-      {/* Bar Chart for Weekly Sales */}
+      {/* Weekly Sales Chart */}
       <div className="bg-[#fbf5ec] mx-2 mb-2 flex flex-1 min-w-[300px] max-w-[400px] flex-col rounded-lg shadow-lg items-center justify-center">
-        <p className="font-semibold text-lg my-4">Weekly Sales Comparision</p>
+        <p className="font-semibold text-lg my-4">Weekly Sales Comparison</p>
         <Chart
           options={{
             xaxis: {
-              categories: weeklySalesDates, // Use dates instead of day names
-              title: { text: "Week" },
+              categories: weeklySalesDates,
+              title: { text: "Dates" },
             },
-            colors: ["#896439"],
             yaxis: {
-              title: { text: "Total Amount" },
               labels: {
                 formatter: formatAmount,
               },
+              title: { text: "Total Sales" },
             },
             tooltip: {
               enabled: true,
@@ -146,29 +176,29 @@ function Charts({ selectedCategory, filteredItems }) {
             dataLabels: {
               enabled: false,
             },
+            colors: ["#896439"],
           }}
-          series={[{ name: "Total Amount", data: weeklySalesAmounts }]}
+          series={[{ name: "Daily Sales", data: weeklySalesAmounts }]}
           type="bar"
           width="300"
           height="180"
         />
       </div>
 
-      {/* Line Chart for Monthly Sales Comparison */}
+      {/* Monthly Sales Chart */}
       <div className="bg-[#fbf5ec] mx-2 mb-2 flex flex-1 min-w-[300px] max-w-[400px] flex-col rounded-lg shadow-lg items-center justify-center">
         <p className="font-semibold text-lg my-4">Monthly Sales Comparison</p>
         <Chart
           options={{
             xaxis: {
-              categories: monthNames.slice(currentMonth - 5, currentMonth + 1),
+              categories: displayMonths,
               title: { text: "Months" },
             },
-            colors: ["#896439"],
             yaxis: {
-              title: { text: "Total Sales" },
               labels: {
                 formatter: formatAmount,
               },
+              title: { text: "Total Sales" },
             },
             tooltip: {
               enabled: true,
@@ -176,16 +206,12 @@ function Charts({ selectedCategory, filteredItems }) {
                 formatter: formatAmount,
               },
             },
-          }}
-          series={[
-            {
-              name: "Sales",
-              data: monthlySalesAmounts.slice(
-                currentMonth - 5,
-                currentMonth + 1
-              ),
+            dataLabels: {
+              enabled: false,
             },
-          ]}
+            colors: ["#896439"],
+          }}
+          series={[{ name: "Monthly Sales", data: monthlySalesAmounts }]}
           type="line"
           width="300"
           height="180"
@@ -193,6 +219,6 @@ function Charts({ selectedCategory, filteredItems }) {
       </div>
     </div>
   );
-}
+};
 
-export default Charts;
+export default HotelChart;

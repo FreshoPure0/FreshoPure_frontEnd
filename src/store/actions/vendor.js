@@ -32,13 +32,14 @@ export const EMPTY_VENDOR_ITEMS = "EMPTY_VENDOR_ITEMS";
 export const ORDER_STATUS_TO_DELIVERED = "ORDER_STATUS_TO_DELIVERED";
 export const CHANGE_HOTEL_ITEM_PRICE = "CHANGE_HOTEL_ITEM_PRICE";
 export const UPDATE_VENDOR_STOCK = "UPDATE_VENDOR_STOCK";
-export const HOTEL_TYPE_TOGGLE = "HOTEL_TYPE_TOGGLE"
+export const HOTEL_TYPE_TOGGLE = "HOTEL_TYPE_TOGGLE";
 export const GET_ALL_COMPILED_ORDERS_TABLE = "GET_ALL_COMPILED_ORDERS_TABLE";
-export const UPDATE_TODAY_COST_PRICE_C_O_TABLE = "UPDATE_TODAY_COST_PRICE_C_O_TABLE";
-
+export const UPDATE_TODAY_COST_PRICE_C_O_TABLE =
+  "UPDATE_TODAY_COST_PRICE_C_O_TABLE";
+export const GET_ANALYTICS_CHART = "GET_ANALYTICS_CHART";
 
 import { baseUrl } from "../baseUrl";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const fetchToken = () => {
   // Get the cookies using js-cookie
@@ -64,26 +65,23 @@ const fetchToken = () => {
 export const getcompiledordertable = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch(
-        `${baseUrl}/vendor/getcompiledordertable`,
-        {
-          method: "GET",
-          headers: {
-            token: await fetchToken(),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${baseUrl}/vendor/getcompiledordertable`, {
+        method: "GET",
+        headers: {
+          token: await fetchToken(),
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Something went wrong while fetching orders!!");
       }
 
       const orders = await response.json();
-      console.log(orders,"action")
-      
+      console.log(orders, "action");
+
       dispatch({
-        type: GET_ALL_COMPILED_ORDERS_TABLE, 
+        type: GET_ALL_COMPILED_ORDERS_TABLE,
         payload: orders,
       });
     } catch (err) {
@@ -92,19 +90,20 @@ export const getcompiledordertable = () => {
   };
 };
 
-
-
 export const updateTodayCostPriceInCOTable = (updates) => {
   return async (dispatch, getState) => {
     try {
-      const response = await fetch(`${baseUrl}/vendor/updateTodayCostPriceInCOTable`, {
-        method: "post",
-        body: JSON.stringify(updates),
-        headers: {
-          token: await fetchToken(),
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${baseUrl}/vendor/updateTodayCostPriceInCOTable`,
+        {
+          method: "post",
+          body: JSON.stringify(updates),
+          headers: {
+            token: await fetchToken(),
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Something went wrong while updating");
@@ -137,15 +136,14 @@ export const compiledOrders = () => {
 
       const data = await response.json();
 
-      console.log(data)
+      console.log(data);
 
       dispatch({
         type: GET_COMPILED_ORDER,
         payload: data.data,
       });
     } catch (err) {
-
-      console.log(err)
+      console.log(err);
       throw err;
     }
   };
@@ -155,9 +153,9 @@ export const linkedHotels = () => {
   return async (dispatch, getState) => {
     try {
       const response = await fetch(`${baseUrl}/vendor/hotelsLinkedWithVendor`, {
-        method: "GET",  // Use uppercase for the method
+        method: "GET", // Use uppercase for the method
         headers: {
-          token: await fetchToken(),  // Make sure the token is valid
+          token: await fetchToken(), // Make sure the token is valid
         },
       });
 
@@ -165,19 +163,21 @@ export const linkedHotels = () => {
 
       // Check if response is not ok (e.g., 404, 500, etc.)
       if (!response.ok) {
-        throw new Error(`Something went wrong: ${response.statusText} (status: ${response.status})`);
+        throw new Error(
+          `Something went wrong: ${response.statusText} (status: ${response.status})`
+        );
       }
-      console.log("hit")
+      console.log("hit");
       // Safely parse the response as JSON
       const data = await response.json();
-      
+
       // Log the data for debugging
       console.log("Response Data:", data);
 
       // Dispatch the data to your store
       dispatch({
         type: GET_ALL_HOTELS,
-        payload: data.data,  // Make sure data is structured correctly
+        payload: data.data, // Make sure data is structured correctly
       });
     } catch (err) {
       // Handle and log the error
@@ -186,7 +186,6 @@ export const linkedHotels = () => {
     }
   };
 };
-
 
 export const getHotelItemList = (HotelId) => {
   return async (dispatch, getState) => {
@@ -442,7 +441,6 @@ export const deleteItemStock = (itemId) => {
         throw new Error("Something went wrong while deleting Stocks!");
       }
 
-
       dispatch({
         type: REMOVE_STOCK,
         payload: itemId,
@@ -656,7 +654,7 @@ export const getVendorItems = (offset) => {
 
       const data = await response.json();
 
-      console.log(data)
+      console.log(data);
 
       dispatch({
         type: GET_VENDOR_ITEMS,
@@ -698,7 +696,7 @@ export const getItemsForVendor = () => {
       }
 
       const data = await response.json();
-      
+
       dispatch({
         type: GET_ITEMS_FOR_VENDOR,
         payload: data.data,
@@ -710,7 +708,6 @@ export const getItemsForVendor = () => {
 };
 
 export const addVendorItem = (itemIds) => {
-
   return async (dispatch, getState) => {
     try {
       const response = await fetch(`${baseUrl}/vendor/addVendorItem`, {
@@ -730,7 +727,7 @@ export const addVendorItem = (itemIds) => {
 
       dispatch({
         type: ADD_VENDOR_ITEM,
-        payload:data?.data
+        payload: data?.data,
       });
     } catch (err) {
       throw err;
@@ -818,6 +815,36 @@ export const getItemAnalytics = (duration) => {
       });
     } catch (err) {
       throw err;
+    }
+  };
+};
+export const getAnalyticsChart = () => {
+  return async (dispatch, getState) => {
+    try {
+      const token = await fetchToken();
+      console.log("Token:", token);
+      console.log("url:", `${baseUrl}/vender/itemSalesAnalytics`);
+      const response = await fetch(`${baseUrl}/vendor/itemSalesAnalytics`, {
+        method: "GET",
+        headers: {
+          token: token,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          "Something went wrong while fetching analytics chart data!!"
+        );
+      }
+
+      const data = await response.json();
+
+      dispatch({
+        type: GET_ANALYTICS_CHART,
+        payload: data,
+      });
+    } catch (err) {
+      console.error(err);
     }
   };
 };
@@ -994,7 +1021,12 @@ export const UpdateFixedItemPrice = ({ hotelId, itemId, newPrice }) => {
 
       dispatch({
         type: CHANGE_HOTEL_ITEM_PRICE,
-        payload: { hotelId, itemId, newPrice,todayPercentageProfit:(data?.newProfitPercentage).toFixed(2) },
+        payload: {
+          hotelId,
+          itemId,
+          newPrice,
+          todayPercentageProfit: (data?.newProfitPercentage).toFixed(2),
+        },
       });
     } catch (err) {
       throw err;
@@ -1026,10 +1058,9 @@ export const changeHotelType = ({ hotelId, toggle }) => {
 
       const data = await response.json();
 
-
       dispatch({
         type: HOTEL_TYPE_TOGGLE,
-        payload:{hotelId,toggle}
+        payload: { hotelId, toggle },
       });
     } catch (err) {
       throw err;
@@ -1060,8 +1091,6 @@ export const importItems = ({ hotelTo, hotelFrom }) => {
       }
 
       const data = await response.json();
-
-
     } catch (err) {
       throw err;
     }
@@ -1097,21 +1126,17 @@ export const vendorItemSearch = (searchText) => {
   };
 };
 
-
 export const updateVendorStock = (price, quantity, historyId, itemId) => {
   return async (dispatch, getState) => {
     try {
-      const response = await fetch(
-        `${baseUrl}/vendor/updateVendorItemStock`,
-        {
-          method: "post",
-          body: JSON.stringify({ price, quantity, historyId, itemId}),
-          headers: {
-            token: await fetchToken(),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${baseUrl}/vendor/updateVendorItemStock`, {
+        method: "post",
+        body: JSON.stringify({ price, quantity, historyId, itemId }),
+        headers: {
+          token: await fetchToken(),
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Something went wrong while adding stock!!");
@@ -1136,20 +1161,16 @@ export const updateVendorStock = (price, quantity, historyId, itemId) => {
 };
 
 export const updateVendorWaste = (reason, quantity, wasteId, itemId) => {
-
   return async (dispatch, getState) => {
     try {
-      const response = await fetch(
-        `${baseUrl}/vendor/updateVendorItemWaste`,
-        {
-          method: "post",
-          body: JSON.stringify({reason, quantity, wasteId, itemId}),
-          headers: {
-            token: await fetchToken(),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${baseUrl}/vendor/updateVendorItemWaste`, {
+        method: "post",
+        body: JSON.stringify({ reason, quantity, wasteId, itemId }),
+        headers: {
+          token: await fetchToken(),
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response.ok) {
         // Toast.show({

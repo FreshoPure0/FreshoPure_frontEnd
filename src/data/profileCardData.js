@@ -67,7 +67,7 @@ const useProfileCardData = () => {
     },
     {
       id: 6,
-      image: "/assets/address.jpg",
+      image: "/assets/Inventory.jpg",
       title: "Inventory Management",
       text: "",
       component: "Inventory",

@@ -40,7 +40,7 @@ function SubVendorCard(subVendor) {
   };
 
   // Function to filter subVendorItems based on the search query
-  const filteredItems = subVendorItems?.filter(item =>
+  const filteredItems = subVendorItems?.filter((item) =>
     item?.items?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

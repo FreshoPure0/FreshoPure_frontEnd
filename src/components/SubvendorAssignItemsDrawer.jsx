@@ -3,7 +3,12 @@ import { FiX } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { AddSubVendorItem } from "../store/actions/subvendor";
 
-function SubvendorAssignItemsDrawer({ isOpen, onClose, assignableItems, vendorId }) {
+function SubvendorAssignItemsDrawer({
+  isOpen,
+  onClose,
+  assignableItems,
+  vendorId,
+}) {
   const dispatch = useDispatch();
   const [selectedItems, setSelectedItems] = useState([]);
   const [loadingAssign, setLoadingAssign] = useState(false);
@@ -14,8 +19,10 @@ function SubvendorAssignItemsDrawer({ isOpen, onClose, assignableItems, vendorId
     // Filter items based on search query
     if (searchQuery) {
       setFilteredItems(
-        assignableItems.filter(item =>
-          item?.itemDetails?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+        assignableItems.filter((item) =>
+          item?.itemDetails?.name
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase())
         )
       );
     } else {
@@ -24,12 +31,12 @@ function SubvendorAssignItemsDrawer({ isOpen, onClose, assignableItems, vendorId
   }, [searchQuery, assignableItems]);
 
   const handleItemSelection = (itemId) => {
-    setSelectedItems(prevSelected => {
-      const itemExists = prevSelected.find(item => item.itemId === itemId);
-      
+    setSelectedItems((prevSelected) => {
+      const itemExists = prevSelected.find((item) => item.itemId === itemId);
+
       if (itemExists) {
         // Deselect if already selected
-        return prevSelected.filter(item => item.itemId !== itemId);
+        return prevSelected.filter((item) => item.itemId !== itemId);
       } else {
         // Add to selection
         return [...prevSelected, { itemId }];
@@ -81,7 +88,9 @@ function SubvendorAssignItemsDrawer({ isOpen, onClose, assignableItems, vendorId
           ) : (
             filteredItems.map((item) => {
               const itemId = item?.itemDetails?._id; // Ensure unique id for each item
-              const isSelected = selectedItems.some(selected => selected.itemId === itemId); // Check if this item is selected
+              const isSelected = selectedItems.some(
+                (selected) => selected.itemId === itemId
+              ); // Check if this item is selected
 
               return (
                 <div key={itemId} className="flex items-center justify-between">

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { FiArrowLeft, FiChevronDown } from "react-icons/fi";
-import Charts from "../../components/chart";
+import HotelChart from "../../components/HotelChart";
 import { useSelector, useDispatch } from "react-redux";
 import { getHotelItemAnalytics } from "../../store/actions/hotel";
 import { getAllCategories } from "../../store/actions/product";
@@ -164,7 +164,7 @@ function AnalyticsSection({ onBack }) {
             </div>
           </div>
         </div>
-        <Charts
+        <HotelChart
           selectedCategory={selectedCategory}
           filteredItems={filteredItems}
         />
