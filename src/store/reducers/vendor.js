@@ -6,6 +6,7 @@ import {
   GET_ALL_HOTEL_ITEMS,
   GET_ALL_HOTEL_ORDERS,
   GET_ALL_VENDOR_ORDERS,
+  GET_ANALYTICS_CHART,
 //   UPDATE_ITEM_PRICE,
   UPDATE_STOCK,
   ADD_STOCK,
@@ -54,6 +55,8 @@ const initialState = {
   compiledOrderTableData: [],
   updatedCompiledOrderTableData: [],
   totalSales: 0,
+  weeklySalesData: [],
+  sixMonthSalesData: [],
 };
 
 export default (state = initialState, action) => {
@@ -281,6 +284,11 @@ export default (state = initialState, action) => {
         ...state,
         itemAnalytics: action.payload,
       };
+      case GET_ANALYTICS_CHART:
+        return {
+          ...state,
+          ...action.payload,
+        };
     case SUBSCRIPTION_PLAN:
       return {
         ...state,

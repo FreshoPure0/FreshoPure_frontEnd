@@ -52,7 +52,7 @@ function SubVendorCard(subVendor) {
   }
 
   return (
-    <div className="w-[13vw] h-[34vh] bg-white rounded-lg shadow flex flex-col p-2 relative">
+    <div className="w-[13vw] h-[34vh] bg-white rounded-lg shadow flex flex-col p-2 mt-4 relative">
       <FiX
         className="absolute right-3 cursor-pointer"
         size={18}

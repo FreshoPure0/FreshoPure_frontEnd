@@ -9,7 +9,7 @@ function ProfileCard({ image, title, text, link, isFirst }) {
   return (
     <Link to={link}>
       <div
-        style={{ width: "232px", height: "300px" }} // Fixed width and height for the card
+        style={{ width: "175px", height: "225px" }} // Fixed width and height for the card
         className="border rounded-lg shadow-lg p-4 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300 bg-white"
       >
         <div
@@ -22,12 +22,12 @@ function ProfileCard({ image, title, text, link, isFirst }) {
             alt={title}
             className={`w-full object-cover ${
               isFirst
-                ? "h-[200px]"
-                : "max-h-[120px] max-w-[120px] object-fill scale-90 mx-auto my-10" // Set fixed height for images
+                ? "h-[140px]"
+                : "max-h-[65px] max-w-[65px] object-fill scale-90 mx-auto my-10" // Set fixed height for images
             }  `}
           />
         </div>
-        <h3 className="text-lg font-semibold text-gray-800 line-clamp-1">
+        <h3 className="text-sm font-semibold text-gray-800 line-clamp-1">
           {title}
         </h3>
         <p className="text-sm text-gray-500 line-clamp-2">

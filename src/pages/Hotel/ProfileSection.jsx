@@ -86,7 +86,7 @@ function ProfileSection() {
           {cardData.map((profile, index) => (
             <div
               key={profile.id}
-              className="w-full max-w-xs min-w-0 cursor-pointer p-2 flex justify-center"
+              className="w-[20vw] max-w-xs min-w-0 cursor-pointer p-2 flex justify-center"
               onClick={() => handleCardClick(profile.component)} // Set the clicked component
             >
               <ProfileCard

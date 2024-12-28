@@ -27,7 +27,7 @@ const VenderProfileCardData = () => {
     {
       id: 1,
       image:
-        "https://s3-alpha-sig.figma.com/img/3c8d/1c0e/302cb16330f866e30689725dbb18c9dd?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=YSYUeKNLryaB3e-NIDKLZDXkoEFrX4J9IwGo335lbXmiQOcZI8vfhANeMfVX1173tNGbgCNwXIlp8euEEO3vtWc5X1NISrLHKjwEClO9wySuMYsZj9ysBwJENWzbeOF32JvAZDzgEpkH7zoZcWA44hX8ALijvzL-0mQO~t2LCoN20XaSBVimmMijL9Jy~79-nBksnP1JqoGcBcDRPKtwmXGBhg5EBvRqR026NUQyX4DjsBgQmZw6d0gKNmYWYsJ7l3-63RXZX9Y7ad8szVUBvUqX8rCZCPkaHusP5bLR1XLHN74fvYSqDNUfGPQEedVciMHPccoJa-PY9v7P0Mb7KA__",
+        "/assets/vendor_profile.png",
       title: profileDetail?.imageDetails?.fullName || " ",
       text: uniqueId || " ",
       component: "personalInfo",

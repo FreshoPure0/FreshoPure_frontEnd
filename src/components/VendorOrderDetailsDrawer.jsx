@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FiX } from "react-icons/fi";
-import { OrderStatusToDelivered } from "../store/actions/vendor";
+import { OrderStatusToDelivered, changeOrderQuantity } from "../store/actions/vendor";
 import { useDispatch } from "react-redux";
 
 function VendorOrderDetailsDrawer({
@@ -11,14 +11,85 @@ function VendorOrderDetailsDrawer({
 }) {
   //   console.log(selectedOrder, "order");
   const [selectedStatus, setSelectedStatus] = useState("");
+    const [quantities, setQuantities] = useState({});
+    const [errors, setErrors] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  //   console.log(selectedStatus,"status")
-  // Effect to update the status when the order prop is available
+
+
   useEffect(() => {
     if (selectedOrder?.orderStatusDetails?.status) {
       setSelectedStatus(selectedOrder.orderStatusDetails.status);
     }
+
+    const initialQuantities = {};
+    selectedOrder?.orderedItems?.forEach((item) => {
+      initialQuantities[item?.itemDetails?._id] = {
+        kg: item?.quantity?.kg || 0,
+        gram: item?.quantity?.gram || 0,
+        packet: item?.quantity?.packet || 0,
+        piece: item?.quantity?.piece || 0,
+        litre: item?.quantity?.litre || 0,
+      };
+    });
+    setQuantities(initialQuantities);
   }, [selectedOrder]);
+
+  const validate = () => {
+    return Object.values(quantities).every((qty) => {
+      return (
+        qty.kg > 0 ||
+        qty.gram > 0 ||
+        qty.piece > 0 ||
+        qty.packet > 0 ||
+        qty.litre > 0
+      );
+    });
+  };
+
+  const handleUpdateQuantity = async (itemId) => {
+    const quantity = { ...quantities[itemId] };
+  
+    // Replace empty fields with 0
+    for (const key in quantity) {
+      if (quantity[key] === "") {
+        quantity[key] = 0;
+      }
+    }
+  
+    const data = {
+      itemId,
+      quantity,
+      orderId: selectedOrder?._id,
+    };
+  
+    setIsLoading(true);
+    try {
+      dispatch(changeOrderQuantity(data));
+      setTimeout(() => {
+        console.log("Quantity updated successfully");
+        toast.success("Quantity Updated");
+      }, 500);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+
+  const handleQuantityChange = (itemId, field, value) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [itemId]: {
+        ...prev[itemId],
+        [field]: value === "" ? "" : Number(value), // Allow empty or convert to number
+      },
+    }));
+  };
 
   // Handle change for dropdown selection
   const handleStatusChange = (e) => {
@@ -162,26 +233,52 @@ function VendorOrderDetailsDrawer({
                       <p className="text-sm text-gray-500">
                         <strong>Price:</strong> ₹ {item?.price}
                       </p>
-                      <div className="flex">
-                        <p className="text-sm text-gray-500 mr-1">
-                          <strong>Quantity:</strong>{" "}
-                          {item?.itemDetails?.unit === "kg"
-                            ? item?.quantity?.kg
-                            : item?.itemDetails?.unit === "packet"
-                            ? item?.quantity?.packet
-                            : item?.itemDetails?.unit === "piece"
-                            ? item?.quantity?.piece
-                            : item?.itemDetails?.unit === "litre"
-                            ? item?.quantity?.litre
-                            : null}{" "}
-                          {item?.itemDetails?.unit}
-                        </p>
-                        {item?.itemDetails?.unit === "kg" && (
-                          <p className="text-sm text-gray-500">
-                            {item?.quantity?.gram} grams
-                          </p>
-                        )}
-                      </div>
+                      <div className="flex items-center mt-2">
+                          <label className="mr-2 text-sm">Quantity:</label>
+                          {unit === "kg" && (
+                            <>
+                              <input
+                                type="number"
+                                className="border rounded w-16 px-2 py-1 text-sm mr-2"
+                                value={quantities[itemId]?.kg || 0}
+                                onChange={(e) =>
+                                  handleQuantityChange(itemId, "kg", e.target.value)
+                                }
+                              />
+                              <span className="mr-2">kg</span>
+                              <input
+                                type="number"
+                                className="border rounded w-16 px-2 py-1 text-sm mr-2"
+                                value={quantities[itemId]?.gram || 0}
+                                onChange={(e) =>
+                                  handleQuantityChange(itemId, "gram", e.target.value)
+                                }
+                              />
+                              <span>g</span>
+                            </>
+                          )}
+                          {unit !== "kg" && (
+                            <>
+                              <input
+                                type="number"
+                                className="border rounded w-16 px-2 py-1 text-sm mr-2"
+                                value={
+                                  quantities[itemId]?.[unit] || 0
+                                }
+                                onChange={(e) =>
+                                  handleQuantityChange(itemId, unit, e.target.value)
+                                }
+                              />
+                              <span>{unit}</span>
+                            </>
+                          )}
+                          <button
+                            className="ml-4 bg-[#619524] active:bg-[#61952490] text-white text-sm px-2 py-1 rounded"
+                            onClick={() => handleUpdateQuantity(itemId)}
+                          >
+                            {/* Update */}
+                          </button>
+                        </div>
                     </div>
                   </div>
                 ))}

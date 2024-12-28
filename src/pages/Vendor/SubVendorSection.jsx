@@ -31,6 +31,7 @@ function SubVendorSection() {
 
   const handleAddNewVendor = async () => {
     try {
+      console.log(fullName, phone, "page")
       await dispatch(addSubVendor(fullName, phone));
     } catch (error) {
       console.log(error);
@@ -60,7 +61,7 @@ function SubVendorSection() {
             />
           </div>
         </div>
-        <div className="py-2 w-full mt-4 h-[69vh] relative bg-[#EFE5D8] rounded-lg flex flex-col overflow-y-auto hide-scrollbar">
+        <div className="py-2 w-full mt-4 h-[69vh] relative bg-[#EFE5D8] rounded-lg flex flex-row justify-evenly overflow-y-auto hide-scrollbar">
           {allSubVendors?.map((subVendor, index) => (
             <SubVendorCard key={`${index}`} subVendor={subVendor} />
           ))}
@@ -114,7 +115,7 @@ function SubVendorSection() {
             className="bg-[#619524] text-white rounded-full px-4 py-2"
             onClick={() => {
               handleAddNewVendor();
-              closeModal();
+              // closeModal();
             }}
           >
             Add Sub-Vendor

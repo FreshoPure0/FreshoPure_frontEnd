@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import HotelOrderDetailsDrawer from "./HotelOrderDetailsDrawer"; // Import the Drawer component
+import { downloadReceiptFromAPI } from "../../utils/downloadReciept";
 
 const ORDERS_PER_PAGE = 7; // Number of orders to load at once
 const STATUS_COLORS = {
@@ -31,6 +32,14 @@ function OrderContainer({ orders = [], activeStatus }) {
     if (nextOrders.length < filteredOrders.length) {
       setCurrentPage((prev) => prev + 1);
     }
+  };
+
+  const downloadTheReciept = async (orderId, orderNumber) => {
+    // setIsLoading(true);
+    downloadReceiptFromAPI(orderId, orderNumber)
+    // .then(() => {
+    //   setIsLoading(false);
+    // });
   };
 
   const getDateAndTime = (createdAt) => {
@@ -82,6 +91,7 @@ function OrderContainer({ orders = [], activeStatus }) {
         {/* Displaying the current page orders */}
         {displayedOrders.map((order, index) => {
           const {
+            _id,
             orderNumber,
             createdAt,
             totalPrice,
@@ -142,7 +152,11 @@ function OrderContainer({ orders = [], activeStatus }) {
               </div>
 
               <div className="flex p-2 flex-col w-full sm:w-1/6 items-center justify-center border-b border-[#00000033] bg-[#FFF7EC]">
-                <button className="w-full border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs transition duration-200">
+                <button className="w-full border border-[#619524] rounded-full p-1 hover:bg-[#619524] hover:text-white text-[#619524] text-xs transition duration-200"
+                    onClick={() => {
+                      downloadTheReciept(_id, orderNumber)
+                    }}
+                                  >
                   Receipt
                 </button>
               </div>

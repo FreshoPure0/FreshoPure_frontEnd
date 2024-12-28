@@ -35,6 +35,7 @@ export const UPDATE_VENDOR_STOCK = "UPDATE_VENDOR_STOCK";
 export const HOTEL_TYPE_TOGGLE = "HOTEL_TYPE_TOGGLE"
 export const GET_ALL_COMPILED_ORDERS_TABLE = "GET_ALL_COMPILED_ORDERS_TABLE";
 export const UPDATE_TODAY_COST_PRICE_C_O_TABLE = "UPDATE_TODAY_COST_PRICE_C_O_TABLE";
+export const GET_ANALYTICS_CHART = "GET_ANALYTICS_CHART";
 
 
 import { baseUrl } from "../baseUrl";
@@ -637,6 +638,7 @@ export const vendorOrderAnalytics = (duration) => {
 };
 
 export const getVendorItems = (offset) => {
+  console.log("hit")
   return async (dispatch, getState) => {
     try {
       const response = await fetch(
@@ -818,6 +820,37 @@ export const getItemAnalytics = (duration) => {
       });
     } catch (err) {
       throw err;
+    }
+  };
+};
+
+export const getAnalyticsChart = () => {
+  return async (dispatch, getState) => {
+    try {
+      const token = await fetchToken();
+      console.log("Token:", token);
+      console.log("url:", `${baseUrl}/vender/itemSalesAnalytics`);
+      const response = await fetch(`${baseUrl}/vendor/itemSalesAnalytics`, {
+        method: "GET",
+        headers: {
+          token: token,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          "Something went wrong while fetching analytics chart data!!"
+        );
+      }
+
+      const data = await response.json();
+
+      dispatch({
+        type: GET_ANALYTICS_CHART,
+        payload: data,
+      });
+    } catch (err) {
+      console.error(err);
     }
   };
 };

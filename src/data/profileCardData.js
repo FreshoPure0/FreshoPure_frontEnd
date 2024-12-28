@@ -30,7 +30,7 @@ const useProfileCardData = () => {
     {
       id: 1,
       image:
-        "https://s3-alpha-sig.figma.com/img/9913/48e1/c591f24014fcc2f1215d47984442d440?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Jur9sC4GO2Kx4C5OEV-3767XQ7PH0UPqjcHHxmlTZRziJ8kyHxdJSZbVLsmdTcNEXJTZVAb2ndHdkJfEMmRbtPdlQ6QY-NlSp5kuUQm51ImeIpGJ3plieBDB8TgV-~NmtCbFCf5K8igjtga7S~d6Y6PkMxVFq7c6vaiDOH~xZy6jD4hf2R9qmHJ9ilkKdSFc9P1AyF5rWsS3~xXYE88m2aUO5yAQ7cY2fAzj314QUPERdizpWxU5Um2quD3V15uDR4YabUeiYTeWxVqsq5Gt8pnaCt7QZHne9yC5fMI40ncL4zHtORNTK5~5PIVQGSGt4CbIIxCs07hBijbStzPLDg__",
+        "/assets/hotel_profile.png",
       title: profileDetail?.imageDetails?.fullName || " ",
       text: uniqueId || " ",
       component: "personalInfo",
@@ -67,7 +67,7 @@ const useProfileCardData = () => {
     },
     {
       id: 6,
-      image: "/assets/address.jpg",
+      image: "/assets/items.jpg",
       title: "Inventory Management",
       text: "",
       component: "Inventory",

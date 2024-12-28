@@ -64,7 +64,7 @@ function HeroSection() {
           />
         </div>
       </div>
-      <div className="flex flex-row px-4 overflow-x-auto hide-scrollbar flex-nowrap mt-4 ">
+      <div className="flex flex-row px-4 pb-12 overflow-x-auto hide-scrollbar flex-nowrap mt-4 ">
         {allCategories?.map((cat, index) => (
           <div
             key={index}
@@ -78,7 +78,7 @@ function HeroSection() {
                 alt=""
                 className="w-full h-full object-cover rounded-lg"
               />
-              <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 flex align-middle items-center justify-center px-2">
+              <div className="absolute top-0 left-0 right-0 bottom-0 bg-[#11111170] bg-opacity-50 opacity-100 flex align-middle items-center justify-center px-2">
                 <span className="text-white text-sm">{cat?.name}</span>
               </div>
             </div>

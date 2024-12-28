@@ -87,13 +87,15 @@ export const getSubVendorItems = (_id) => {
 };
 
 export const addSubVendor = (fullName, phone) => {
+  console.log(fullName, phone)
   return async (dispatch, getState) => {
     try {
       const response = await fetch(`${baseUrl}/subvendor/add`, {
         method: "post",
-        body: JSON.stringify({ fullName, phone }),
+        body: JSON.stringify({fullName, phone }),
         headers: {
           token: await fetchToken(),
+          "Content-Type": "application/json",
         },
       });
 

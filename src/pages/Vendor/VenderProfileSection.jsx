@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 // import useProfileCardData from "../../data/profileCardData";
-import AnalyticsSection from "../Hotel/AnalyticsSection";
+import AnalyticsSectionVendor from "../Vendor/AnalyticSectionVendor";
 import PersonalInfo from "../Hotel/PersonalInfo";
 import ProfileCard from "../../components/ProfileCard";
 import MyOrderSection from "./ProfileMyOrderSection";
@@ -33,7 +33,7 @@ function VenderProfileSection() {
       case "analytics":
         return {
           title: "Analytics",
-          component: <AnalyticsSection onBack={handleBack} />,
+          component: <AnalyticsSectionVendor onBack={handleBack} />,
         };
       case "myOrders":
         return {
@@ -68,7 +68,7 @@ function VenderProfileSection() {
           {cardData.map((profile, index) => (
             <div
               key={profile.id}
-              className="w-full max-w-xs min-w-0 cursor-pointer p-2 flex justify-center"
+              className="w-[20vw] max-w-xs min-w-0 cursor-pointer p-2 flex justify-center"
               onClick={() => handleCardClick(profile.component)} // Set the clicked component
             >
               <ProfileCard

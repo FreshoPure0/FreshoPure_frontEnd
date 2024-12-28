@@ -97,12 +97,12 @@ function LoginById() {
               {/* Update button text based on loading */}
             </button>
           </div>
-          <p>
+          {/* <p>
             New User?{" "}
             <span className="text-orange-800 font-semibold">
               Login by your phone number
             </span>
-          </p>
+          </p> */}
           <p>
             By Continuing, you agree to the{" "}
             <span className="text-orange-800 font-semibold">Terms of use</span>{" "}

@@ -1,13 +1,27 @@
 import { toast } from "react-toastify"; // Import Toast for notifications
 import { baseUrl } from "../src/store/baseUrl";
+import Cookies from 'js-cookie';
 
 // Function to fetch the token from localStorage (similar to AsyncStorage in mobile apps)
-const fetchToken = async () => {
-//   const userData = localStorage.getItem("userData");
-//   const activeId = localStorage.getItem("activeUserId");
-//   const parsedData = JSON.parse(userData);
-  const user = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NmFjY2YzMzUzYTg2ZDU0M2I0ZTc2ZCIsImlhdCI6MTcyNzA4Mjc0MCwiZXhwIjoxNzI5Njc0NzQwfQ.RaAfyudWgHFePipY0IfQVu3EFlZ_9TOgVdxUMKbLAC8";
-  return user;
+const fetchToken = () => {
+  // Get the cookies using js-cookie
+  const userDataCookie = Cookies.get("userData");
+  const activeUserIdCookie = Cookies.get("activeUserId");
+
+  // If userData or activeUserId doesn't exist, return null
+  if (!userDataCookie || !activeUserIdCookie) {
+    return null;
+  }
+
+  // Parse the JSON data
+  const parsedData = JSON.parse(userDataCookie);
+
+  // Find the user with the active ID
+  const user = parsedData?.filter((user) => user.id === activeUserIdCookie);
+
+  // Return the token if found
+  return user[0]?.token;
+  // console.log(user[0]?.token)
 };
 
 const getFormattedDate = () => {

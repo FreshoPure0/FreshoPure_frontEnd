@@ -1,24 +1,27 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
+
 import React, { useEffect, useState } from "react";
 import { FiArrowLeft, FiChevronDown } from "react-icons/fi";
-import HotelChart from "../../components/HotelChart";
-import { useSelector, useDispatch } from "react-redux";
-import { getHotelItemAnalytics } from "../../store/actions/hotel";
+import { useDispatch, useSelector } from "react-redux";
+import { getItemAnalytics } from "../../store/actions/vendor";
 import { getAllCategories } from "../../store/actions/product";
+import VenderChart from "./../../components/VenderChart";
 
-function AnalyticsSection({ onBack }) {
+const AnalyticSectionVendor = ({ onBack }) => {
   const dispatch = useDispatch();
   const { allCategories } = useSelector((state) => state.products);
   const [selectedCategory, setSelectedCategory] = useState({
     id: null,
     name: "Select a Category",
   });
-  const { itemAnalytics } = useSelector((state) => state.hotel);
+
+  const { itemAnalytics } = useSelector((state) => state.vendor);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [selectedTimeInterval, setSelectedTimeInterval] = useState("Week");
   const [isTimeOpen, setIsTimeOpen] = useState(false);
 
-  console.log(allCategories, "Categories");
+  console.log(allCategories, "allCategories");
   console.log("itemAnalytics", itemAnalytics);
   console.log(selectedCategory, "sel");
 
@@ -30,7 +33,7 @@ function AnalyticsSection({ onBack }) {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getHotelItemAnalytics(selectedTimeInterval.toLowerCase()));
+    dispatch(getItemAnalytics(selectedTimeInterval.toLowerCase()));
   }, [dispatch, selectedTimeInterval]);
 
   const handleCategoryChange = (category) => {
@@ -116,7 +119,7 @@ function AnalyticsSection({ onBack }) {
                         console.log("Selected time interval", interval.label);
                         console.log("Selected time ", interval.value);
 
-                        dispatch(getHotelItemAnalytics(interval.value));
+                        dispatch(getItemAnalytics(interval.value));
                         setIsTimeOpen(false);
                       }}
                     >
@@ -156,7 +159,7 @@ function AnalyticsSection({ onBack }) {
                       className="px-4 py-2 cursor-pointer hover:bg-gray-100"
                       onClick={() => handleCategoryChange(category)}
                     >
-                      {category.name}
+                      {category?.name}
                     </div>
                   ))}
                 </div>
@@ -164,7 +167,7 @@ function AnalyticsSection({ onBack }) {
             </div>
           </div>
         </div>
-        <HotelChart
+        <VenderChart
           selectedCategory={selectedCategory}
           filteredItems={filteredItems}
         />
@@ -242,6 +245,6 @@ function AnalyticsSection({ onBack }) {
       </div>
     </section>
   );
-}
+};
 
-export default AnalyticsSection;
+export default AnalyticSectionVendor;

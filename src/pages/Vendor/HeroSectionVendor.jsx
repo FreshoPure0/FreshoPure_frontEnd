@@ -43,11 +43,11 @@ function HeroSectionVendor() {
         </div>
       </div>
       <div className="py-2 w-full mt-4 h-[69vh] relative bg-[#EFE5D8] rounded-lg flex flex-col overflow-y-auto hide-scrollbar">
-        <div className="flex justify-between">
-          <FiArrowLeft
+        <div className="flex justify-end">
+          {/* <FiArrowLeft
             className="bg-white rounded-md shadow p-1 h-7 w-7 ml-6 mt-1 mb-2 flex flex-shrink-0"
             size={20}
-          />
+          /> */}
           <FiPrinter
             className="bg-white rounded-md shadow p-1 h-7 w-7 mr-6 mt-1 mb-2 flex flex-shrink-0"
             size={20}
