@@ -19,6 +19,7 @@ function CartSection() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [note, setNote] = useState("")
   const { selectedAddress } = useSelector((state) => state.address);
 
   const [addressLine1, setAddressLine1] = useState();
@@ -45,7 +46,7 @@ function CartSection() {
     setIsOrderPlaced(true);
     try {
       if (selectedAddress !== null) {
-        await dispatch(placeorder());
+        await dispatch(placeorder(note));
       } else {
         console.log("Address is missing");
       }
@@ -213,6 +214,15 @@ function CartSection() {
                 </tr>
               </tbody>
             </table>
+            <label htmlFor="note">Note:</label>
+<input
+  type="text"
+  name="note"
+  id="note"
+  value={note} // Bind the note state
+  onChange={(e) => setNote(e.target.value)} // Update note state
+  className="mx-4 rounded-md"
+/>
             <button
               className="bg-[#619524] text-white rounded-full px-4 py-2"
               onClick={handleOrderPlace}

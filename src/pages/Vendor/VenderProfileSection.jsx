@@ -56,7 +56,7 @@ function VenderProfileSection() {
     : { title: "Profile Details", component: null };
 
   return (
-    <section className="mt-10 flex flex-col w-full lg:w-full md:w-4/5 h-[80vh] md:px-8 overflow-y-auto">
+    <section className="mt-10 flex flex-col w-full lg:w-full md:w-4/5 h-[80vh] md:px-8 overflow-y-auto hide-scrollbar">
       <div className="flex justify-between mb-4">
         <h2 className="text-3xl font-bold  mb-0">{title}</h2>
       </div>

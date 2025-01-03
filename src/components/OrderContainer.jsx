@@ -59,6 +59,7 @@ function OrderContainer({ orders = [], activeStatus }) {
   };
 
   const handleViewDetails = (order) => {
+    console.log(order,"OrderContainer")
     setSelectedOrder(order);
     setIsDetailsDrawerOpen(true); // Open the drawer
   };
@@ -94,6 +95,7 @@ function OrderContainer({ orders = [], activeStatus }) {
             _id,
             orderNumber,
             createdAt,
+            notes,
             totalPrice,
             orderedItems,
             orderStatusDetails,

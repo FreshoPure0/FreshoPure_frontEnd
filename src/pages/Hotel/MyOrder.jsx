@@ -64,7 +64,7 @@ function MyOrderSection({ onBack }) {
     <section>
       <div className="mt-5 -ml-2 p-4 w-full lg:h-[69vh] bg-[#EFE5D8] rounded-lg flex items-center justify-evenly flex-wrap overflow-y-auto hide-scrollbar">
         <div className="py-3 h-[67vh] relative p-1 flex flex-col items-center overflow-y-scroll hide-scrollbar">
-          <div className=" ">
+          <div className="">
             <FiArrowLeft
               onClick={onBack}
               className="bg-white rounded-md absolute left-0 shadow p-1 h-7 w-7 ml-4 mt-1 mb-2 flex flex-shrink-0"

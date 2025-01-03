@@ -12,6 +12,7 @@ function HotelOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus 
   const [errors, setErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  console.log(selectedOrder)
 
   useEffect(() => {
     if (selectedOrder?.orderStatusDetails?.status) {
@@ -124,8 +125,8 @@ function HotelOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus 
 
       <div className="p-4 overflow-y-auto">
         {selectedOrder ? (
-          <div className="flex">
-            <div className="bg-white w-[50%] h-[200px] mx-2 rounded p-2 shadow mb-2 overflow-y-auto hide-scrollbar">
+          <div className="flex overflow-y-scroll hide-scrollbar h-full mb-40">
+            <div className="bg-white w-[50%] h-[120px] mx-2 rounded p-2 shadow mb-2 overflow-y-auto hide-scrollbar">
               <p>
                 <strong>Order Number:</strong> #{selectedOrder.orderNumber}
               </p>
@@ -158,7 +159,7 @@ function HotelOrderDetailsDrawer({ isOpen, onClose, selectedOrder, activeStatus 
               </p>
             </div>
 
-            <div className="bg-white w-[50%] h-[200px] rounded p-2 shadow mb-2 overflow-y-auto hide-scrollbar">
+            <div className="bg-white w-[50%] h-[120px] rounded p-2 shadow mb-2 overflow-y-auto hide-scrollbar">
               <h3>
                 <strong>Ordered Items:</strong>
               </h3>

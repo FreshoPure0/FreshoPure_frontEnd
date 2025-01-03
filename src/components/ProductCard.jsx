@@ -178,7 +178,7 @@ function ProductCard(item) {
                   value={weightKg}
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (value >= 0 && value <= 200) {
+                    if (value >= 0 && value <= 999) {
                       console.log("kG value: ", value);
                       setWeightKg(value);
                     }
@@ -215,7 +215,7 @@ function ProductCard(item) {
                 value={weight}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (value >= 0 && value <= 200) {
+                  if (value >= 0 && value <= 999) {
                     setWeight(value);
                   }
                 }}
@@ -232,7 +232,7 @@ function ProductCard(item) {
                 value={weight}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (value >= 0 && value <= 200) {
+                  if (value >= 0 && value <= 999) {
                     setWeight(value);
                   }
                 }}
@@ -249,7 +249,7 @@ function ProductCard(item) {
                 value={weight}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (value >= 0 && value <= 200) {
+                  if (value >= 0 && value <= 999) {
                     setWeight(value);
                   }
                 }}

@@ -132,7 +132,7 @@ function WishlistCard(item) {
                   value={weightKg}
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (value >= 0 && value <= 200) {
+                    if (value >= 0 && value <= 999) {
                       console.log("kG value: ", value);
                       setWeightKg(value);
                     }
@@ -169,7 +169,7 @@ function WishlistCard(item) {
                 value={weight}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (value >= 0 && value <= 200) {
+                  if (value >= 0 && value <= 999) {
                     setWeight(value);
                   }
                 }}
@@ -186,7 +186,7 @@ function WishlistCard(item) {
                 value={weight}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (value >= 0 && value <= 200) {
+                  if (value >= 0 && value <= 999) {
                     setWeight(value);
                   }
                 }}
@@ -203,7 +203,7 @@ function WishlistCard(item) {
                 value={weight}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (value >= 0 && value <= 200) {
+                  if (value >= 0 && value <= 999) {
                     setWeight(value);
                   }
                 }}

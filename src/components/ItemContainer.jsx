@@ -104,7 +104,7 @@ function ItemContainer(item) {
                     value={weightKg}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (value >= 0 && value <= 200) {
+                      if (value >= 0 && value <= 999) {
                         setWeightKg(value);
                       }
                     }}
@@ -144,7 +144,7 @@ function ItemContainer(item) {
                   value={weight}
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (value >= 0 && value <= 200) {
+                    if (value >= 0 && value <= 999) {
                       setWeight(value);
                     }
                   }}
