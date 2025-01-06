@@ -44,10 +44,12 @@ function HeroSection() {
 
   // Filter logic for search
   const filteredItems = hotelItems?.flatMap((hotel) =>
-    hotel.items.filter((item) =>
-      item.itemDetails.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+    hotel.items.filter((item) => {
+      const name = item.itemDetails.name?.toLowerCase() || ''; // Default to empty string if undefined
+      const toSearch = item.itemDetails.toSearch?.toLowerCase() || ''; // Default to empty string if undefined
+      return name.includes(searchTerm.toLowerCase()) || toSearch.includes(searchTerm.toLowerCase());
+    })
+  ); 
 
   return (
     <section className="flex flex-col mx-6 w-[78vw]">
@@ -64,7 +66,7 @@ function HeroSection() {
           />
         </div>
       </div>
-      <div className="flex flex-row px-4 pb-12 overflow-x-auto hide-scrollbar flex-nowrap mt-4 ">
+      <div className="flex flex-row px-4  overflow-x-auto hide-scrollbar flex-nowrap mt-4 ">
         {allCategories?.map((cat, index) => (
           <div
             key={index}
