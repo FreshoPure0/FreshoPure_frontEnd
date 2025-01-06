@@ -62,6 +62,13 @@ const VenderProfileCardData = () => {
       text: "",
       component: "myitems",
     },
+    {
+      id: 6,
+      image: "/assets/ledger.png",
+      title: "Ledger",
+      text: "",
+      component: "ledger",
+    },
   ];
 };
 

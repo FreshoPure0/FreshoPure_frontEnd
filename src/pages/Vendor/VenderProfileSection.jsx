@@ -7,6 +7,7 @@ import ProfileCard from "../../components/ProfileCard";
 import MyOrderSection from "./ProfileMyOrderSection";
 import MyItemSection from "./ProfileMyItemSection";
 import VenderProfileCardData from "../../data/venderProfileCardData";
+import ProfileLedger from "./ProfileLedger";
 
 function VenderProfileSection() {
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -44,6 +45,11 @@ function VenderProfileSection() {
         return {
           title: "My items",
           component: <MyItemSection onBack={handleBack} />,
+        };
+      case "ledger":
+        return {
+          title: "Ledger",
+          component: <ProfileLedger onBack={handleBack} />,
         };
       default:
         return null;

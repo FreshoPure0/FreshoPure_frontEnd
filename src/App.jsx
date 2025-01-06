@@ -18,6 +18,7 @@ import LoginById from "./pages/Auth/LoginById";
 import { useSelector } from "react-redux";
 import VenderProfileSection from "./pages/Vendor/VenderProfileSection";
 import InventorySection from "./pages/Hotel/InventarySection";
+import ProfileLedger from "./pages/Vendor/ProfileLedger";
 // import InventorySection from "./pages/Hotel/InventarySection";
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
         <Route
           path="/hotel"
           element={
-            <div className="flex  min-h-[60.5vh] h-[85vh]">
+            <div className="flex">
               <Header />
               <HeroSection />
             </div>
@@ -39,16 +40,24 @@ function App() {
         <Route
           path="/hotel/cart"
           element={
-            <div className="flex min-h-[60.5vh] h-[85vh]">
+            <div className="flex">
               <Header />
               <CartSection />
             </div>
           }
         />
+        {/* <Route
+          path="/hotel/ledger"
+          element={
+            <div className="flex">
+              <ProfileLedger />
+            </div>
+          }
+        /> */}
         <Route
           path="/hotel/wishlist"
           element={
-            <div className="flex min-h-[60.5vh] h-[85vh]">
+            <div className="flex">
               <Header />
               <WishlistSection />
             </div>
@@ -57,16 +66,16 @@ function App() {
         <Route
           path="/hotel/profile"
           element={
-            <div className="flex min-h-[60.5vh] h-[85vh]">
+            <div className="flex">
               <Header />
               <ProfileSection />
             </div>
           }
         />
-        {/* <Route
+        <Route
           path="/hotel/profile/analytics"
           element={
-            <div className="flex min-h-[60.5vh] h-[85vh]">
+            <div className="flex">
               <Header />
               <AnalyticsSection />
             </div>
@@ -75,7 +84,7 @@ function App() {
         <Route
           path="/hotel/profile/orders"
           element={
-            <div className="flex min-h-[60.5vh] h-[85vh]">
+            <div className="flex">
               <Header />
               <MyOrderSection />
             </div>
@@ -84,17 +93,17 @@ function App() {
         <Route
           path="/hotel/profile/inventory"
           element={
-            <div className="flex min-h-[60.5vh] h-[85vh]">
+            <div className="flex">
               <Header />
               <InventorySection />
             </div>
           }
-        /> */}
+        />
         <>
           <Route
             path="/vendor"
             element={
-              <div className="flex min-h-[60.5vh] h-[85vh]">
+              <div className="flex">
                 <Header />
                 <HeroSectionVendor />
               </div>

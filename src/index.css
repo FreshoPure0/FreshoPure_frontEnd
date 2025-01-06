@@ -23,7 +23,7 @@ a:hover {
 
 html, body {
   margin: 0;
-  padding: 1vh 2vh 1vh ;
+  /* padding: 1vh 2vh 1vh ; */
   box-sizing: border-box;
 }
 
