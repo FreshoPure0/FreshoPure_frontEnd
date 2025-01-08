@@ -67,7 +67,11 @@ function ProductCard(item) {
   const isItemInWishlist = wishlistData?.some(
     (wishlistItem) => wishlistItem.items._id === item?.item.itemId
   );
-
+  const emptyWeight = () => {
+    setWeight("");
+    setWeightG("");
+    setWeightKg("");
+  };
   const isItemInCart = items?.some(
     (cartItem) => cartItem.itemDetails?._id === item?.item.itemId
   );
@@ -108,7 +112,7 @@ function ProductCard(item) {
         // Ensure latest state values are used
         const quantity = await getQuantity();
         console.log("Final Quantity: ", quantity); // Debugging statement
-        dispatch(
+        await dispatch(
           addItemToCart({
             itemId: item?.item.itemId,
             quantity: quantity,
@@ -117,6 +121,7 @@ function ProductCard(item) {
           })
         );
         console.log("Added to cart with quantity", quantity);
+        emptyWeight();
       }
     } catch (err) {
       setError(err.message);

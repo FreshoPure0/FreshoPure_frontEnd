@@ -18,7 +18,6 @@ import LoginById from "./pages/Auth/LoginById";
 import { useSelector } from "react-redux";
 import VenderProfileSection from "./pages/Vendor/VenderProfileSection";
 import InventorySection from "./pages/Hotel/InventarySection";
-import ProfileLedger from "./pages/Vendor/ProfileLedger";
 // import InventorySection from "./pages/Hotel/InventarySection";
 
 function App() {

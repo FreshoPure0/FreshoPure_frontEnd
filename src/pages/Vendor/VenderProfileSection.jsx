@@ -6,8 +6,9 @@ import PersonalInfo from "../Hotel/PersonalInfo";
 import ProfileCard from "../../components/ProfileCard";
 import MyOrderSection from "./ProfileMyOrderSection";
 import MyItemSection from "./ProfileMyItemSection";
+import ProfileStock from "./ProfileStock";
 import VenderProfileCardData from "../../data/venderProfileCardData";
-import ProfileLedger from "./ProfileLedger";
+
 
 function VenderProfileSection() {
   const [selectedComponent, setSelectedComponent] = useState(null);
@@ -46,10 +47,10 @@ function VenderProfileSection() {
           title: "My items",
           component: <MyItemSection onBack={handleBack} />,
         };
-      case "ledger":
+      case "ProfileStock":
         return {
-          title: "Ledger",
-          component: <ProfileLedger onBack={handleBack} />,
+          title: "Stock & Waste",
+          component: <ProfileStock onBack={handleBack} />,
         };
       default:
         return null;
