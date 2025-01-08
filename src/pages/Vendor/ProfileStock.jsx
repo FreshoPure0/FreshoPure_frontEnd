@@ -43,6 +43,29 @@ function ProfileStock({ onBack }) {
     return { unit: null, pricePerUnit: "N/A" };
   };
 
+
+  const calculateTotalWaste = (waste) => {
+    const totalWaste = { kg: 0, gram: 0, litre: 0, packet: 0, piece: 0 };
+  
+    // Sum up waste quantities for each unit
+    waste.forEach((entry) => {
+      for (const unit in entry.quantity) {
+        if (entry.quantity[unit] > 0) {
+          totalWaste[unit] += entry.quantity[unit];
+        }
+      }
+    });
+  
+    // Create an array of non-zero waste units
+    const summarizedWaste = Object.entries(totalWaste)
+      .filter(([unit, quantity]) => quantity > 0)
+      .map(([unit, quantity]) => `${quantity} ${unit}`);
+  
+    return summarizedWaste.length > 0 ? summarizedWaste : null;
+  };
+
+
+
   return (
     <section className="bg-[#EFE5D8] h-[70vh] flex flex-col items-center  rounded-lg p-1 overflow-y-auto hide-scrollbar">
       <div className="flex items-start w-full relative cursor-pointer mb-10">
@@ -78,9 +101,26 @@ function ProfileStock({ onBack }) {
             <div className="flex items-center justify-evenly w-3/4">
               <div className="flex flex-col items-center  border-gray-300 ">
                 <h4 className="text-gray-500 text-xs ">STOCK</h4>
-                <p className="text-xs">
-                  {item?.totalQuantity?.kg} <span>Kg</span>
+                {item?.itemDetails?.unit === "kg" ? (
+                  <div className="flex space-x-1">
+                    <p className="text-xs">
+                      {item?.totalQuantity?.kg} <span>Kg</span>
+                    </p>
+                    <p className="text-xs">
+                      {item?.totalQuantity?.gram} <span>grams</span>
+                    </p>
+                  </div>
+                ) : item?.itemDetails?.unit === "litre" ? (
+                  <p className="text-xs">
+                    {item?.totalQuantity?.litre} <span>Litre</span>
+                  </p>
+                ) : 
+                  item?.itemDetails?.unit === "piece" ? (<p className="text-xs">
+                  {item?.totalQuantity?.piece} <span>Piece</span>
                 </p>
+                ) : (<p className="text-xs">
+                    {item?.totalQuantity?.packet} <span>Packet</span>
+                  </p>)}
               </div>
 
               <div className="flex flex-col items-center  border-gray-300 ">
@@ -92,10 +132,24 @@ function ProfileStock({ onBack }) {
                   })()}
                 </p>
               </div>
-              <div className="flex flex-col items-center  border-gray-300 ">
-                <h4 className="text-gray-500 text-xs ">WASTE</h4>
-                <p className="text-xs">10 Litres</p>
-              </div>
+              <div className="flex flex-col items-center border-gray-300">
+  <h4 className="text-gray-500 text-xs">WASTE</h4>
+  {item?.waste?.length > 0 ? (
+    (() => {
+      const summarizedWaste = calculateTotalWaste(item.waste);
+
+      return summarizedWaste ? (
+        summarizedWaste.map((wasteItem, index) => (
+          <p key={index} className="text-xs">{wasteItem}</p>
+        ))
+      ) : (
+        <p className="text-xs">No wastage yet</p>
+      );
+    })()
+  ) : (
+    <p className="text-xs">No wastage yet</p>
+  )}
+</div>
             </div>
           </div>
         </div>
