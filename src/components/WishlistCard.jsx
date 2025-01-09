@@ -99,9 +99,9 @@ function WishlistCard(item) {
   }
   return (
     <>
-      <div className="h-fit w-fit bg-white rounded-md shadow m-2 ml-4 p-2">
+      <div className="h-72 max-h-72 w-52 max-w-52 bg-white relative flex flex-col justify-center rounded-md shadow m-2 ml-4 p-2">
         <FiHeart
-          className="text-red-600 fill-current pointer-cursor flex float-right mr-2 mt-2 z-40"
+          className="text-red-600 fill-current cursor-pointer absolute top-2 right-2 z-40"
           size={20}
           onClick={() => {
             handleRemoveFromWishlist();
@@ -110,9 +110,9 @@ function WishlistCard(item) {
         <img
           src={func(item?.item?.items.image.img)}
           alt=""
-          className="h-16 mt-9 mx-auto"
+          className="h-16 mt-3 mx-auto"
         />
-        <p className="px-2 mt-2">{truncatedName}</p>
+        <p className="px-2 text-xs mt-2">{item?.item?.items?.name}</p>
         <p className="px-2 font-light text-xs mb-2 text-[#619524]">
           {item?.item?.items?.unit === "kg"
             ? `${(item?.item?.items?.price?.todayCostPrice).toFixed(2)}/${
@@ -213,7 +213,7 @@ function WishlistCard(item) {
           ) : null}
         </div>
         <button
-          className="w-36 bg-[#619524] mx-2 my-1 rounded-full text-white z-10"
+          className="w-[85%] bg-[#619524] mx-2 absolute bottom-3 rounded-full text-white z-10"
           onClick={() => {
             console.log("Add button clicked");
             handleCart();

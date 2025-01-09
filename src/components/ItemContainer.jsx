@@ -83,8 +83,8 @@ function ItemContainer(item) {
           <p className="flex-1 text-white bg-[#896439] text-center">
             Item Name
           </p>
-          <p className="flex-3 text-center justify-center my-9 font-bold text-sm sm:text-base">
-            {truncatedName}
+          <p className="flex-3 text-center justify-center mx-5 my-9 font-bold text-sm sm:text-base">
+            {item?.item.itemDetails.name}
           </p>
         </div>
       </div>
