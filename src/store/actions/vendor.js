@@ -1168,7 +1168,7 @@ export const updateVendorStock = (price, quantity, historyId, itemId) => {
   };
 };
 
-export const updateVendorWaste = (reason, quantity, wasteId, itemId) => {
+export const updateVendorWaste = (reason, quantity, itemId) => {
 
   return async (dispatch, getState) => {
     try {
@@ -1176,7 +1176,7 @@ export const updateVendorWaste = (reason, quantity, wasteId, itemId) => {
         `${baseUrl}/vendor/updateVendorItemWaste`,
         {
           method: "post",
-          body: JSON.stringify({reason, quantity, wasteId, itemId}),
+          body: JSON.stringify({reason, quantity, itemId}),
           headers: {
             token: await fetchToken(),
             "Content-Type": "application/json",
