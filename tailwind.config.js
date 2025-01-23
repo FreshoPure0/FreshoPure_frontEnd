@@ -12,6 +12,7 @@ export default {
     },
   },
   plugins: [
+    
     function ({ addUtilities }) {
       addUtilities({
         ".hide-scrollbar": {

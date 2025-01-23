@@ -322,7 +322,7 @@ export const setHotelItemProfit = ({
           "Content-Type": "application/json",
         },
       });
-
+f
       if (!response.ok) {
         throw new Error("Something went wrong while updating price!!");
       }
@@ -1009,7 +1009,7 @@ export const UpdateFixedItemPrice = ({ hotelId, itemId, newPrice }) => {
         headers: {
           token: await fetchToken(),
           "Content-Type": "application/json",
-        },
+        },  
       });
 
       if (!response.ok) {
@@ -1034,6 +1034,44 @@ export const UpdateFixedItemPrice = ({ hotelId, itemId, newPrice }) => {
     }
   };
 };
+
+export const UpdateFixedOrderItemPrice = ({ hotelId, itemId, newPrice, orderId }) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await fetch(`${baseUrl}/vendor/updateOrderItemPrice`, {
+        method: "post",
+        body: JSON.stringify({ hotelId, itemId, newPrice, orderId }),
+        headers: {
+          token: await fetchToken(),
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Something went wrong while updating Status!!");
+      }
+
+      if (response.ok) {
+        // Toast.show({
+        //   type: "success",
+        //   text1: "Price Updated!",
+        // });
+        console.log("PRICE GOT UPDATED");
+        
+      }
+
+      const data = await response.json();
+
+      // dispatch({
+      //   type: CHANGE_HOTEL_ITEM_PRICE,
+      //   payload: { hotelId, itemId, newPrice,todayPercentageProfit:(data?.newProfitPercentage).toFixed(2) },
+      // });
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
 export const changeHotelType = ({ hotelId, toggle }) => {
   return async (dispatch, getState) => {
     try {

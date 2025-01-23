@@ -50,6 +50,7 @@ function ItemDrawer({ isOpen, onClose, hotelItems }) {
       );
     } catch (err) {
       // Handle error (optional)
+      console.error(err)
     }
   };
 

@@ -98,7 +98,7 @@ function OrderDrawer({ isOrdersDrawerOpen, setIsOrdersDrawerOpen, orders }) {
                     </div>
                     <div className="flex flex-col">
                       <p className="text-xs text-gray-500">ORDER PRICE</p>
-                      <p className="text-xs">₹ {order?.totalPrice}</p>
+                      <p className="text-xs">₹ {parseFloat(order?.totalPrice).toFixed(2)}</p>
                     </div>
                   </div>
                   <div className="flex flex-row">

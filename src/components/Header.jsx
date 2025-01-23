@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { FiMenu, FiX, FiHome, FiShoppingCart, FiHeart, FiUser, FiUsers, FiBarChart2, FiLogOut, FiSettings } from "react-icons/fi";
+import { FiMenu, FiX, FiHome, FiShoppingCart, FiHeart, FiUser, FiUsers, FiBarChart2, FiLogOut, FiSettings, FiBookOpen } from "react-icons/fi";
 import { getUserRole, logout } from "../store/actions/auth";
 
 function Header() {
@@ -35,6 +35,7 @@ function Header() {
     subvendor: FiUsers,
     hotel: FiBarChart2,
     setting: FiSettings,
+    ledger: FiBookOpen,
   };
 
   // Function to render the icon based on the name
@@ -115,6 +116,13 @@ function Header() {
               >
                 <Icon name="setting" size={30} />
                 <p className="flex-grow pl-2 text-base text-yellow-900 hidden lg:block">Profile</p>
+              </Link>
+              <Link
+                to="/vendor/ledger"
+                className="flex items-center justify-center mt-2 py-1 mx-8 px-2 bg-[#FDFCFB] shadow-sm rounded-lg focus:bg-[#FFF4E8] focus:border-l-4 focus:border-[#896439] transition-all duration-200"
+              >
+                <Icon name="ledger" size={30} />
+                <p className="flex-grow pl-2 text-base text-yellow-900 hidden lg:block">Ledger</p>
               </Link>
             </div>
           ) : null}
@@ -208,6 +216,14 @@ function Header() {
                 <Icon name="setting" size={30} />
                 <p className="pl-2 text-base text-yellow-900">Profile</p>
               </Link>
+              <Link
+                to="/vendor/ledger"
+                className="flex items-center justify-center mt-2 py-1 mx-8 px-2 bg-[#FDFCFB] shadow-sm rounded-lg focus:bg-[#FFF4E8] focus:border-l-4 focus:border-[#896439] transition-all duration-200"
+              >
+                <Icon name="ledger" size={30} />
+                <p className="pl-2 text-base text-yellow-900">Ledger</p>
+              </Link>
+              
             </div>
           ) : null}
           <Link
