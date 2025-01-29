@@ -27,12 +27,14 @@ import {
   CLEAR_ALL_VENDOR_ORDERS,
   TOTAL_SALES,
   EMPTY_VENDOR_ITEMS,
+  GET_LEDGER,
   OrderStatusToDelivered,
   ORDER_STATUS_TO_DELIVERED,
   CHANGE_HOTEL_ITEM_PRICE,
   REMOVE_HOTEL_ITEM,
   GET_ALL_COMPILED_ORDERS_TABLE,
   UPDATE_TODAY_COST_PRICE_C_O_TABLE,
+  EDIT_TRANSACTION,
 } from "../actions/vendor";
 
 const initialState = {
@@ -57,6 +59,7 @@ const initialState = {
   totalSales: 0,
   weeklySalesData: [],
   sixMonthSalesData: [],
+  ledger: [],
 };
 
 export default (state = initialState, action) => {
@@ -66,6 +69,21 @@ export default (state = initialState, action) => {
         ...state,
         compiledOrder: action.payload,
       };
+    case GET_LEDGER:
+      return {
+        ...state,
+        ledger: action.payload,
+      };
+      case EDIT_TRANSACTION: {
+        // When editing a transaction, we'll map over the ledger to find the transaction by _id
+        const updatedLedger = state.ledger.map((txn) =>
+          txn._id === action.payload._id ? { ...txn, ...action.payload } : txn
+        );
+        return {
+          ...state,
+          ledger: updatedLedger,  // Update the ledger state with the edited transaction
+        };
+      }
     case GET_ALL_HOTELS:
       return {
         ...state,

@@ -1,4 +1,6 @@
 export const GET_COMPILED_ORDER = "GET_COMPILED_ORDER";
+export const GET_LEDGER = "GET_LEDGER";
+export const EDIT_TRANSACTION = "EDIT_TRANSACTION";
 export const GET_ALL_ORDERS = "GET_ALL_ORDERS";
 export const GET_ALL_HOTELS = "GET_ALL_HOTELS";
 export const GET_ALL_HOTEL_ITEMS = "GET_ALL_HOTEL_ITEMS";
@@ -187,6 +189,97 @@ export const linkedHotels = () => {
     }
   };
 };
+
+export const updateTransaction = (updatedTxn) => {
+  return async (dispatch, getState) => {
+    try {
+      // Construct the URL for the PUT request
+      console.log(updatedTxn, "This is the transaction");
+      
+      const url = `${baseUrl}/vendor/postOrUpdateLedgerTransaction/${updatedTxn._id}`;
+      
+      // Send the updated transaction to the backend via PUT request
+      const response = await fetch(url, {
+        method: "PUT", // Use PUT to update the transaction
+        headers: {
+          "Content-Type": "application/json", // Set content type as JSON
+          token: await fetchToken(), // Ensure the token is valid
+        },
+        body: JSON.stringify(updatedTxn), // Send the updated transaction in the request body
+      });
+
+      // Safely parse the response as JSON
+      const data = await response.json();
+
+      // Log the data for debugging
+      console.log("Response from Update:", data);
+
+      if (data.success) {
+        // If successful, dispatch the updated ledger data to Redux
+        const { startDate, endDate } = getState().vendor; // Access start and end date from Redux state if needed
+
+        dispatch(
+          getLedger({
+            startDate: startDate,
+            endDate: endDate,
+          })
+        );
+        
+        // Optionally, close the modal (or handle any additional UI updates)
+        dispatch({
+          type: EDIT_TRANSACTION, // Dispatch action to close modal if necessary
+        });
+      } else {
+        console.error("Failed to update transaction:", data.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error updating transaction:", error.message || error);
+    }
+  };
+};
+
+
+export const getLedger = ({ startDate, endDate }) => {
+  return async (dispatch, getState) => {
+    try {
+      // Create the query params object
+      const queryParams = new URLSearchParams();
+
+      // Append startDate and endDate only if they are provided
+      if (startDate && endDate) {
+        queryParams.append('startDate', startDate);
+        queryParams.append('endDate', endDate);
+      }
+
+      // Construct the URL with the query params (if any)
+      const url = `${baseUrl}/vendor/getLedgerTransactions?${queryParams.toString()}`;
+
+      const response = await fetch(url, {
+        method: "GET", // Keep GET method
+        headers: {
+          token: await fetchToken(), // Ensure the token is valid
+        },
+      });
+
+      console.log("hit");
+
+      // Safely parse the response as JSON
+      const data = await response.json();
+
+      // Log the data for debugging
+      console.log("Response Ledger Data:", data.data);
+
+      // Dispatch the data to Redux
+      dispatch({
+        type: GET_LEDGER,
+        payload: data.data,  
+      });
+    } catch (err) {
+      console.error("Error fetching ledger:", err.message || err);
+    }
+  };
+};
+
 
 
 export const getHotelItemList = (HotelId) => {
