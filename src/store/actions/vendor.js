@@ -194,7 +194,7 @@ export const updateTransaction = (updatedTxn) => {
   return async (dispatch, getState) => {
     try {
       // Construct the URL for the PUT request
-      console.log(updatedTxn, "This is the transaction");
+      console.log(updatedTxn._id, "This is the transaction's ID");
       
       const url = `${baseUrl}/vendor/postOrUpdateLedgerTransaction/${updatedTxn._id}`;
       
@@ -217,13 +217,17 @@ export const updateTransaction = (updatedTxn) => {
       if (data.success) {
         // If successful, dispatch the updated ledger data to Redux
         const { startDate, endDate } = getState().vendor; // Access start and end date from Redux state if needed
+        
 
-        dispatch(
-          getLedger({
-            startDate: startDate,
-            endDate: endDate,
-          })
-        );
+         
+         
+            dispatch(
+              getLedger({
+                startDate: startDate,
+                endDate: endDate ,
+              })
+            );
+         
         
         // Optionally, close the modal (or handle any additional UI updates)
         dispatch({
@@ -266,13 +270,16 @@ export const getLedger = ({ startDate, endDate }) => {
       // Safely parse the response as JSON
       const data = await response.json();
 
-      // Log the data for debugging
-      console.log("Response Ledger Data:", data.data);
+      // console.log("Response Ledger Data:", data.data);
 
       // Dispatch the data to Redux
       dispatch({
         type: GET_LEDGER,
-        payload: data.data,  
+        payload: {
+          ledger: data.data, // The ledger data from the backend
+          startDate: startDate, // Include startDate in the payload
+          endDate: endDate, // Include endDate in the payload
+        },
       });
     } catch (err) {
       console.error("Error fetching ledger:", err.message || err);

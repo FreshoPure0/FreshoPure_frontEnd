@@ -60,6 +60,8 @@ const initialState = {
   weeklySalesData: [],
   sixMonthSalesData: [],
   ledger: [],
+  startDate: null,
+  endDate: null,
 };
 
 export default (state = initialState, action) => {
@@ -72,7 +74,9 @@ export default (state = initialState, action) => {
     case GET_LEDGER:
       return {
         ...state,
-        ledger: action.payload,
+        ledger: action.payload.ledger, // Store the ledger data
+        startDate: action.payload.startDate, // Store the startDate
+        endDate: action.payload.endDate, // Store the endDate
       };
       case EDIT_TRANSACTION: {
         // When editing a transaction, we'll map over the ledger to find the transaction by _id

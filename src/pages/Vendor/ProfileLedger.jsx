@@ -15,43 +15,18 @@ function ProfileLedger() {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [addTransaction, setaddTransaction] = useState(false);
   const [date, setDate] = useState({
-    startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // current date - 7 days
+    startDate: new Date(new Date().setDate(new Date().getDate() - 20)), // current date - 7 days
     endDate: new Date(), // current date
   });
-  const [editedTransaction, setEditedTransaction] = useState({
-    date: selectedTransaction?.date || "",
-    hotelFullName: selectedTransaction?.hotelFullName || "",
-    remarks: selectedTransaction?.remarks || "",
-    amount: selectedTransaction?.amount || 0,
-    transactionType: selectedTransaction?.transactionType || "",
-    status: selectedTransaction?.status || "",
-    // Other fields as needed
-  });
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedTransaction({
-      ...editedTransaction,
-      [name]: value,
-    });
-  };
-  // const handleSave = async () => {
-  //   try {
-  //     // Call an API to save the updated transaction
-  //     await updateTransaction(editedTransaction);
-  //     closeModal();  // Close the modal after saving
-  //   } catch (error) {
-  //     console.error("Error updating transaction:", error);
-  //   }
-  // };
 
   const handleSaveClick = () => {
-    if (selectedTransaction) {
+    if (selectedTransaction && selectedTransaction._id) {
       // Dispatch the update transaction action
-      console.log("Selected Transaction:", selectedTransaction);
+      console.log("Selected Transaction ki ID:", selectedTransaction._id);
       dispatch(updateTransaction(selectedTransaction));
-    }
-    else {
-      console.log("No transaction selected");  // Log if no transaction is selected
+      closeModal();
+    } else {
+      console.log("No transaction selected"); // Log if no transaction is selected
     }
   };
 
@@ -76,9 +51,11 @@ function ProfileLedger() {
 
   const filteredLedgerData = async () => {
     if (startDate && endDate) {
-      const formattedStartDate = new Date(startDate).toISOString().split('T')[0]; // "YYYY-MM-DD"
-      const formattedEndDate = new Date(endDate).toISOString().split('T')[0]; // "YYYY-MM-DD"
-      
+      const formattedStartDate = new Date(startDate)
+        .toISOString()
+        .split("T")[0]; // "YYYY-MM-DD"
+      const formattedEndDate = new Date(endDate).toISOString().split("T")[0]; // "YYYY-MM-DD"
+
       await dispatch(
         getLedger({
           startDate: formattedStartDate,
@@ -87,29 +64,45 @@ function ProfileLedger() {
       );
     }
   };
-  
+
   const applyFilter = () => {
     // When the "Apply Filter" button is clicked, we dispatch the filtered ledger data
     filteredLedgerData();
     closeModal(); // Close the modal after applying the filter
   };
   const formatDate = (dateStr) => {
-    return new Date(dateStr).toISOString().split('T')[0]; // "2025-01-21"
+    return new Date(dateStr).toISOString().split("T")[0]; // "2025-01-21"
   };
-  const sortedLedger = ledger.sort((a, b) => new Date(a.date) - new Date(b.date));
-  const openingBalance = sortedLedger.length > 0 ? sortedLedger[0].openingBalance : 0;
+  const sortedLedger = ledger.sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+  const openingBalance =
+    sortedLedger.length > 0 ? sortedLedger[0].openingBalance : 0;
   let runningBalance = openingBalance;
 
   const updatedLedger = sortedLedger.map((txn) => {
-    const balance = txn.transactionType === "Cr"
-      ? (runningBalance += txn.amount)
-      : (runningBalance -= txn.amount);
+    const balance =
+      txn.transactionType === "Cr"
+        ? (runningBalance += txn.amount)
+        : (runningBalance -= txn.amount);
 
     return {
       ...txn,
       balance, // Add the balance to the transaction object
     };
   });
+
+  const calculateBalance = (index) => {
+    let balance = openingBalance;
+    for (let i = 0; i <= index; i++) {
+      const txn = sortedLedger[i];
+      balance =
+        txn.transactionType === "Cr"
+          ? balance + txn.amount
+          : balance - txn.amount;
+    }
+    return balance;
+  };
   return (
     <>
       {/* Add Entry Modal */}
@@ -145,6 +138,10 @@ function ProfileLedger() {
                       <option value="">Dummy Hotel</option>
                       <option value="">Kanha Tan Sukh</option>
                       <option value="">Gud Mishri</option>
+                      <option value="">Salary</option>
+                      <option value="">Transportaion</option>
+                      <option value="">Mandi Expenses</option>
+                      <option value="">Other Expenses</option>
                     </select>
                   </td>
                   <td className="py-2 px-4 border-b">
@@ -164,7 +161,7 @@ function ProfileLedger() {
                     />
                   </td>
                   <td className="py-2 px-4 border-b">
-                  <select className="w-[5vw] rounded-md p-1" name="">
+                    <select className="w-[5vw] rounded-md p-1" name="">
                       <option value="">Cr</option>
                       <option value="">Dr</option>
                     </select>
@@ -208,10 +205,14 @@ function ProfileLedger() {
               </thead>
               <tbody>
                 <tr className="hover:bg-gray-100">
-                  <td className="py-2 px-4 border-b">{formatDate(selectedTransaction.date)}</td>
-                  <td className="py-2 px-4 border-b">{selectedTransaction.hotelFullName}</td>
                   <td className="py-2 px-4 border-b">
-                  <input
+                    {formatDate(selectedTransaction.date)}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {selectedTransaction.hotelFullName}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <input
                       type="text"
                       className="w-[7vw] rounded-md p-1"
                       placeholder="Enter a remark"
@@ -245,9 +246,15 @@ function ProfileLedger() {
                         });
                       }}
                     >
-                      <option className="text-black" value="Approved">Approved</option>
-                      <option className="text-black" value="Pending">Pending</option>
-                      <option className="text-black" value="Rejected">Rejected</option>
+                      <option className="text-black" value="Approved">
+                        Approved
+                      </option>
+                      <option className="text-black" value="Pending">
+                        Pending
+                      </option>
+                      <option className="text-black" value="Rejected">
+                        Rejected
+                      </option>
                     </select>
                   </td>
                   <td className="py-2 px-4 border-b">
@@ -264,7 +271,9 @@ function ProfileLedger() {
                       }}
                     />
                   </td>
-                  <td className="py-2 px-4 border-b">{selectedTransaction.transactionType}</td>
+                  <td className="py-2 px-4 border-b">
+                    {selectedTransaction.transactionType}
+                  </td>
                   <td
                     className={`py-2 px-4 border-b ${
                       selectedTransaction.transactionType === "Cr"
@@ -274,7 +283,10 @@ function ProfileLedger() {
                         : ""
                     }`}
                   >
-                    ₹{selectedTransaction.amount !== undefined ? selectedTransaction.amount.toFixed(2) : "0.00"}
+                    ₹
+                    {selectedTransaction.amount !== undefined
+                      ? selectedTransaction.amount.toFixed(2)
+                      : "0.00"}
                   </td>
                 </tr>
               </tbody>
@@ -282,8 +294,9 @@ function ProfileLedger() {
           </div>
           <div className="flex gap-3 mt-2">
             <button
-            onClick={handleSaveClick}
-             className="bg-[#EFE5D8] text-yellow-900 rounded-md px-4 py-1 shadow flex items-center gap-2">
+              onClick={handleSaveClick}
+              className="bg-[#EFE5D8] text-yellow-900 rounded-md px-4 py-1 shadow flex items-center gap-2"
+            >
               Save
             </button>
             <button
@@ -299,7 +312,10 @@ function ProfileLedger() {
       {/* Main Ledger Section */}
       <section className="mt-10 flex flex-col w-full lg:w-full md:w-4/5 h-[90vh] md:px-8 overflow-y-auto hide-scrollbar">
         {(addTransaction || selectedTransaction) && (
-          <div onClick={closeModal} className="h-full w-full absolute top-0 left-0 z-40 bg-black opacity-40"></div>
+          <div
+            onClick={closeModal}
+            className="h-full w-full absolute top-0 left-0 z-40 bg-black opacity-40"
+          ></div>
         )}
         <div className="flex justify-between mb-4">
           <h2 className="text-3xl font-bold mb-0">Ledger</h2>
@@ -355,7 +371,7 @@ function ProfileLedger() {
               id="startDate"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="border rounded p-2 w-full mb-4 bg-yellow-100"
+              className="border border-gray-300 rounded p-2 w-full mb-4 placeholder-gray-400"
             />
             <label htmlFor="endDate" className="mb-2">
               To Date:
@@ -365,7 +381,7 @@ function ProfileLedger() {
               id="endDate"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="border rounded p-2 w-full mb-4 bg-yellow-100"
+              className="border border-gray-300 rounded p-2 w-full mb-4 placeholder-gray-400"
             />
             <button
               className="bg-yellow-500 text-white rounded-md px-4 py-2 shadow w-full mb-2"
@@ -386,13 +402,21 @@ function ProfileLedger() {
           {/* Summary Section */}
           <div className="grid grid-cols-2 h-[10vh] w-full justify-items-center items-center text-center mt-2">
             <div className="bg-white rounded-lg shadow w-[80%] p-2 flex flex-col items-center">
-              <h2 className="font-semibold text-lg text-gray-800">Opening Balance</h2>
-              <p className="text-lg text-gray-600">₹{openingBalance.toFixed(2)}</p>
+              <h2 className="font-semibold text-lg text-gray-800">
+                Opening Balance
+              </h2>
+              <p className="text-lg text-gray-600">
+                ₹{openingBalance.toFixed(2)}
+              </p>
             </div>
-          
+
             <div className="bg-white rounded-lg shadow w-[80%] p-2 flex flex-col items-center">
-              <h2 className="font-semibold text-lg text-gray-800">Closing Balance</h2>
-              <p className="text-lg text-gray-600">₹{updatedLedger.reduce((total, txn) => total + txn.balance, 0).toFixed(2)}</p>
+              <h2 className="font-semibold text-lg text-gray-800">
+                Closing Balance
+              </h2>
+              <p className="text-lg text-gray-600">
+                ₹{calculateBalance(sortedLedger.length - 1).toFixed(2)}
+              </p>
             </div>
           </div>
 
@@ -404,7 +428,9 @@ function ProfileLedger() {
                   <tr>
                     <th className="py-2 px-4 border-b font-bold">Date</th>
                     <th className="py-2 px-4 border-b font-bold">Hotel</th>
-                    <th className="py-2 px-4 border-b font-bold">Invoice No.</th>
+                    <th className="py-2 px-4 border-b font-bold">
+                      Invoice No.
+                    </th>
                     <th className="py-2 px-4 border-b font-bold">Remarks</th>
                     <th className="py-2 px-4 border-b font-bold">Status</th>
                     <th className="py-2 px-4 border-b font-bold">Amount</th>
@@ -417,8 +443,12 @@ function ProfileLedger() {
                   {/* Render real data from ledger */}
                   {updatedLedger.map((txn, index) => (
                     <tr key={index} className="hover:bg-gray-100">
-                      <td className="py-2 px-4 border-b">{formatDate(txn.date)}</td>
-                      <td className="py-2 px-4 border-b">{txn.hotelFullName}</td>
+                      <td className="py-2 px-4 border-b">
+                        {formatDate(txn.date)}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {txn.hotelFullName}
+                      </td>
                       <td className="py-2 px-4 border-b">{txn.invoiceNo}</td>
                       <td className="py-2 px-4 border-b">{txn.remarks}</td>
                       <td
@@ -435,27 +465,26 @@ function ProfileLedger() {
                         {txn.status}
                       </td>
                       <td className="py-2 px-4 border-b">₹{txn.amount}</td>
-                      <td className="py-2 px-4 border-b">{txn.transactionType}</td>
+                      <td className="py-2 px-4 border-b">
+                        {txn.transactionType}
+                      </td>
                       <td
                         className={`py-2 px-4 border-b ${
                           txn.balance > 0
                             ? "text-green-500"
-                            : txn.balance <0
+                            : txn.balance < 0
                             ? "text-red-500"
-                            : txn.balance === 0 ? "text-gray-500" : ""
+                            : ""
                         }`}
                       >
                         ₹{txn.balance}
                       </td>
-                      <td
-                        className="py-2 px-4 border-b cursor-pointer"
-                      >
-                        <GoPencil onClick={() =>{setSelectedTransaction(txn)
-                          console.log(txn);  // Access txn directly here
-                          // If you need the transaction ID
-                          console.log(txn._id);
-                          
-                        }} />
+                      <td className="py-2 px-4 border-b cursor-pointer">
+                        <GoPencil
+                          onClick={() => {
+                            setSelectedTransaction(txn);
+                          }}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -469,13 +498,22 @@ function ProfileLedger() {
                     <td className="py-2 px-4 border-t"></td>
                     <td className="py-2 px-4 border-t"></td>
                     <td className="py-2 px-4 border-t">
-                      ₹{updatedLedger.reduce((total, txn) => total + txn.amount, 0).toFixed(2)}
+                      ₹
+                      {updatedLedger
+                        .reduce((total, txn) => total + txn.amount, 0)
+                        .toFixed(2)}
                     </td>
                     <td className="py-2 px-4 border-t"></td>
-                    <td className={`py-2 px-2 ${
-                      updatedLedger.reduce((total, txn) => total + txn.balance, 0) > 0 ? "text-green-500" : updatedLedger.reduce((total, txn) => total + txn.balance, 0) ? "text-red-500" : updatedLedger.reduce((total, txn) => total + txn.balance, 0) === 0 ? "text-gray-500" : ""
-                    }`}>
-                      ₹{updatedLedger.reduce((total, txn) => total + txn.balance, 0).toFixed(2)}
+                    <td
+                      className={`py-2 px-2 ${
+                        calculateBalance(sortedLedger.length - 1).toFixed(2) > 0
+                          ? "text-green-500"
+                          : calculateBalance(sortedLedger.length - 1).toFixed(2) < 0
+                          ? "text-red-500"
+                          : ""
+                      }`}
+                    >
+                      ₹{calculateBalance(sortedLedger.length - 1).toFixed(2)}
                     </td>
                     <td className="py-2 px-4 border-t"></td>
                   </tr>
