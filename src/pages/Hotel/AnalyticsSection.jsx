@@ -17,6 +17,7 @@ function AnalyticsSection({ onBack }) {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [selectedTimeInterval, setSelectedTimeInterval] = useState("Week");
   const [isTimeOpen, setIsTimeOpen] = useState(false);
+  
 
   console.log(allCategories, "Categories");
   console.log("itemAnalytics", itemAnalytics);
@@ -58,11 +59,57 @@ function AnalyticsSection({ onBack }) {
 
   console.log(filteredItems, "filter");
 
+  const [sortedItems, setSortedItems] = useState(filteredItems);
+
+  // Function to sort items by total quantity
+  const sortByTotalQuantity = () => {
+    const sorted = [...filteredItems].sort((a, b) => {
+      const getQuantityInGrams = (item) => {
+        if (item?.orderedItems?.totalQuantity?.kg) {
+          return item.orderedItems.totalQuantity.kg * 1000; // Convert kg to grams
+        }
+        if (item?.orderedItems?.totalQuantity?.gram) {
+          return item.orderedItems.totalQuantity.gram;
+        }
+        if (item?.orderedItems?.totalQuantity?.piece) {
+          return item.orderedItems.totalQuantity.piece; // Assuming 1 piece = 1 unit
+        }
+        if (item?.orderedItems?.totalQuantity?.packet) {
+          return item.orderedItems.totalQuantity.packet; // Assuming 1 packet = 1 unit
+        }
+        if (item?.orderedItems?.totalQuantity?.litre) {
+          return item.orderedItems.totalQuantity.litre * 1000; // Convert litres to grams (assuming density of water)
+        }
+        return 0; // Default to 0 if no quantity is found
+      };
+
+      const quantityA = getQuantityInGrams(a);
+      const quantityB = getQuantityInGrams(b);
+
+      return quantityA - quantityB; // Sort in ascending order
+    });
+
+    setSortedItems(sorted); // Update state with sorted items
+  };
+
+  const sortByTotalPrice = () => {
+    const sorted = [...filteredItems].sort((a, b) => {
+      const priceA = a?.orderedItems?.totalPrice || 0;
+      const priceB = b?.orderedItems?.totalPrice || 0;
+      return priceA - priceB; // Sort in ascending order
+    });
+  
+    setSortedItems(sorted); // Update state with sorted items
+  };
+
   // Calculate total sales
   const totalSales = filteredItems?.reduce(
     (acc, item) => acc + (item?.orderedItems?.totalPrice || 0),
     0
   );
+  useEffect(() => {
+    setSortedItems(filteredItems);
+  }, [filteredItems]);
 
   function func(img) {
     let image = img?.substr(12);
@@ -169,6 +216,20 @@ function AnalyticsSection({ onBack }) {
           filteredItems={filteredItems}
         />
         <div className="flex flex-col mx-2">
+        <div className="flex gap-5 justify-end">
+        <button
+              className="bg-[#FFF7EC] text-sm mb-2 w-[15%] text-[#896439] rounded-md px-4 py-2 shadow flex items-center justify-center gap-2"
+              onClick={sortByTotalQuantity}
+            >
+              Filter by Quantity
+            </button>
+        <button
+              className="bg-[#FFF7EC] text-sm mb-2 w-[15%] text-[#896439] rounded-md px-4 py-2 shadow flex items-center justify-center gap-2"
+              onClick={sortByTotalPrice}
+            >
+              Filter by Price
+            </button>
+        </div>
           <div className="flex flex-row border border-[#00000033]">
             <div className="flex flex-col flex-1">
               <p className="border-r border-white bg-[#896439] text-center text-sm text-white p-1">
@@ -191,7 +252,7 @@ function AnalyticsSection({ onBack }) {
               </p>
             </div>
           </div>
-          {filteredItems.map((item, index) => (
+          {sortedItems.map((item, index) => (
             <div
               className="flex flex-row border border-[#00000033]"
               key={index}
