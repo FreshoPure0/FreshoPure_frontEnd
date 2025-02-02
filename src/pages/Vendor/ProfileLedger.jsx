@@ -449,7 +449,7 @@ function ProfileLedger() {
                       <td className="py-2 px-4 border-b">
                         {txn.hotelFullName}
                       </td>
-                      <td className="py-2 px-4 border-b">{txn.invoiceNo}</td>
+                      <td className="py-2 px-4 border-b">{txn.invoiceNumber}</td>
                       <td className="py-2 px-4 border-b">{txn.remarks}</td>
                       <td
                         className={`py-2 px-4 max-w-20 min-w-20 border-b ${
