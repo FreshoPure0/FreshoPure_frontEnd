@@ -11,7 +11,7 @@ function ProfileLedger() {
   const [startDate, setStartDate] = useState(""); // separate state for start date
   const [endDate, setEndDate] = useState(""); // separate state for end date
   const dispatch = useDispatch();
-  const { ledger } = useSelector((state) => state.vendor); // This fetches the ledger from the Redux store
+  const { ledger, linkedHotels } = useSelector((state) => state.vendor); // This fetches the ledger from the Redux store
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [addTransaction, setaddTransaction] = useState(false);
   const [date, setDate] = useState({
@@ -22,7 +22,6 @@ function ProfileLedger() {
   const handleSaveClick = () => {
     if (selectedTransaction && selectedTransaction._id) {
       // Dispatch the update transaction action
-      console.log("Selected Transaction ki ID:", selectedTransaction._id);
       dispatch(updateTransaction(selectedTransaction));
       closeModal();
     } else {
@@ -133,16 +132,14 @@ function ProfileLedger() {
                     />
                   </td>
                   <td className="py-2 px-4 border-b">
-                    <select className="w-[10vw] rounded-md p-1" name="hotels">
-                      <option value="">Select a hotel</option>
-                      <option value="">Dummy Hotel</option>
-                      <option value="">Kanha Tan Sukh</option>
-                      <option value="">Gud Mishri</option>
-                      <option value="">Salary</option>
-                      <option value="">Transportaion</option>
-                      <option value="">Mandi Expenses</option>
-                      <option value="">Other Expenses</option>
-                    </select>
+                  <select className="w-[10vw] rounded-md p-1" name="hotels">
+                <option value="">Select a hotel</option>
+                {linkedHotels.map((hotel) => (
+                  <option key={hotel.hotelId} value={hotel.hotelId}>
+                    {hotel.hotelName} ({hotel.organization})
+                  </option>
+                ))}
+              </select>
                   </td>
                   <td className="py-2 px-4 border-b">
                     <input
@@ -262,7 +259,7 @@ function ProfileLedger() {
                     <input
                       className="w-[7vw] rounded-md p-1"
                       type="number"
-                      value={selectedTransaction.amount || 0}
+                      value={selectedTransaction.amount.toFixed(2) || 0}
                       onChange={(e) => {
                         setSelectedTransaction({
                           ...selectedTransaction,
@@ -443,16 +440,16 @@ function ProfileLedger() {
                   {/* Render real data from ledger */}
                   {updatedLedger.map((txn, index) => (
                     <tr key={index} className="hover:bg-gray-100">
-                      <td className="py-2 px-4 border-b">
+                      <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
                         {formatDate(txn.date)}
                       </td>
-                      <td className="py-2 px-4 border-b">
+                      <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
                         {txn.hotelFullName}
                       </td>
                       <td className="py-2 px-4 border-b">{txn.invoiceNumber}</td>
-                      <td className="py-2 px-4 border-b">{txn.remarks}</td>
+                      <td className="py-2 px-4 border-b w-25 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">{txn.remarks}</td>
                       <td
-                        className={`py-2 px-4 max-w-20 min-w-20 border-b ${
+                        className={`py-2 px-4 max-w-25 min-w-25 border-b ${
                           txn.status === "Approved"
                             ? "text-green-500"
                             : txn.status === "Pending"
@@ -464,12 +461,12 @@ function ProfileLedger() {
                       >
                         {txn.status}
                       </td>
-                      <td className="py-2 px-4 border-b">₹{txn.amount}</td>
-                      <td className="py-2 px-4 border-b">
+                      <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">₹{txn.amount.toFixed(2)}</td>
+                      <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
                         {txn.transactionType}
                       </td>
                       <td
-                        className={`py-2 px-4 border-b ${
+                        className={`py-2 px-4 border-b w-25 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap ${
                           txn.balance > 0
                             ? "text-green-500"
                             : txn.balance < 0
@@ -477,7 +474,7 @@ function ProfileLedger() {
                             : ""
                         }`}
                       >
-                        ₹{txn.balance}
+                        ₹{txn.balance.toFixed(2)}
                       </td>
                       <td className="py-2 px-4 border-b cursor-pointer">
                         <GoPencil

@@ -265,18 +265,15 @@ export const getLedger = ({ startDate, endDate }) => {
         },
       });
 
-      console.log("hit");
-
       // Safely parse the response as JSON
       const data = await response.json();
-
-      // console.log("Response Ledger Data:", data.data);
 
       // Dispatch the data to Redux
       dispatch({
         type: GET_LEDGER,
         payload: {
-          ledger: data.data, // The ledger data from the backend
+          ledger: data.data.ledgerTransactions, // The ledger data from the backend
+          linkedHotels: data.data.hotelNames, // The linked hotels data from the backend
           startDate: startDate, // Include startDate in the payload
           endDate: endDate, // Include endDate in the payload
         },
