@@ -35,6 +35,7 @@ import {
   GET_ALL_COMPILED_ORDERS_TABLE,
   UPDATE_TODAY_COST_PRICE_C_O_TABLE,
   EDIT_TRANSACTION,
+  linkedHotels,
 } from "../actions/vendor";
 
 const initialState = {
@@ -62,6 +63,7 @@ const initialState = {
   ledger: [],
   startDate: null,
   endDate: null,
+  linkedHotels: [],
 };
 
 export default (state = initialState, action) => {
@@ -77,6 +79,7 @@ export default (state = initialState, action) => {
         ledger: action.payload.ledger, // Store the ledger data
         startDate: action.payload.startDate, // Store the startDate
         endDate: action.payload.endDate, // Store the endDate
+        linkedHotels: action.payload.linkedHotels,
       };
       case EDIT_TRANSACTION: {
         // When editing a transaction, we'll map over the ledger to find the transaction by _id

@@ -243,6 +243,7 @@ export const updateTransaction = (updatedTxn) => {
 };
 
 
+
 export const getLedger = ({ startDate, endDate }) => {
   return async (dispatch, getState) => {
     try {
@@ -267,13 +268,14 @@ export const getLedger = ({ startDate, endDate }) => {
 
       // Safely parse the response as JSON
       const data = await response.json();
+      
 
       // Dispatch the data to Redux
       dispatch({
         type: GET_LEDGER,
         payload: {
           ledger: data.data.ledgerTransactions, // The ledger data from the backend
-          linkedHotels: data.data.hotelNames, // The linked hotels data from the backend
+          linkedHotels: data.data.hotelDetails, // The linked hotels data from the backend
           startDate: startDate, // Include startDate in the payload
           endDate: endDate, // Include endDate in the payload
         },

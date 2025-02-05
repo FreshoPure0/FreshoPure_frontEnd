@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlinePrinter } from "react-icons/ai";
-import { getLedger, updateTransaction } from "../../store/actions/vendor";
+import { getLedger, linkedHotels, updateTransaction } from "../../store/actions/vendor";
 import Modal from "react-modal";
 import { BiFilterAlt } from "react-icons/bi";
 import { GoPencil } from "react-icons/go";
@@ -132,14 +132,14 @@ function ProfileLedger() {
                     />
                   </td>
                   <td className="py-2 px-4 border-b">
-                  <select className="w-[10vw] rounded-md p-1" name="hotels">
-                <option value="">Select a hotel</option>
-                {linkedHotels.map((hotel) => (
-                  <option key={hotel.hotelId} value={hotel.hotelId}>
-                    {hotel.hotelName} ({hotel.organization})
-                  </option>
-                ))}
-              </select>
+                    <select className="w-[10vw] rounded-md p-1 hide-scrollbar" name="hotels">
+                      <option value="">Select a hotel</option>
+                      {linkedHotels.map((hotel) => (
+                        <option key={hotel._id}>
+                          {hotel.fullName} 
+                        </option>
+                      ))}
+                    </select>
                   </td>
                   <td className="py-2 px-4 border-b">
                     <input
@@ -446,8 +446,14 @@ function ProfileLedger() {
                       <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
                         {txn.hotelFullName}
                       </td>
-                      <td className="py-2 px-4 border-b">{txn.invoiceNumber}</td>
-                      <td className="py-2 px-4 border-b w-25 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">{txn.remarks}</td>
+                      <td className="py-2 px-4 border-b">
+                        {Array.isArray(txn.invoiceNumber)
+                          ? txn.invoiceNumber.join(", ")
+                          : txn.invoiceNumber}
+                      </td>
+                      <td className="py-2 px-4 border-b w-40 max-w-40 hide-scrollbar overflow-x-scroll whitespace-nowrap">
+                        {txn.remarks}
+                      </td>
                       <td
                         className={`py-2 px-4 max-w-25 min-w-25 border-b ${
                           txn.status === "Approved"
@@ -461,7 +467,9 @@ function ProfileLedger() {
                       >
                         {txn.status}
                       </td>
-                      <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">₹{txn.amount.toFixed(2)}</td>
+                      <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
+                        ₹{txn.amount.toFixed(2)}
+                      </td>
                       <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
                         {txn.transactionType}
                       </td>
@@ -505,7 +513,9 @@ function ProfileLedger() {
                       className={`py-2 px-2 ${
                         calculateBalance(sortedLedger.length - 1).toFixed(2) > 0
                           ? "text-green-500"
-                          : calculateBalance(sortedLedger.length - 1).toFixed(2) < 0
+                          : calculateBalance(sortedLedger.length - 1).toFixed(
+                              2
+                            ) < 0
                           ? "text-red-500"
                           : ""
                       }`}
