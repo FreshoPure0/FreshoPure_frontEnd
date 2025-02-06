@@ -64,6 +64,7 @@ const initialState = {
   startDate: null,
   endDate: null,
   linkedHotels: [],
+  expense: [],
 };
 
 export default (state = initialState, action) => {
@@ -80,7 +81,13 @@ export default (state = initialState, action) => {
         startDate: action.payload.startDate, // Store the startDate
         endDate: action.payload.endDate, // Store the endDate
         linkedHotels: action.payload.linkedHotels,
+        expense: action.payload.expense,
       };
+      case "CREATE_TRANSACTION":
+        return {
+          ...state,
+          ledger: [action.payload, ...state.ledger], // Add the new transaction to the ledger
+        };
       case EDIT_TRANSACTION: {
         // When editing a transaction, we'll map over the ledger to find the transaction by _id
         const updatedLedger = state.ledger.map((txn) =>

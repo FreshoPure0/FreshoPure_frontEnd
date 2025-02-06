@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlinePrinter } from "react-icons/ai";
-import { getLedger, linkedHotels, updateTransaction } from "../../store/actions/vendor";
+import { getLedger, updateTransaction, createTransaction } from "../../store/actions/vendor";
 import Modal from "react-modal";
 import { BiFilterAlt } from "react-icons/bi";
 import { GoPencil } from "react-icons/go";
@@ -11,13 +11,66 @@ function ProfileLedger() {
   const [startDate, setStartDate] = useState(""); // separate state for start date
   const [endDate, setEndDate] = useState(""); // separate state for end date
   const dispatch = useDispatch();
-  const { ledger, linkedHotels } = useSelector((state) => state.vendor); // This fetches the ledger from the Redux store
+  const { ledger, linkedHotels, expense } = useSelector((state) => state.vendor); // This fetches the ledger from the Redux store
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [addTransaction, setaddTransaction] = useState(false);
   const [date, setDate] = useState({
     startDate: new Date(new Date().setDate(new Date().getDate() - 20)), // current date - 7 days
     endDate: new Date(), // current date
   });
+
+
+  const [newTransaction, setNewTransaction] = useState({
+    date: new Date().toISOString().split("T")[0], // Default to today's date
+    hotelId: "",
+    expenseId: "",
+    remarks: "",
+    transactionType: "Cr",
+    status: "Pending",
+    amount: 0,
+  });
+
+  const handleAddTransaction = () => {
+    let transactionData = { ...newTransaction };
+
+  // Remove hotelId if it's an empty string
+  if (!transactionData.hotelId) {
+    delete transactionData.hotelId;
+  }
+
+  // Remove expenseId if it's an empty string
+  if (!transactionData.expenseId) {
+    delete transactionData.expenseId;
+  }
+    // Dispatch the createTransaction action with the new transaction data
+    dispatch(createTransaction(transactionData));
+    setaddTransaction(false); // Close the modal
+    setNewTransaction({
+      date: new Date().toISOString().split("T")[0],
+      hotelId: "",
+      expenseId: "",
+      remarks: "",
+      transactionType: "Cr",
+      status: "Pending",
+      amount: 0,
+    }); // Reset the form
+  };
+
+  const handleHotelChange = (e) => {
+    setNewTransaction({
+      ...newTransaction,
+      hotelId: e.target.value,
+      expenseId: '', // Reset the other dropdown
+    });
+  };
+
+  const handleExpenseChange = (e) => {
+    setNewTransaction({
+      ...newTransaction,
+      expenseId: e.target.value,
+      hotelId: '', // Reset the other dropdown
+    });
+  };
 
   const handleSaveClick = () => {
     if (selectedTransaction && selectedTransaction._id) {
@@ -116,6 +169,7 @@ function ProfileLedger() {
                 <tr>
                   <th className="py-2 px-4 border-b font-bold">Date</th>
                   <th className="py-2 px-4 border-b font-bold">Hotel</th>
+                  <th className="py-2 px-4 border-b font-bold">Expenses</th>
                   <th className="py-2 px-4 border-b font-bold">Remarks</th>
                   <th className="py-2 px-4 border-b font-bold">Status</th>
                   <th className="py-2 px-4 border-b font-bold">Amount</th>
@@ -124,28 +178,55 @@ function ProfileLedger() {
               </thead>
               <tbody>
                 <tr className="hover:bg-gray-100">
-                  <td className="py-2 px-4 border-b">
+                <td className="py-2 px-4 border-b">
                     <input
                       className="w-[10vw] rounded-md p-1"
                       type="date"
-                      placeholder="Enter Date"
+                      value={newTransaction.date}
+                      onChange={(e) =>
+                        setNewTransaction({ ...newTransaction, date: e.target.value })
+                      }
                     />
                   </td>
                   <td className="py-2 px-4 border-b">
-                    <select className="w-[10vw] rounded-md p-1 hide-scrollbar" name="hotels">
+                  <select
+                      className="w-[10vw] rounded-md p-1 hide-scrollbar"
+                      value={newTransaction.hotelId}
+                      onChange={handleHotelChange}
+                      disabled={!!newTransaction.expenseId} // Disable if expenseId is selected
+                    >
                       <option value="">Select a hotel</option>
                       {linkedHotels.map((hotel) => (
-                        <option key={hotel._id}>
-                          {hotel.fullName} 
+                        <option key={hotel._id} value={hotel.userId}>
+                          {hotel.fullName}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                  <select
+                      className="w-[10vw] rounded-md p-1 pr-8 hide-scrollbar"
+                      value={newTransaction.expenseId}
+                      onChange={handleExpenseChange}
+                      disabled={!!newTransaction.hotelId} // Disable if hotelId is selected
+                    >
+                      <option value="">Select an option</option>
+                      {expense.map((exp) => (
+                        <option key={exp._id} value={exp._id}>
+                          {exp.expenses}
                         </option>
                       ))}
                     </select>
                   </td>
                   <td className="py-2 px-4 border-b">
                     <input
-                      className=" w-[7vw] rounded-md p-1"
+                      className="w-[7vw] rounded-md p-1"
                       type="text"
                       placeholder="Remark"
+                      value={newTransaction.remarks}
+                      onChange={(e) =>
+                        setNewTransaction({ ...newTransaction, remarks: e.target.value })
+                      }
                     />
                   </td>
                   <td className="py-2 px-4 border-b">Pending</td>
@@ -155,12 +236,22 @@ function ProfileLedger() {
                       type="number"
                       className="w-[7vw] rounded-md p-1"
                       placeholder="Amount"
+                      value={newTransaction.amount}
+                      onChange={(e) =>
+                        setNewTransaction({ ...newTransaction, amount: parseFloat(e.target.value) })
+                      }
                     />
                   </td>
                   <td className="py-2 px-4 border-b">
-                    <select className="w-[5vw] rounded-md p-1" name="">
-                      <option value="">Cr</option>
-                      <option value="">Dr</option>
+                  <select
+                      className="w-[5vw] rounded-md p-1"
+                      value={newTransaction.transactionType}
+                      onChange={(e) =>
+                        setNewTransaction({ ...newTransaction, transactionType: e.target.value })
+                      }
+                    >
+                      <option value="Cr">Cr</option>
+                      <option value="Dr">Dr</option>
                     </select>
                   </td>
                 </tr>
@@ -168,7 +259,9 @@ function ProfileLedger() {
             </table>
           </div>
           <div className="flex gap-3 mt-2">
-            <button className="bg-[#EFE5D8] text-yellow-900 rounded-md px-4 py-1 shadow flex items-center gap-2">
+            <button
+            onClick={handleAddTransaction}
+             className="bg-[#EFE5D8] text-yellow-900 rounded-md px-4 py-1 shadow flex items-center gap-2">
               Save
             </button>
             <button
@@ -234,7 +327,7 @@ function ProfileLedger() {
                     }`}
                   >
                     <select
-                      className="w-[7vw] rounded-md p-1"
+                      className="w-[7vw] rounded-md p-1 pr-6"
                       value={selectedTransaction.status}
                       onChange={(e) => {
                         setSelectedTransaction({

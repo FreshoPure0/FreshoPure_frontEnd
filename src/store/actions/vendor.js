@@ -242,7 +242,66 @@ export const updateTransaction = (updatedTxn) => {
   };
 };
 
+export const createTransaction = (transactionData) => {
+  return async (dispatch, getState) => {
+    try {
+      // Destructure the required fields from the transactionData object
+      const { date, hotelName, hotelId, expenseId, remarks, transactionType, status, amount } = transactionData;
 
+      // Construct the URL for the POST request
+      const url = `${baseUrl}/vendor/postOrUpdateLedgerTransaction`;
+
+      // Prepare the payload for the POST request
+      const payload = {
+        date,
+        hotelName,
+        hotelId,
+        expenseId,
+        remarks,
+        transactionType,
+        status,
+        amount,
+      };
+
+      // Send the new transaction data to the backend via POST request
+      const response = await fetch(url, {
+        method: "POST", // Use POST to create a new transaction
+        headers: {
+          "Content-Type": "application/json", // Set content type as JSON
+          token: await fetchToken(), // Ensure the token is valid
+        },
+        body: JSON.stringify(payload), // Send the new transaction data in the request body
+      });
+
+      // Safely parse the response as JSON
+      const data = await response.json();
+
+      // Log the data for debugging
+      console.log("Response from Create Transaction:", data);
+
+      if (data.success) {
+        // If successful, dispatch the updated ledger data to Redux
+        const { startDate, endDate } = getState().vendor; // Access start and end date from Redux state if needed
+
+        dispatch(
+          getLedger({
+            startDate: startDate,
+            endDate: endDate,
+          })
+        );
+
+        // Optionally, close the modal or handle any additional UI updates
+        dispatch({
+          type: CREATE_TRANSACTION, // Dispatch action to indicate success
+        });
+      } else {
+        console.error("Failed to create transaction:", data.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error creating transaction:", error.message || error);
+    }
+  };
+};
 
 export const getLedger = ({ startDate, endDate }) => {
   return async (dispatch, getState) => {
@@ -276,6 +335,7 @@ export const getLedger = ({ startDate, endDate }) => {
         payload: {
           ledger: data.data.ledgerTransactions, // The ledger data from the backend
           linkedHotels: data.data.hotelDetails, // The linked hotels data from the backend
+          expense: data.data.expenses, // The linked hotels data from the backend
           startDate: startDate, // Include startDate in the payload
           endDate: endDate, // Include endDate in the payload
         },
