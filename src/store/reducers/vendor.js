@@ -7,6 +7,7 @@ import {
   GET_ALL_HOTEL_ORDERS,
   GET_ALL_VENDOR_ORDERS,
   GET_ANALYTICS_CHART,
+  CREATE_TRANSACTION,
 //   UPDATE_ITEM_PRICE,
   UPDATE_STOCK,
   ADD_STOCK,
@@ -83,7 +84,7 @@ export default (state = initialState, action) => {
         linkedHotels: action.payload.linkedHotels,
         expense: action.payload.expense,
       };
-      case "CREATE_TRANSACTION":
+      case CREATE_TRANSACTION:
         return {
           ...state,
           ledger: [action.payload, ...state.ledger], // Add the new transaction to the ledger

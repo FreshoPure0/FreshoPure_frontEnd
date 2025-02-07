@@ -44,6 +44,8 @@ function ProfileLedger() {
   }
     // Dispatch the createTransaction action with the new transaction data
     dispatch(createTransaction(transactionData));
+    console.log(transactionData.transactionType, "Transaction type");
+    
     setaddTransaction(false); // Close the modal
     setNewTransaction({
       date: new Date().toISOString().split("T")[0],
@@ -123,6 +125,7 @@ function ProfileLedger() {
     closeModal(); // Close the modal after applying the filter
   };
   const formatDate = (dateStr) => {
+    console.log(dateStr, "Current date")
     return new Date(dateStr).toISOString().split("T")[0]; // "2025-01-21"
   };
   const sortedLedger = ledger.sort(
@@ -134,9 +137,9 @@ function ProfileLedger() {
 
   const updatedLedger = sortedLedger.map((txn) => {
     const balance =
-      txn.transactionType === "Cr"
-        ? (runningBalance += txn.amount)
-        : (runningBalance -= txn.amount);
+      txn?.transactionType === "Cr"
+        ? (runningBalance += txn?.amount)
+        : (runningBalance -= txn?.amount);
 
     return {
       ...txn,
@@ -149,9 +152,9 @@ function ProfileLedger() {
     for (let i = 0; i <= index; i++) {
       const txn = sortedLedger[i];
       balance =
-        txn.transactionType === "Cr"
-          ? balance + txn.amount
-          : balance - txn.amount;
+        txn?.transactionType === "Cr"
+          ? balance + txn?.amount
+          : balance - txn?.amount;
     }
     return balance;
   };
@@ -296,7 +299,7 @@ function ProfileLedger() {
               <tbody>
                 <tr className="hover:bg-gray-100">
                   <td className="py-2 px-4 border-b">
-                    {formatDate(selectedTransaction.date)}
+                    {formatDate(selectedTransaction?.date)}
                   </td>
                   <td className="py-2 px-4 border-b">
                     {selectedTransaction.hotelFullName}
@@ -534,7 +537,7 @@ function ProfileLedger() {
                   {updatedLedger.map((txn, index) => (
                     <tr key={index} className="hover:bg-gray-100">
                       <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
-                        {formatDate(txn.date)}
+                        {formatDate(txn?.date ?txn?.date : "02-07-2025")}                        
                       </td>
                       <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
                         {txn.hotelFullName}
@@ -561,10 +564,10 @@ function ProfileLedger() {
                         {txn.status}
                       </td>
                       <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
-                        ₹{txn.amount.toFixed(2)}
+                        ₹{txn?.amount?.toFixed(2)}
                       </td>
                       <td className="py-2 px-4 border-b w-24 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap">
-                        {txn.transactionType}
+                        {txn?.transactionType}
                       </td>
                       <td
                         className={`py-2 px-4 border-b w-25 max-w-25 hide-scrollbar overflow-auto whitespace-nowrap ${

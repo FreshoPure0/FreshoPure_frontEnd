@@ -257,8 +257,9 @@ function AnalyticsSection({ onBack }) {
               className="flex flex-row border border-[#00000033]"
               key={index}
             >
-              <div className="flex flex-col flex-1 bg-[#FFF7EC]">
-                <div className="flex items-center justify-center border-r border-b border-[#00000033]">
+              <div className="flex flex-col flex-1 bg-[#FFF7EC] h-[10vh]">
+                <div className="flex items-center justify-center border-r border-b border-[#00000033] h-[10vh] relative">
+                  <p className="font-bold absolute left-2">{index+1}.</p>
                   <img
                     src={func(item?.image)}
                     alt=""
@@ -267,12 +268,12 @@ function AnalyticsSection({ onBack }) {
                 </div>
               </div>
               <div className="flex flex-col flex-1 bg-[#FFF7EC]">
-                <p className="text-center border-r border-b border-[#00000033] py-1">
+                <p className="text-center border-r border-b border-[#00000033] py-1 h-[10vh]">
                   {item?.name}
                 </p>
               </div>
               <div className="flex flex-col flex-1 bg-[#FFF7EC]">
-                <p className="text-center border-r border-b border-[#00000033] py-1">
+                <p className="text-center border-r border-b border-[#00000033] py-1 h-[10vh]">
                   {item?.orderedItems?.totalQuantity?.kg ||
                   item?.orderedItems?.totalQuantity?.gram
                     ? item?.orderedItems?.totalQuantity?.kg +
@@ -289,7 +290,7 @@ function AnalyticsSection({ onBack }) {
                 </p>
               </div>
               <div className="flex flex-col flex-1 bg-[#FFF7EC]">
-                <p className="text-center border-b border-[#00000033] py-1">
+                <p className="text-center border-b border-[#00000033] py-1 h-[10vh]">
                   ₹{" "}
                   {(
                     Math.round(item?.orderedItems?.totalPrice * 100) / 100
